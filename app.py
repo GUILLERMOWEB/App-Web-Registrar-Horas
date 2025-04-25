@@ -466,22 +466,22 @@ def lista_usuarios():
     return render_template('usuarios.html', usuarios=usuarios)
 
 
-@app.route('/editar_usuario/<int:id>', methods=['GET', 'POST'])
-def editar_usuario(id):
-    if 'user_id' not in session or session['role'] != 'superadmin':
-        return redirect(url_for('login'))  # Si no es superadmin, redirigir al login
+#@app.route('/editar_usuario/<int:id>', methods=['GET', 'POST'])
+#def editar_usuario(id):
+ # if 'user_id' not in session or session['role'] != 'superadmin':
+  #      return redirect(url_for('login'))  # Si no es superadmin, redirigir al login
 
-    user = User.query.get_or_404(id)  # Busca el usuario por ID, si no lo encuentra, lanza error 404
+   # user = User.query.get_or_404(id)  # Busca el usuario por ID, si no lo encuentra, lanza error 404
 
-    if request.method == 'POST':  # Si se recibe una solicitud POST (cuando el formulario es enviado)
-        user.username = request.form['username']
-        user.email = request.form['email']
-        user.role = request.form['role']
-        db.session.commit()  # Realiza el commit en la base de datos para guardar los cambios
+    #if request.method == 'POST':  # Si se recibe una solicitud POST (cuando el formulario es enviado)
+     #   user.username = request.form['username']
+      #  user.email = request.form['email']
+       # user.role = request.form['role']
+        #db.session.commit()  # Realiza el commit en la base de datos para guardar los cambios
         flash('Usuario actualizado correctamente', 'success')  # Mensaje de éxito
-        return redirect(url_for('lista_usuarios'))  # Redirige a la lista de usuarios después de la edición
+        #return redirect(url_for(''))  # Redirige a la lista de usuarios después de la edición
 
-    return render_template('editar_usuarios.html', user=user)  # Si es GET, muestra el formulario con los datos actuales
+   # return render_template('editar_usuarios.html', user=user)  # Si es GET, muestra el formulario con los datos actuales
 
 @app.route('/eliminar_usuario/<int:id>', methods=['POST'])
 def eliminar_usuario(id):
