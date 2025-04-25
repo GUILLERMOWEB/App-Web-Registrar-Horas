@@ -479,7 +479,7 @@ def editar_usuario(id):
         user.role = request.form['role']
         db.session.commit()  # Realiza el commit en la base de datos para guardar los cambios
         flash('Usuario actualizado correctamente', 'success')  # Mensaje de éxito
-        return redirect(url_for('ver_usuarios'))  # Redirige a la lista de usuarios después de la edición
+        return redirect(url_for('lista_usuarios'))  # Redirige a la lista de usuarios después de la edición
 
     return render_template('editar_usuarios.html', user=user)  # Si es GET, muestra el formulario con los datos actuales
 
@@ -492,7 +492,7 @@ def eliminar_usuario(id):
     db.session.delete(user)
     db.session.commit()
     flash('Usuario eliminado correctamente', 'danger')
-    return redirect(url_for('ver_usuarios'))
+    return redirect(url_for('lista_usuarios'))  # Cambio aquí
 
 
 if __name__ == '__main__':
