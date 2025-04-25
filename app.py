@@ -2,7 +2,7 @@ from flask import Flask, render_template, request, redirect, url_for, session, f
 from flask_sqlalchemy import SQLAlchemy
 from datetime import datetime, timedelta
 import os
-# Carga de variables de entorno desde .env
+# Carga de variables de entorno desde .envy listo
 from dotenv import load_dotenv
 load_dotenv()
 import pandas as pd
