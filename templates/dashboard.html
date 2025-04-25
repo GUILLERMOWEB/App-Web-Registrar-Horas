@@ -56,10 +56,25 @@
   </form>
 
   <!-- Botones para exportar y cerrar sesión -->
-  <div class="mb-4">
-    <a href="/exportar_excel" class="btn btn-success me-2">Exportar a Excel</a>
+<div class="mb-4 d-flex align-items-end gap-3">
+    <form method="GET" action="/exportar_excel">
+      <div class="row g-2 align-items-end">
+        <div class="col-auto">
+          <label for="fecha_desde" class="form-label">Desde</label>
+          <input type="date" class="form-control" name="fecha_desde" required>
+        </div>
+        <div class="col-auto">
+          <label for="fecha_hasta" class="form-label">Hasta</label>
+          <input type="date" class="form-control" name="fecha_hasta" required>
+        </div>
+        <div class="col-auto">
+          <button type="submit" class="btn btn-success">Exportar a Excel</button>
+        </div>
+      </div>
+    </form>
     <a href="/logout" class="btn btn-secondary">Cerrar sesión</a>
   </div>
+  
 
   <!-- Información del total de horas trabajadas -->
   <div class="alert alert-info">

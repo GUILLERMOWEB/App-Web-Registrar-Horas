@@ -189,18 +189,26 @@ def dashboard():
 
 
 
-
 @app.route('/exportar_excel')
 def exportar_excel():
     if 'user_id' not in session:
         return redirect(url_for('login'))
 
     role = session.get('role')
+    fecha_desde = request.args.get('fecha_desde')
+    fecha_hasta = request.args.get('fecha_hasta')
 
-    if role in ['admin', 'superadmin']:
-        registros = Registro.query.all()
-    else:
-        registros = Registro.query.filter_by(user_id=session['user_id']).all()
+    query = Registro.query
+
+    # Filtrar por usuario si no es admin
+    if role not in ['admin', 'superadmin']:
+        query = query.filter_by(user_id=session['user_id'])
+
+    # Filtrar por fechas si se especifican
+    if fecha_desde and fecha_hasta:
+        query = query.filter(Registro.fecha.between(fecha_desde, fecha_hasta))
+
+    registros = query.all()
 
     df = pd.DataFrame([{
         'usuario': r.user.username,
@@ -214,7 +222,7 @@ def exportar_excel():
         'horas_totales': round((r.horas or 0) + (r.viaje_ida or 0) + (r.viaje_vuelta or 0), 2),
         'km_ida': r.km_ida,
         'km_vuelta': r.km_vuelta,
-        'km_totales': (r.km_ida or 0) + (r.km_vuelta or 0),  # 👈 nuevo campo
+        'km_totales': (r.km_ida or 0) + (r.km_vuelta or 0),
         'tarea': r.tarea,
         'cliente': r.cliente,
         'comentarios': r.comentarios
@@ -225,10 +233,10 @@ def exportar_excel():
         df.to_excel(writer, index=False, sheet_name='Registros')
         ws = writer.sheets['Registros']
 
-        # ✅ Filtros automáticos
+        # Filtros automáticos
         ws.auto_filter.ref = ws.dimensions
 
-        # ✅ Ajuste automático del ancho de columnas
+        # Ajuste automático del ancho de columnas
         for col_num, column_cells in enumerate(ws.columns, 1): 
             max_length = 0
             for cell in column_cells:
@@ -242,7 +250,12 @@ def exportar_excel():
             ws.column_dimensions[column_letter].width = adjusted_width
 
     archivo.seek(0)
-    return send_file(archivo, as_attachment=True, download_name=f"registros_{session['username']}.xlsx")
+    return send_file(
+        archivo,
+        as_attachment=True,
+        download_name=f"registros_{session['username']}.xlsx"
+    )
+
 
 
 @app.route('/editar_registro/<int:id>', methods=['GET', 'POST'])
