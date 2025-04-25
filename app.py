@@ -239,6 +239,31 @@ def exportar_excel():
     with pd.ExcelWriter(archivo, engine='openpyxl') as writer:
         df.to_excel(writer, index=False, sheet_name='Registros')
         ws = writer.sheets['Registros']
+        
+        from openpyxl.styles import Font, PatternFill, Border, Side
+
+        # Estilos
+        header_font = Font(bold=True, color="FFFFFF")
+        header_fill = PatternFill(start_color="4F81BD", end_color="4F81BD", fill_type="solid")
+        thin_border = Border(
+            left=Side(style='thin'), right=Side(style='thin'),
+            top=Side(style='thin'), bottom=Side(style='thin')
+        )
+        zebra_fill = PatternFill(start_color="F2F2F2", end_color="F2F2F2", fill_type="solid")
+
+        # Aplicar estilos a los encabezados
+        for cell in ws[1]:
+            cell.font = header_font
+            cell.fill = header_fill
+            cell.border = thin_border
+
+        # Aplicar estilos al resto de las filas
+        for row in ws.iter_rows(min_row=2, max_row=ws.max_row):
+            for cell in row:
+                cell.border = thin_border
+            if row[0].row % 2 == 0:  # zebra stripe
+                for cell in row:
+                    cell.fill = zebra_fill
 
         # Aplicar filtros y ajustar anchos
         ws.auto_filter.ref = ws.dimensions
@@ -253,6 +278,7 @@ def exportar_excel():
         as_attachment=True,
         download_name=f"registros_{session['username']}.xlsx"
     )
+
 
 
 
