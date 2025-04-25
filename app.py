@@ -478,7 +478,7 @@ def lista_usuarios():
       #  user.email = request.form['email']
        # user.role = request.form['role']
         #db.session.commit()  # Realiza el commit en la base de datos para guardar los cambios
-        flash('Usuario actualizado correctamente', 'success')  # Mensaje de éxito
+        #flash('Usuario actualizado correctamente', 'success')  # Mensaje de éxito
         #return redirect(url_for(''))  # Redirige a la lista de usuarios después de la edición
 
    # return render_template('editar_usuarios.html', user=user)  # Si es GET, muestra el formulario con los datos actuales
