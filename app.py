@@ -464,6 +464,35 @@ def listar_usuarios():
 
     usuarios = User.query.with_entities(User.id, User.username, User.role).all()
     return render_template('usuarios.html', usuarios=usuarios)
+    
+@app.route('/editar_usuario/<int:id>', methods=['GET', 'POST'])
+def editar_usuario(id):
+    if 'user_id' not in session or session['role'] != 'superadmin':
+        return redirect(url_for('login'))
+
+    user = User.query.get_or_404(id)
+
+    if request.method == 'POST':
+        user.username = request.form['username']
+        user.email = request.form['email']
+        user.role = request.form['role']
+        db.session.commit()
+        flash('Usuario actualizado correctamente', 'success')
+        return redirect(url_for('ver_usuarios'))
+
+    return render_template('editar_usuario.html', user=user)
+
+@app.route('/eliminar_usuario/<int:id>', methods=['POST'])
+def eliminar_usuario(id):
+    if 'user_id' not in session or session['role'] != 'superadmin':
+        return redirect(url_for('login'))
+
+    user = User.query.get_or_404(id)
+    db.session.delete(user)
+    db.session.commit()
+    flash('Usuario eliminado correctamente', 'danger')
+    return redirect(url_for('ver_usuarios'))
+
 
 if __name__ == '__main__':
     port = int(os.environ.get("PORT", 5000))

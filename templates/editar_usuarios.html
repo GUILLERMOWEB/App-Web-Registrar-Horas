@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container mt-5">
+  <h2 class="mb-4">Editar Usuario</h2>
+
+  <form method="POST">
+    <div class="mb-3">
+      <label for="username" class="form-label">Nombre de Usuario</label>
+      <input type="text" name="username" class="form-control" value="{{ user.username }}" required>
+    </div>
+    <div class="mb-3">
+      <label for="email" class="form-label">Correo Electrónico</label>
+      <input type="email" name="email" class="form-control" value="{{ user.email }}" required>
+    </div>
+    <div class="mb-3">
+      <label for="role" class="form-label">Rol</label>
+      <select name="role" class="form-control" required>
+        <option value="user" {% if user.role == 'user' %}selected{% endif %}>Usuario</option>
+        <option value="admin" {% if user.role == 'admin' %}selected{% endif %}>Administrador</option>
+        <option value="superadmin" {% if user.role == 'superadmin' %}selected{% endif %}>Superadministrador</option>
+      </select>
+    </div>
+    <button type="submit" class="btn btn-primary">Guardar Cambios</button>
+  </form>
+</div>
+{% endblock %}
