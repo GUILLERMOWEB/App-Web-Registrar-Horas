@@ -257,21 +257,27 @@ def editar_registro(id):
         entrada = request.form['entrada']
         salida = request.form['salida']
 
-        almuerzo_horas = int(request.form.get('almuerzo_horas', 0))       
-        almuerzo = almuerzo_horas
+    almuerzo_horas = int(request.form.get('almuerzo_horas', 0))       
+    almuerzo = almuerzo_horas
 
-        try:
-            viaje_ida = float(request.form.get('viaje_ida', 0) or 0)
-            viaje_vuelta = float(request.form.get('viaje_vuelta', 0) or 0)
-            km_ida = float(request.form.get('km_ida', 0) or 0)
-            km_vuelta = float(request.form.get('km_vuelta', 0) or 0)
-        except ValueError:
-            flash("Las horas de viaje y kilómetros deben ser números.", "danger")
+    try:
+        registro.viaje_ida = int(request.form['viaje_ida'])
+        registro.viaje_vuelta = int(request.form['viaje_vuelta'])
+        registro.km_ida = int(request.form['km_ida'])
+        registro.km_vuelta = int(request.form['km_vuelta'])
+
+        # Validación dentro del try
+        if registro.viaje_ida < 0 or registro.viaje_vuelta < 0:
+            flash("Las horas de viaje no pueden ser negativas", "danger")
             return redirect(url_for('editar_registro', id=id))
 
-        tarea = request.form.get('tarea', '')
-        cliente = request.form.get('cliente', '')
-        comentarios = request.form.get('comentarios', '')
+    except ValueError:
+        flash("Por favor, ingresá valores válidos en los campos numéricos", "danger")
+        return redirect(url_for('editar_registro', id=id))
+
+    tarea = request.form.get('tarea', '')
+    cliente = request.form.get('cliente', '')
+    comentarios = request.form.get('comentarios', '')
 
         try:
             t_entrada = datetime.strptime(entrada, "%H:%M")
