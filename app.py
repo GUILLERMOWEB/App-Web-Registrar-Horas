@@ -189,6 +189,11 @@ def dashboard():
 
 
 
+from flask import send_file, request, session, redirect, url_for
+from io import BytesIO
+from openpyxl.utils import get_column_letter
+import pandas as pd
+
 @app.route('/exportar_excel')
 def exportar_excel():
     if 'user_id' not in session:
@@ -200,16 +205,17 @@ def exportar_excel():
 
     query = Registro.query
 
-    # Filtrar por usuario si no es admin
+    # Si no es admin o superadmin, se filtra por el usuario actual
     if role not in ['admin', 'superadmin']:
         query = query.filter_by(user_id=session['user_id'])
 
-    # Filtrar por fechas si se especifican
+    # Si hay filtros de fechas, se aplican
     if fecha_desde and fecha_hasta:
         query = query.filter(Registro.fecha.between(fecha_desde, fecha_hasta))
 
     registros = query.all()
 
+    # Armar el DataFrame para exportar
     df = pd.DataFrame([{
         'usuario': r.user.username,
         'fecha': r.fecha,
@@ -228,33 +234,26 @@ def exportar_excel():
         'comentarios': r.comentarios
     } for r in registros])
 
+    # Crear archivo en memoria
     archivo = BytesIO()
     with pd.ExcelWriter(archivo, engine='openpyxl') as writer:
         df.to_excel(writer, index=False, sheet_name='Registros')
         ws = writer.sheets['Registros']
 
-        # Filtros automáticos
+        # Aplicar filtros y ajustar anchos
         ws.auto_filter.ref = ws.dimensions
-
-        # Ajuste automático del ancho de columnas
-        for col_num, column_cells in enumerate(ws.columns, 1): 
-            max_length = 0
-            for cell in column_cells:
-                try:
-                    if cell.value:
-                        max_length = max(max_length, len(str(cell.value)))
-                except:
-                    pass
-            adjusted_width = (max_length + 2)
-            column_letter = get_column_letter(col_num)
-            ws.column_dimensions[column_letter].width = adjusted_width
+        for col_num, column_cells in enumerate(ws.columns, 1):
+            max_length = max((len(str(cell.value)) for cell in column_cells if cell.value), default=0)
+            ws.column_dimensions[get_column_letter(col_num)].width = max_length + 2
 
     archivo.seek(0)
+
     return send_file(
         archivo,
         as_attachment=True,
         download_name=f"registros_{session['username']}.xlsx"
     )
+
 
 
 

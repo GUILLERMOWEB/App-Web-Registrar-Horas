@@ -55,6 +55,15 @@
   </form>
 
   <div class="mb-4 d-flex flex-wrap gap-2">
+    <div class="col-auto">
+        <label for="fecha_desde" class="form-label">Desde</label>
+        <input type="date" class="form-control" name="fecha_desde" required>
+      </div>
+      <div class="col-auto">
+        <label for="fecha_hasta" class="form-label">Hasta</label>
+        <input type="date" class="form-control" name="fecha_hasta" required>
+      </div>
+      <div class="col-auto">
     <a href="{{ url_for('exportar_excel') }}" class="btn btn-success">Exportar a Excel</a>
 
     {% if role in ['superadmin'] %}

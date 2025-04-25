@@ -23,23 +23,20 @@
             <tbody>
                 {% for usuario in usuarios %}
                 <tr>
-                    <td>{{ usuario.id }}</td>
-                    <td>{{ usuario.username }}</td>
-                    <td>{{ usuario.role }}</td>
-                    {% if session['role'] == 'superadmin' %}
-                    <td>
-                        {% if usuario.role != 'superadmin' %}
-                            <a href="{{ url_for('editar_usuario', id=usuario.id) }}" class="btn btn-warning btn-sm">Editar</a>
-            
-                            <form action="{{ url_for('eliminar_usuario', id=usuario.id) }}" method="POST" style="display:inline;">
-                                <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('¿Estás seguro que querés eliminar este usuario?')">Eliminar</button>
-                            </form>
-                        {% endif %}
-                    </td>
-                    {% endif %}
+                  <td>{{ usuario.id }}</td>
+                  <td>{{ usuario.username }}</td>
+                  <td>{{ usuario.role }}</td>
+                  {% if session['role'] == 'superadmin' %}
+                  <td>
+                    <form action="{{ url_for('eliminar_usuario', id=usuario.id) }}" method="POST" style="display:inline;">
+                      <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('¿Estás seguro que querés eliminar este usuario?')">Eliminar</button>
+                    </form>
+                  </td>
+                  {% endif %}
                 </tr>
                 {% endfor %}
-            </tbody>
+              </tbody>
+              
             
         </table>
 
