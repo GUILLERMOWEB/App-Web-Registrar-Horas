@@ -457,7 +457,7 @@ def registro():
 
     return render_template('registro.html')
 
-@app.route('/usuarios')
+@app.route('/lista_usuarios')
 def lista_usuarios():
     if 'user_id' not in session or session.get('role') != 'superadmin':
         return redirect(url_for('login'))
