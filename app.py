@@ -94,7 +94,7 @@ def dashboard():
         fecha = request.form['fecha']
         entrada = request.form['entrada']
         salida = request.form['salida']
-        almuerzo = float(request.form['almuerzo'])
+        almuerzo = int(request.form['almuerzo'])
         tarea = request.form['tarea']
         cliente = request.form['cliente']
         comentarios = request.form['comentarios']

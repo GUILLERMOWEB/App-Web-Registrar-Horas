@@ -40,7 +40,7 @@
 <body>
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
         <div class="container-fluid">
-            <a class="navbar-brand" href="{{ url_for('dashboard') }}">App de Registro</a>
+            <a class="navbar-brand" href="{{ url_for('dashboard') }}">RH Mobility</a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
                 <span class="navbar-toggler-icon"></span>
             </button>
@@ -51,14 +51,14 @@
                             <span class="nav-link">Bienvenido, {{ session['username'] }} ({{ session['role'] }})</span>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="{{ url_for('dashboard') }}">Dashboard</a>
+                            <a class="nav-link" href="{{ url_for('dashboard') }}">Inicio</a>
                         </li>
                         {% if session['role'] == 'superadmin' %}
                             <li class="nav-item">
-                                <a class="nav-link" href="{{ url_for('admin') }}">Admin</a>
+                                <a class="nav-link" href="{{ url_for('admin') }}">Admministrador</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" href="{{ url_for('crear_admin') }}">Crear Admin</a>
+                                <a class="nav-link" href="{{ url_for('crear_admin') }}">Crear Admministrador</a>
                             </li>
                         {% endif %}
                         <li class="nav-item">
