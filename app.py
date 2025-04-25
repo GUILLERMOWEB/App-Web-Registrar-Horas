@@ -480,7 +480,7 @@ def editar_usuario(id):
         flash('Usuario actualizado correctamente', 'success')  # Mensaje de éxito
         return redirect(url_for('ver_usuarios'))  # Redirige a la lista de usuarios después de la edición
 
-    return render_template('editar_usuario.html', user=user)  # Si es GET, muestra el formulario con los datos actuales
+    return render_template('editar_usuarios.html', user=user)  # Si es GET, muestra el formulario con los datos actuales
 
 @app.route('/eliminar_usuario/<int:id>', methods=['POST'])
 def eliminar_usuario(id):
