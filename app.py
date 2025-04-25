@@ -279,10 +279,10 @@ def editar_registro(id):
     cliente = request.form.get('cliente', '')
     comentarios = request.form.get('comentarios', '')
 
-        try:
-            t_entrada = datetime.strptime(entrada, "%H:%M")
-            t_salida = datetime.strptime(salida, "%H:%M")
-            horas_trabajadas = (t_salida - t_entrada - timedelta(hours=almuerzo)).total_seconds() / 3600
+    try:
+        t_entrada = datetime.strptime(entrada, "%H:%M")
+        t_salida = datetime.strptime(salida, "%H:%M")
+        horas_trabajadas = (t_salida - t_entrada - timedelta(hours=almuerzo)).total_seconds() / 3600
         except ValueError:
             flash("Error en el formato de hora. Use HH:MM", "danger")
             return redirect(url_for('editar_registro', id=id))
