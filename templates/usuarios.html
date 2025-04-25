@@ -23,21 +23,20 @@
             <tbody>
                 {% for usuario in usuarios %}
                 <tr>
-                    <td>{{ usuario[0] }}</td>
-                    <td>{{ usuario[1] }}</td>
-                    <td>{{ usuario[2] }}</td>
+                    <td>{{ usuario.id }}</td>  <!-- Accede al ID del usuario -->
+                    <td>{{ usuario.username }}</td>  <!-- Accede al nombre de usuario -->
+                    <td>{{ usuario.role }}</td>  <!-- Accede al rol del usuario -->
                     {% if session['role'] == 'superadmin' %}
                     <td>
-                        <a href="{{ url_for('editar_usuario', id=usuario[0]) }}" class="btn btn-warning btn-sm">Editar</a>
-                        <form method="POST" action="{{ url_for('eliminar_usuario', id=usuario[0]) }}" style="display:inline;" onsubmit="return confirm('¿Estás seguro de que quieres eliminar este usuario?');">
-                            <input type="hidden" name="usuario_id" value="{{ usuario[0] }}">
-                            <button type="submit" class="btn btn-danger btn-sm">Eliminar</button>
-                        </form>
+                        <!-- Agregar botones de editar y eliminar si es superadmin -->
+                        <a href="{{ url_for('editar_usuario', id=usuario.id) }}" class="btn btn-warning btn-sm">Editar</a>
+                        <a href="{{ url_for('eliminar_usuario', id=usuario.id) }}" class="btn btn-danger btn-sm">Eliminar</a>
                     </td>
                     {% endif %}
                 </tr>
                 {% endfor %}
             </tbody>
+            
         </table>
 
         <a href="{{ url_for('admin') }}" class="btn btn-secondary mt-3">Volver al panel de administración</a>
