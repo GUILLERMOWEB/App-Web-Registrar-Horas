@@ -457,13 +457,14 @@ def registro():
 
     return render_template('registro.html')
 
-@app.route('/usuarios')  # Esta es la ruta que debe coincidir con la plantilla
+@app.route('/usuarios')
 def lista_usuarios():
     if 'user_id' not in session or session.get('role') != 'superadmin':
         return redirect(url_for('login'))
 
-    users = User.query.all()  # Obtener todos los usuarios desde la base de datos
-    return render_template('usuarios.html', usuarios=users)
+    usuarios = User.query.all()
+    return render_template('usuarios.html', usuarios=usuarios)
+
 
 @app.route('/editar_usuario/<int:id>', methods=['GET', 'POST'])
 def editar_usuario(id):

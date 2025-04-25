@@ -23,27 +23,24 @@
             <tbody>
                 {% for usuario in usuarios %}
                 <tr>
-                    <td>{{ usuario.id }}</td>  <!-- Accede al ID del usuario -->
-                    <td>{{ usuario.username }}</td>  <!-- Accede al nombre de usuario -->
-                    <td>{{ usuario.role }}</td>  <!-- Accede al rol del usuario -->
+                    <td>{{ usuario.id }}</td>
+                    <td>{{ usuario.username }}</td>
+                    <td>{{ usuario.role }}</td>
                     {% if session['role'] == 'superadmin' %}
                     <td>
-                        <!-- Agregar botones de editar -->
                         <a href="{{ url_for('editar_usuario', id=usuario.id) }}" class="btn btn-warning btn-sm">Editar</a>
 
-                        <!-- Formulario de eliminación con método POST -->
                         <form action="{{ url_for('eliminar_usuario', id=usuario.id) }}" method="POST" style="display:inline;">
-                            <button type="submit" class="btn btn-danger btn-sm">Eliminar</button>
+                            <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('¿Estás seguro que querés eliminar este usuario?')">Eliminar</button>
                         </form>
                     </td>
                     {% endif %}
                 </tr>
                 {% endfor %}
             </tbody>
-            
         </table>
 
-        <a href="{{ url_for('admin') }}" class="btn btn-secondary mt-3">Volver al panel de administración</a>
+        <a href="{{ url_for('administrator') }}" class="btn btn-secondary mt-3">Volver al panel de administración</a>
     </div>
 </body>
 </html>
