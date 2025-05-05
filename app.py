@@ -69,24 +69,23 @@ class User(db.Model):
 
 class Registro(db.Model):
     __tablename__ = 'registros'
-    __table_args__ = {'extend_existing': True}  # 👉 esta línea es clave
+    __table_args__ = {'extend_existing': True}
 
     id = db.Column(db.Integer, primary_key=True)
-    # el resto de tus campos...
-
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
-    fecha = db.Column(db.String(50))
-    entrada = db.Column(db.String(50))
-    salida = db.Column(db.String(50))
-    almuerzo = db.Column(db.Float)
-    viaje_ida = db.Column(db.Float, default=0)
-    viaje_vuelta = db.Column(db.Float, default=0)
-    km_ida = db.Column(db.Float, default=0)
-    km_vuelta = db.Column(db.Float, default=0)
-    horas = db.Column(db.Float)
-    tarea = db.Column(db.Text)
-    cliente = db.Column(db.Text)
-    comentarios = db.Column(db.Text)
+    fecha = db.Column(db.String(50), nullable=False)
+    entrada = db.Column(db.String(50), nullable=False)
+    salida = db.Column(db.String(50), nullable=False)
+    almuerzo = db.Column(db.Float, default=0.0)
+    viaje_ida = db.Column(db.Float, default=0.0)
+    viaje_vuelta = db.Column(db.Float, default=0.0)
+    km_ida = db.Column(db.Float, default=0.0)
+    km_vuelta = db.Column(db.Float, default=0.0)
+    horas = db.Column(db.Float, nullable=False)  # Asegúrate de que este campo no sea nulo
+    tarea = db.Column(db.Text, default="")
+    cliente = db.Column(db.Text, default="")
+    comentarios = db.Column(db.Text, default="")
+
 
 # ─── Inicialización de la base de datos ─────────
 with app.app_context():
