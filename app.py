@@ -518,6 +518,65 @@ def eliminar_usuario(id):
     db.session.commit()
     flash('Usuario eliminado correctamente', 'danger')
     return redirect(url_for('lista_usuarios'))  # Cambio aquí
+    
+    
+app.route('/ver_cliente', methods=['GET', 'POST'])
+def ver_cliente():
+    clientes = Cliente.query.all()  # Obtener todos los clientes
+
+    if request.method == 'POST':
+        cliente_id = request.form['cliente']  # Obtener el ID del cliente seleccionado
+        
+        if not cliente_id:
+            flash('Debe seleccionar un cliente.', 'danger')
+            return redirect(url_for('ver_cliente'))
+        
+        cliente = Cliente.query.get(cliente_id)  # Obtener el cliente por su ID
+
+        if cliente:
+            return render_template('detalle_cliente.html', cliente=cliente)  # Muestra los detalles del cliente
+        else:
+            flash('Cliente no encontrado.', 'danger')
+            return redirect(url_for('ver_cliente'))  # Redirige de vuelta si no se encuentra el cliente
+
+    return render_template('ver_cliente.html', clientes=clientes)
+
+
+
+@app.route('/agregar_cliente', methods=['GET', 'POST'])
+@login_required
+def agregar_cliente():
+    # Solo el superadmin puede agregar clientes
+    if current_user.role != 'superadmin':
+        flash('Acceso denegado: solo el superadministrador puede agregar clientes.', 'danger')
+        return redirect(url_for('dashboard'))
+
+    if request.method == 'POST':
+        nombre = request.form['nombre']
+        direccion = request.form['direccion']
+        telefono = request.form.get('telefono')
+
+        # Validación de datos antes de guardarlos
+        if not nombre or not direccion:
+            flash('El nombre y la dirección son campos obligatorios.', 'danger')
+            return redirect(url_for('agregar_cliente'))
+
+        # Crear un nuevo cliente
+        nuevo_cliente = Cliente(nombre=nombre, direccion=direccion, telefono=telefono)
+
+        try:
+            db.session.add(nuevo_cliente)
+            db.session.commit()
+            flash('Cliente agregado exitosamente.', 'success')
+            return redirect(url_for('dashboard'))  # Redirige al dashboard superadmin
+        except Exception as e:
+            db.session.rollback()
+            flash(f'Error al agregar el cliente: {e}', 'danger')
+
+    # Obtener todos los clientes para mostrarlos en el formulario
+    clientes = Cliente.query.all()
+
+    return render_template('agregar_cliente.html')
 
 
 if __name__ == '__main__':
