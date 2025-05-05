@@ -69,7 +69,11 @@ class User(db.Model):
 
 class Registro(db.Model):
     __tablename__ = 'registros'
+    __table_args__ = {'extend_existing': True}  # 👉 esta línea es clave
+
     id = db.Column(db.Integer, primary_key=True)
+    # el resto de tus campos...
+
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
     fecha = db.Column(db.String(50))
     entrada = db.Column(db.String(50))
@@ -210,13 +214,6 @@ def dashboard():
         total_horas=round(total_horas, 2),
         total_km=round(total_km, 2)
     )
-
-
-
-from flask import send_file, request, session, redirect, url_for
-from io import BytesIO
-from openpyxl.utils import get_column_letter
-import pandas as pd
 
 @app.route('/exportar_excel')
 def exportar_excel():
