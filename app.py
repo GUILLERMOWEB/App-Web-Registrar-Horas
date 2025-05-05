@@ -175,8 +175,8 @@ def dashboard():
         nuevo_registro = Registro(
             user_id=session['user_id'],
             fecha=fecha,
-            hora_entrada=t_entrada.time(),  # ✅ Esto sí es datetime.time
-            hora_salida=t_salida.time(),    # ✅ Esto también
+            entrada=t_entrada.strftime("%H:%M"),  # Convierte la hora de entrada a cadena
+            salida=t_salida.strftime("%H:%M"),    # Convierte la hora de salida a cadena
             almuerzo=round(almuerzo.total_seconds() / 3600, 2),
             horas=round(horas_trabajadas, 2),
             viaje_ida=viaje_ida,
