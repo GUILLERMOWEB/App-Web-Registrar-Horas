@@ -541,7 +541,7 @@ def eliminar_usuario(id):
     return redirect(url_for('lista_usuarios'))  # Cambio aquí
     
     
-app.route('/ver_cliente', methods=['GET', 'POST'])
+@app.route('/ver_cliente', methods=['GET', 'POST'])
 def ver_cliente():
     clientes = Cliente.query.all()  # Obtener todos los clientes
 
