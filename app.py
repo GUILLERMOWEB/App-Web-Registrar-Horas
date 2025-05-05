@@ -2,7 +2,7 @@ from flask import Flask, render_template, request, redirect, url_for, session, f
 from flask_sqlalchemy import SQLAlchemy
 from datetime import datetime, timedelta
 import os
-# Carga de variables de entorno desde .envy listo
+# Carga de variables de entorno desde .env
 from dotenv import load_dotenv
 load_dotenv()
 import pandas as pd
@@ -10,28 +10,52 @@ from io import BytesIO
 from openpyxl.utils import get_column_letter
 from openpyxl import load_workbook
 from flask_migrate import Migrate
+from flask_wtf import FlaskForm
+from wtforms import StringField
+from wtforms.validators import DataRequired
+from wtforms import StringField, SubmitField
+from flask_login import login_required, current_user
+from functools import wraps
 
+# Importar db de forma tardía para evitar importación circular
+from models import db, RegistroHoras, ClienteModel
 
+# Función para convertir una hora en formato de texto a un número decimal
 def convertir_hora_a_decimal(hora_str):
     try:
         return float(int(hora_str.strip()))
     except ValueError:
         return 0.0
 
+# Decorador para asegurarse de que solo el superadministrador pueda acceder
+def superadmin_required(f):
+    @wraps(f)
+    def wrapper(*args, **kwargs):
+        if current_user.role != 'superadmin':  # Verifica el rol del usuario
+            flash('No tienes permisos para realizar esta acción', 'danger')
+            return redirect(url_for('index'))  # Redirige a la página principal
+        return f(*args, **kwargs)
+    return wrapper
 
-
+# Inicialización de la aplicación Flask
 app = Flask(__name__)
+
+# Configuración de la base de datos con PostgreSQL
+app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get("DATABASE_URL")
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.secret_key = 'clave_secreta_para_sesiones'
 
+# Habilita la recarga automática de plantillas y la caché de Jinja
 app.config['TEMPLATES_AUTO_RELOAD'] = True
 app.jinja_env.cache = {}
 
-# Configuración para PostgreSQL
-app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get("DATABASE_URL")
-app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-db = SQLAlchemy(app)
-# Inicializar Flask-Migrate
+# Inicializa la base de datos y el sistema de migración
+db.init_app(app)  # Se inicializa db antes de usarlo
 migrate = Migrate(app, db)
+
+# Asegúrate de que la base de datos se cree si no existe
+with app.app_context():
+    db.create_all()
 
 # ─── Modelos ─────────────────────────────────────
 class User(db.Model):
