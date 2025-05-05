@@ -130,6 +130,11 @@ def dashboard():
         entrada = request.form['entrada']
         salida = request.form['salida']
 
+        # Verificar que los campos de entrada y salida no estén vacíos
+        if not entrada or not salida:
+            flash("Por favor, complete las horas de entrada y salida.", "danger")
+            return redirect(url_for('dashboard'))
+
         try:
             almuerzo_horas = int(request.form.get('almuerzo_horas', 0))
             almuerzo_minutos = int(request.form.get('almuerzo_minutos', 0))
@@ -166,6 +171,7 @@ def dashboard():
             flash("Formato de hora incorrecto. Use HH:MM.", "danger")
             return redirect(url_for('dashboard'))
 
+        # Crear nuevo registro en la base de datos
         nuevo_registro = Registro(
             user_id=session['user_id'],
             fecha=fecha,
@@ -213,6 +219,7 @@ def dashboard():
         total_horas=round(total_horas, 2),
         total_km=round(total_km, 2)
     )
+
 
 @app.route('/exportar_excel')
 def exportar_excel():
