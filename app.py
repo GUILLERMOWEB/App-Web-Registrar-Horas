@@ -174,8 +174,8 @@ def dashboard():
         # Crear nuevo registro en la base de datos
         nuevo_registro = Registro(
             user_id=session['user_id'],
-            fecha=fecha,
-            hora_entrada=entrada,
+            hora_entrada=t_entrada.time(),  # ✅ Esto sí es datetime.time
+            hora_salida=t_salida.time(),    # ✅ Esto también
             hora_salida=salida,
             almuerzo=round(almuerzo.total_seconds() / 3600, 2),
             horas=round(horas_trabajadas, 2),
