@@ -165,7 +165,7 @@ def dashboard():
 
     if request.method == 'POST':
         fecha = request.form['fecha']
-        entrada = request.form.get('entrada')
+        hora_entrada = request.form.get('hora_entrada')
         if not hora_entrada:
             flash("Hora de entrada es obligatoria", "danger")
             return redirect(url_for('dashboard'))
