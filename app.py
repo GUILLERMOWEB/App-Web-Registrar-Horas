@@ -11,12 +11,11 @@ from openpyxl.utils import get_column_letter
 from openpyxl import load_workbook
 from flask_migrate import Migrate
 from flask_wtf import FlaskForm
-from wtforms import StringField
 from wtforms.validators import DataRequired
 from wtforms import StringField, SubmitField
 from flask_login import login_required, current_user
 from functools import wraps
-from dotenv import load_dotenv
+
 
 
 # Importar db de forma tardía para evitar importación circular
@@ -187,7 +186,7 @@ def dashboard():
             viaje_vuelta = float(request.form.get('viaje_vuelta', 0) or 0)
             km_ida = float(request.form.get('km_ida', 0) or 0)
             km_vuelta = float(request.form.get('km_vuelta', 0) or 0)
-        except ValueError:ytr
+        except ValueError:
             flash("Las horas de viaje y kilómetros deben ser números válidos.", "danger")
             return redirect(url_for('dashboard'))
 
@@ -197,8 +196,8 @@ def dashboard():
 
         try:
             formato_hora = "%H:%M"
-            t_entrada = datetime.strptime(entrada, formato_hora)
-            t_salida = datetime.strptime(salida, formato_hora)
+            t_entrada = datetime.strptime(hora_entrada, formato_hora)
+            t_salida = datetime.strptime(hora_salida, formato_hora)
 
             if t_salida < t_entrada:
                 t_salida += timedelta(days=1)
@@ -248,7 +247,7 @@ def dashboard():
         for r in registros
     ])
 
-    clientes = ClienteModel.query.order_by(ClienteModel.nombre).all()
+    clientes = Cliente.query.order_by(Cliente.nombre).all()
     centros_costo = CentroCosto.query.order_by(CentroCosto.nombre).all()
     tipos_servicio = TipoServicio.query.order_by(TipoServicio.nombre).all()
     lineas = Linea.query.order_by(Linea.nombre).all()
