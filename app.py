@@ -165,8 +165,8 @@ def dashboard():
 
     if request.method == 'POST':
         fecha = request.form['fecha']
-        entrada = request.form['entrada']
-        salida = request.form['salida']
+        hora_entrada = request.form.get('entrada')
+        hora_salida = request.form.get('salida')
 
         # Verificar que los campos de entrada y salida no estén vacíos
         if not entrada or not salida:
@@ -213,8 +213,8 @@ def dashboard():
         nuevo_registro = Registro(
             user_id=session['user_id'],
             fecha=fecha,
-            entrada=entrada,  # campo requerido por la DB
-            salida=salida,    # campo requerido por la DB
+            hora_entrada=hora_entrada,  # campo requerido por la DB
+            hora_salida=hora_salida,    # campo requerido por la DB
             almuerzo=round(almuerzo.total_seconds() / 3600, 2),
             horas=round(horas_trabajadas, 2),
             viaje_ida=viaje_ida,
