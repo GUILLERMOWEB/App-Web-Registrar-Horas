@@ -71,22 +71,30 @@ class User(db.Model):
 
 class Registro(db.Model):
     __tablename__ = 'registros'
-    __table_args__ = {'extend_existing': True}
+    __table_args__ = {'extend_existing': True}  # Agrega esta línea
 
     id = db.Column(db.Integer, primary_key=True)
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
-    fecha = db.Column(db.String(50), nullable=False)
-    entrada = db.Column(db.String(50), nullable=False)  # Añadimos hora_entrada
-    salida = db.Column(db.String(50), nullable=False)  # Añadimos hora_salida
-    almuerzo = db.Column(db.Float, default=0.0)
-    viaje_ida = db.Column(db.Float, default=0.0)
-    viaje_vuelta = db.Column(db.Float, default=0.0)
-    km_ida = db.Column(db.Float, default=0.0)
-    km_vuelta = db.Column(db.Float, default=0.0)
-    horas = db.Column(db.Float, nullable=False)
-    tarea = db.Column(db.Text, default="")
-    cliente = db.Column(db.Text, default="")
-    comentarios = db.Column(db.Text, default="")
+    fecha = db.Column(db.String(50))
+    entrada = db.Column(db.String(50))
+    salida = db.Column(db.String(50))
+    almuerzo = db.Column(db.Float)
+    viaje_ida = db.Column(db.Float, default=0)
+    viaje_vuelta = db.Column(db.Float, default=0)
+    km_ida = db.Column(db.Float, default=0)
+    km_vuelta = db.Column(db.Float, default=0)
+    horas = db.Column(db.Float)
+    tarea = db.Column(db.Text)
+    cliente = db.Column(db.Text)
+    comentarios = db.Column(db.Text)
+    contrato = db.Column(db.Boolean, default=False)
+    centro_costo_id     = db.Column(db.Integer, db.ForeignKey('centros_costo.id'), nullable=True)
+    service_order       = db.Column(db.String(10), nullable=True)
+    tipo_servicio_id    = db.Column(db.Integer, db.ForeignKey('tipos_servicio.id'), nullable=True)
+    linea_id            = db.Column(db.Integer, db.ForeignKey('lineas.id'), nullable=True)
+    centro_costo   = db.relationship('CentroCosto')
+    tipo_servicio  = db.relationship('TipoServicio')
+    linea          = db.relationship('Linea')
 
 
 
@@ -213,14 +221,25 @@ def dashboard():
         (r.km_ida or 0) + (r.km_vuelta or 0)
         for r in registros
     ])
+    
+     # Consultar los clientes, centros de costo, tipos de servicio y líneas
+    clientes = ClienteModel.query.order_by(ClienteModel.nombre).all()
+    centros_costo = CentroCosto.query.order_by(CentroCosto.nombre).all()
+    tipos_servicio = TipoServicio.query.order_by(TipoServicio.nombre).all()
+    lineas = Linea.query.order_by(Linea.nombre).all()
 
-    return render_template(
+     return render_template(
         'dashboard.html',
         username=session['username'],
         role=session['role'],
         registros=registros,
         total_horas=round(total_horas, 2),
-        total_km=round(total_km, 2)
+        total_km=round(total_km, 2),
+        clientes=clientes,
+        centros_costo=centros_costo,
+        tipos_servicio=tipos_servicio,
+        lineas=lineas,
+        registro=None  # Pasar `None` para crear un nuevo registro
     )
 
 
