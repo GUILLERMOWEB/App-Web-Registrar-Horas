@@ -74,17 +74,18 @@ class Registro(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
     fecha = db.Column(db.String(50), nullable=False)
-    entrada = db.Column(db.String(50), nullable=False)
-    salida = db.Column(db.String(50), nullable=False)
+    hora_entrada = db.Column(db.String(50), nullable=False)  # Añadimos hora_entrada
+    hora_salida = db.Column(db.String(50), nullable=False)  # Añadimos hora_salida
     almuerzo = db.Column(db.Float, default=0.0)
     viaje_ida = db.Column(db.Float, default=0.0)
     viaje_vuelta = db.Column(db.Float, default=0.0)
     km_ida = db.Column(db.Float, default=0.0)
     km_vuelta = db.Column(db.Float, default=0.0)
-    horas = db.Column(db.Float, nullable=False)  # Asegúrate de que este campo no sea nulo
+    horas = db.Column(db.Float, nullable=False)
     tarea = db.Column(db.Text, default="")
     cliente = db.Column(db.Text, default="")
     comentarios = db.Column(db.Text, default="")
+
 
 
 # ─── Inicialización de la base de datos ─────────
@@ -171,10 +172,12 @@ def dashboard():
             flash("Formato de hora incorrecto. Use HH:MM.", "danger")
             return redirect(url_for('dashboard'))
 
-        # Crear nuevo registro en la base de datos
+        # Crear nuevo registro en la base de datos (corregido)
         nuevo_registro = Registro(
             user_id=session['user_id'],
             fecha=fecha,
+            hora_entrada=entrada,  # campo requerido por la DB
+            hora_salida=salida,    # campo requerido por la DB
             entrada=entrada,
             salida=salida,
             almuerzo=round(almuerzo.total_seconds() / 3600, 2),
