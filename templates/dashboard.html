@@ -11,24 +11,24 @@
       <input type="date" name="fecha" class="form-control" required>
     </div>
     <div class="col-md-2">
-      <label for="entrada" class="form-label">Hora de Entrada</label>
+      <label for="hora_entrada" class="form-label">Hora de Entrada</label>
       <input type="time" name="hora_entrada" class="form-control" required>
     </div>
     <div class="col-md-2">
-      <label for="salida" class="form-label">Hora de Salida</label>
+      <label for="hora_salida" class="form-label">Hora de Salida</label>
       <input type="time" name="hora_salida" class="form-control" required>
     </div>
     <div class="col-md-2">
-      <label for="almuerzo_horas" class="form-label">Duración de Almuerzo</label>
-      <input type="number" step="0.5" name="horas_almuerzo" class="form-control" value="{{ registro.almuerzo if registro else '' }}" min="0" required>
+      <label for="horas_almuerzo" class="form-label">Duración de Almuerzo</label>
+      <input type="number" step="0.5" name="horas_almuerzo" class="form-control" value="{{ registro.horas_almuerzo if registro else '' }}" min="0" required>
     </div>
     <div class="col-md-2">
-      <label for="viaje_ida" class="form-label">Duración Viaje Ida (h)</label>
-      <input type="number" step="0.01" name="horas_viaje_ida" class="form-control" value="{{ registro.viaje_ida if registro else '' }}">
+      <label for="horas_viaje_ida" class="form-label">Duración Viaje Ida (h)</label>
+      <input type="number" step="0.01" name="horas_viaje_ida" class="form-control" value="{{ registro.horas_viaje_ida if registro else '' }}">
     </div>
     <div class="col-md-2">
-      <label for="viaje_vuelta" class="form-label">Duración Viaje Vuelta (h)</label>
-      <input type="number" step="0.01" name="horas_viaje_vuelta" class="form-control" value="{{ registro.viaje_vuelta if registro else '' }}">
+      <label for="horas_viaje_vuelta" class="form-label">Duración Viaje Vuelta (h)</label>
+      <input type="number" step="0.01" name="horas_viaje_vuelta" class="form-control" value="{{ registro.horas_viaje_vuelta if registro else '' }}">
     </div>
     <div class="col-md-2">
       <label for="km_ida" class="form-label">KM de Ida</label>
