@@ -165,8 +165,15 @@ def dashboard():
 
     if request.method == 'POST':
         fecha = request.form['fecha']
-        entrada = request.form['entrada']
-        salida = request.form['salida']
+        entrada = request.form.get('entrada')
+        if not hora_entrada:
+            flash("Hora de entrada es obligatoria", "danger")
+            return redirect(url_for('dashboard'))
+            
+        salida = request.form.get('salida')
+        if not hora_entrada:
+            flash("Hora de salida es obligatoria", "danger")
+            return redirect(url_for('dashboard'))
 
         # Verificar que los campos de entrada y salida no estén vacíos
         if not entrada or not salida:
