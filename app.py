@@ -167,19 +167,7 @@ def dashboard():
         fecha = request.form['fecha']
         entrada = request.form.get('entrada')
         salida = request.form.get('salida')
-       
-        hora_entrada = request.form.get('hora_entrada')
-        if not hora_entrada:
-            flash("Hora de entrada es obligatoria", "danger")
-            return redirect(url_for('dashboard'))
-            
-        hora_salida = request.form.get('hora_salida')    
-        salida = request.form.get('salida')
-        if not hora_entrada:
-            flash("Hora de salida es obligatoria", "danger")
-            return redirect(url_for('dashboard'))
 
-        # Verificar que los campos de entrada y salida no estén vacíos
         if not entrada or not salida:
             flash("Por favor, complete las horas de entrada y salida.", "danger")
             return redirect(url_for('dashboard'))
@@ -220,12 +208,11 @@ def dashboard():
             flash("Formato de hora incorrecto. Use HH:MM.", "danger")
             return redirect(url_for('dashboard'))
 
-        # Crear nuevo registro en la base de datos (corregido)
         nuevo_registro = Registro(
             user_id=session['user_id'],
             fecha=fecha,
-            entrada=entrada,  # campo requerido por la DB
-            salida=salida,    # campo requerido por la DB
+            entrada=entrada,
+            salida=salida,
             almuerzo=round(almuerzo.total_seconds() / 3600, 2),
             horas=round(horas_trabajadas, 2),
             viaje_ida=viaje_ida,
@@ -259,8 +246,7 @@ def dashboard():
         (r.km_ida or 0) + (r.km_vuelta or 0)
         for r in registros
     ])
-    
-    # Consultar los clientes, centros de costo, tipos de servicio y líneas
+
     clientes = ClienteModel.query.order_by(ClienteModel.nombre).all()
     centros_costo = CentroCosto.query.order_by(CentroCosto.nombre).all()
     tipos_servicio = TipoServicio.query.order_by(TipoServicio.nombre).all()
@@ -277,8 +263,9 @@ def dashboard():
         centros_costo=centros_costo,
         tipos_servicio=tipos_servicio,
         lineas=lineas,
-        registro=None  # Pasar `None` para crear un nuevo registro
+        registro=None
     )
+
 
 
 @app.route('/exportar_excel')
