@@ -165,8 +165,8 @@ def dashboard():
 
     if request.method == 'POST':
         fecha = request.form['fecha']
-        entrada = request.form.get('entrada')
-        salida = request.form.get('salida')
+        entrada = request.form['entrada']
+        salida = request.form['salida']
 
         # Verificar que los campos de entrada y salida no estén vacíos
         if not entrada or not salida:
