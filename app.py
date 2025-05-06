@@ -169,7 +169,7 @@ def dashboard():
         hora_entrada = request.form.get('hora_entrada')
         hora_salida = request.form.get('hora_salida')
 
-        if not entrada or not salida:
+        if not hora_entrada or not hora_salida:
             flash("Por favor, complete las horas de entrada y salida.", "danger")
             return redirect(url_for('dashboard'))
 
@@ -187,7 +187,7 @@ def dashboard():
             viaje_vuelta = float(request.form.get('viaje_vuelta', 0) or 0)
             km_ida = float(request.form.get('km_ida', 0) or 0)
             km_vuelta = float(request.form.get('km_vuelta', 0) or 0)
-        except ValueError:
+        except ValueError:ytr
             flash("Las horas de viaje y kilómetros deben ser números válidos.", "danger")
             return redirect(url_for('dashboard'))
 
