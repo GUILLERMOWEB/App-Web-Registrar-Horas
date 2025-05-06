@@ -173,17 +173,15 @@ def dashboard():
             return redirect(url_for('dashboard'))
 
         try:
-            horas_almuerzo = int(request.form.get('horas_almuerzo', 0))
-            almuerzo_minutos = int(request.form.get('almuerzo_minutos', 0))
+            horas_almuerzo = float(request.form.get('horas_almuerzo', 0) or 0)
+            almuerzo = timedelta(hours=horas_almuerzo)
         except ValueError:
-            flash("El tiempo de almuerzo debe ser un número válido", "danger")
+            flash("El tiempo de almuerzo debe ser un número válido.", "danger")
             return redirect(url_for('dashboard'))
 
-        almuerzo = timedelta(hours=almuerzo_horas, minutes=almuerzo_minutos)
-
         try:
-            horas_viaje_ida = float(request.form.get('horas_viaje_ida', 0) or 0)
-            horas_viaje_vuelta = float(request.form.get('horas_viaje_vuelta', 0) or 0)
+            viaje_ida = float(request.form.get('horas_viaje_ida', 0) or 0)
+            viaje_vuelta = float(request.form.get('horas_viaje_vuelta', 0) or 0)
             km_ida = float(request.form.get('km_ida', 0) or 0)
             km_vuelta = float(request.form.get('km_vuelta', 0) or 0)
         except ValueError:
@@ -239,7 +237,7 @@ def dashboard():
     registros = registros_query.order_by(Registro.fecha.desc()).all()
 
     total_horas = sum([
-        (r.horas or 0) + (r.horas_viaje_ida or 0) + (r.horas_viaje_vuelta or 0)
+        (r.horas_trabajadas or 0) + (r.horas_viaje_ida or 0) + (r.horas_viaje_vuelta or 0)
         for r in registros
     ])
     total_km = sum([
@@ -265,6 +263,7 @@ def dashboard():
         lineas=lineas,
         registro=None
     )
+
 
 
 
