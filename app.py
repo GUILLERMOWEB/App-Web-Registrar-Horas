@@ -56,10 +56,15 @@ db.init_app(app)  # Se inicializa db antes de usarlo
 migrate = Migrate(app, db)
 
 # Asegúrate de que la base de datos se cree si no existe
+# ─── Inicialización de la base de datos ─────────
 with app.app_context():
     db.create_all()
+    if not User.query.filter(db.func.lower(User.username) == 'guillermo gutierrez').first():
+        superadmin = User(username='guillermo gutierrez', password='0000', role='superadmin')
+        db.session.add(superadmin)
+        db.session.commit()
 
-# ─── Modelos ─────────────────────────────────────
+
 class User(db.Model):
     __tablename__ = 'users'
     id = db.Column(db.Integer, primary_key=True)
@@ -68,6 +73,22 @@ class User(db.Model):
     role = db.Column(db.String(50), nullable=False)
 
     registros = db.relationship('Registro', backref='user', lazy=True)
+
+
+class CentroCosto(db.Model):
+    __tablename__ = 'centros_costo'
+    id     = db.Column(db.Integer, primary_key=True)
+    nombre = db.Column(db.String(100), nullable=False, unique=True)
+
+class TipoServicio(db.Model):
+    __tablename__ = 'tipos_servicio'
+    id     = db.Column(db.Integer, primary_key=True)
+    nombre = db.Column(db.String(100), nullable=False, unique=True)
+
+class Linea(db.Model):
+    __tablename__ = 'lineas'
+    id     = db.Column(db.Integer, primary_key=True)
+    nombre = db.Column(db.String(100), nullable=False, unique=True)
 
 class Registro(db.Model):
     __tablename__ = 'registros'
@@ -96,15 +117,20 @@ class Registro(db.Model):
     tipo_servicio  = db.relationship('TipoServicio')
     linea          = db.relationship('Linea')
 
+    
+    
+class Cliente(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    nombre = db.Column(db.String(100), nullable=False)
+    direccion = db.Column(db.String(200), nullable=False)
+    telefono = db.Column(db.String(50), nullable=True)
+
+    def __repr__(self):
+        return f'<Cliente {self.nombre}>'
 
 
-# ─── Inicialización de la base de datos ─────────
-with app.app_context():
-    db.create_all()
-    if not User.query.filter(db.func.lower(User.username) == 'guillermo gutierrez').first():
-        superadmin = User(username='guillermo gutierrez', password='0000', role='superadmin')
-        db.session.add(superadmin)
-        db.session.commit()
+
+
 
 # ─── Rutas ──────────────────────────────────────
 @app.route('/', methods=['GET', 'POST'])
