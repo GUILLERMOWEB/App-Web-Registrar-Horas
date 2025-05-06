@@ -93,11 +93,12 @@ class Registro(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
     fecha = db.Column(db.String(50))
-    entrada = db.Column(db.String(50))
-    salida = db.Column(db.String(50))
-    almuerzo = db.Column(db.Float)
-    viaje_ida = db.Column(db.Float, default=0)
-    viaje_vuelta = db.Column(db.Float, default=0)
+    hora_entrada = db.Column(db.Time, nullable=False)
+    hora_salida = db.Column(db.Time, nullable=False)
+    horas_almuerzo = db.Column(db.Float, nullable=False, default=0.0)
+    horas_trabajadas = db.Column(db.Float, nullable=False, default=0.0)
+    horas_viaje_ida = db.Column(db.Float, nullable=True, default=0.0)
+    horas_viaje_vuelta = db.Column(db.Float, nullable=True, default=0.0)
     km_ida = db.Column(db.Float, default=0)
     km_vuelta = db.Column(db.Float, default=0)
     horas = db.Column(db.Float)
@@ -211,17 +212,17 @@ def dashboard():
         nuevo_registro = Registro(
             user_id=session['user_id'],
             fecha=fecha,
-            entrada=entrada,
-            salida=salida,
-            almuerzo=round(almuerzo.total_seconds() / 3600, 2),
-            horas=round(horas_trabajadas, 2),
-            viaje_ida=viaje_ida,
-            viaje_vuelta=viaje_vuelta,
+            hora_entrada=t_entrada,
+            hora_salida=t_salida,
+            horas_almuerzo=round(almuerzo.total_seconds() / 3600, 2),
+            horas_trabajadas=round(horas_trabajadas, 2),
+            horas_viaje_ida=viaje_ida,
+            horas_viaje_vuelta=viaje_vuelta,
             km_ida=km_ida,
             km_vuelta=km_vuelta,
             tarea=tarea,
             cliente=cliente,
-            comentarios=comentarios
+            comentarios=comentarios,
         )
 
         db.session.add(nuevo_registro)
