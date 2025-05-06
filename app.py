@@ -129,8 +129,8 @@ def dashboard():
 
     if request.method == 'POST':
         fecha = request.form['fecha']
-        entrada = request.form.get('entrada', '').strip()
-        salida = request.form.get('salida', '').strip()
+        hora_entrada = request.form.get('hora_entrada', '').strip()
+        hora_salida = request.form.get('hora_salida', '').strip()
 
         # Verificar que los campos de entrada y salida no estén vacíos
         if not entrada or not salida:
@@ -161,8 +161,8 @@ def dashboard():
 
         try:
             formato_hora = "%H:%M"
-            t_entrada = datetime.strptime(entrada, formato_hora).time()  # Convertido a .time()
-            t_salida = datetime.strptime(salida, formato_hora).time()    # Convertido a .time()
+            t_entrada = datetime.strptime(hora_entrada, formato_hora).time()  # Convertido a .time()
+            t_salida = datetime.strptime(hora_salida, formato_hora).time()    # Convertido a .time()
 
             # Si la hora de salida es antes que la de entrada, añadir un día
             if t_salida < t_entrada:
@@ -179,8 +179,8 @@ def dashboard():
         nuevo_registro = Registro(
             user_id=session['user_id'],
             fecha=fecha,
-            entrada=t_entrada,  # Guardar como time
-            salida=t_salida,    # Guardar como time
+            hora_entrada=t_entrada,  # Guardar como time
+            hora_salida=t_salida,    # Guardar como time
             almuerzo=round(almuerzo.total_seconds() / 3600, 2),
             horas=round(horas_trabajadas, 2),
             viaje_ida=viaje_ida,
