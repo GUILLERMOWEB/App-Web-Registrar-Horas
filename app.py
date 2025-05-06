@@ -222,13 +222,13 @@ def dashboard():
         for r in registros
     ])
     
-     # Consultar los clientes, centros de costo, tipos de servicio y líneas
+    # Consultar los clientes, centros de costo, tipos de servicio y líneas
     clientes = ClienteModel.query.order_by(ClienteModel.nombre).all()
     centros_costo = CentroCosto.query.order_by(CentroCosto.nombre).all()
     tipos_servicio = TipoServicio.query.order_by(TipoServicio.nombre).all()
     lineas = Linea.query.order_by(Linea.nombre).all()
 
-     return render_template(
+    return render_template(
         'dashboard.html',
         username=session['username'],
         role=session['role'],
