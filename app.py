@@ -67,6 +67,7 @@ class User(db.Model):
 
     registros = db.relationship('Registro', backref='user', lazy=True)
 
+
 class Registro(db.Model):
     __tablename__ = 'registros'
     __table_args__ = {'extend_existing': True}
@@ -74,17 +75,18 @@ class Registro(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
     fecha = db.Column(db.String(50), nullable=False)
-    entrada = db.Column(db.String(50), nullable=False)
-    salida = db.Column(db.String(50), nullable=False)
+    entrada = db.Column(db.Time, nullable=False)  # Cambié a db.Time
+    salida = db.Column(db.Time, nullable=False)   # Cambié a db.Time
     almuerzo = db.Column(db.Float, default=0.0)
     viaje_ida = db.Column(db.Float, default=0.0)
     viaje_vuelta = db.Column(db.Float, default=0.0)
     km_ida = db.Column(db.Float, default=0.0)
     km_vuelta = db.Column(db.Float, default=0.0)
-    horas = db.Column(db.Float, nullable=False)  # Asegúrate de que este campo no sea nulo
+    horas = db.Column(db.Float, nullable=False)
     tarea = db.Column(db.Text, default="")
     cliente = db.Column(db.Text, default="")
     comentarios = db.Column(db.Text, default="")
+
 
 
 # ─── Inicialización de la base de datos ─────────
@@ -127,8 +129,8 @@ def dashboard():
 
     if request.method == 'POST':
         fecha = request.form['fecha']
-        entrada = request.form['entrada']
-        salida = request.form['salida']
+        entrada = request.form.get('entrada', '').strip()
+        salida = request.form.get('salida', '').strip()
 
         # Verificar que los campos de entrada y salida no estén vacíos
         if not entrada or not salida:
@@ -159,13 +161,15 @@ def dashboard():
 
         try:
             formato_hora = "%H:%M"
-            t_entrada = datetime.strptime(entrada, formato_hora)
-            t_salida = datetime.strptime(salida, formato_hora)
+            t_entrada = datetime.strptime(entrada, formato_hora).time()  # Convertido a .time()
+            t_salida = datetime.strptime(salida, formato_hora).time()    # Convertido a .time()
 
+            # Si la hora de salida es antes que la de entrada, añadir un día
             if t_salida < t_entrada:
-                t_salida += timedelta(days=1)
+                t_salida = (datetime.combine(datetime.today(), t_salida) + timedelta(days=1)).time()
 
-            tiempo_total = t_salida - t_entrada - almuerzo
+            # Calcular las horas trabajadas restando almuerzo
+            tiempo_total = datetime.combine(datetime.today(), t_salida) - datetime.combine(datetime.today(), t_entrada) - almuerzo
             horas_trabajadas = tiempo_total.total_seconds() / 3600
         except ValueError:
             flash("Formato de hora incorrecto. Use HH:MM.", "danger")
@@ -175,8 +179,8 @@ def dashboard():
         nuevo_registro = Registro(
             user_id=session['user_id'],
             fecha=fecha,
-            entrada=t_entrada.strftime("%H:%M"),  # Convierte la hora de entrada a cadena
-            salida=t_salida.strftime("%H:%M"),    # Convierte la hora de salida a cadena
+            entrada=t_entrada,  # Guardar como time
+            salida=t_salida,    # Guardar como time
             almuerzo=round(almuerzo.total_seconds() / 3600, 2),
             horas=round(horas_trabajadas, 2),
             viaje_ida=viaje_ida,
@@ -219,6 +223,7 @@ def dashboard():
         total_horas=round(total_horas, 2),
         total_km=round(total_km, 2)
     )
+
 
 
 @app.route('/exportar_excel')
