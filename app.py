@@ -75,8 +75,8 @@ class Registro(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
     fecha = db.Column(db.String(50), nullable=False)
-    hora_entrada = db.Column(db.Time, nullable=False)  # Cambié a db.Time
-    hora_salida = db.Column(db.Time, nullable=False)   # Cambié a db.Time
+    entrada = db.Column(db.Time, nullable=False)  # Cambié a db.Time
+    salida = db.Column(db.Time, nullable=False)   # Cambié a db.Time
     almuerzo = db.Column(db.Float, default=0.0)
     viaje_ida = db.Column(db.Float, default=0.0)
     viaje_vuelta = db.Column(db.Float, default=0.0)
@@ -179,8 +179,8 @@ def dashboard():
         nuevo_registro = Registro(
             user_id=session['user_id'],
             fecha=fecha,
-            hora_entrada=t_entrada,  # Guardar como time
-            hora_salida=t_salida,    # Guardar como time
+            entrada=t_entrada,  # Guardar como time
+            salida=t_salida,    # Guardar como time
             almuerzo=round(almuerzo.total_seconds() / 3600, 2),
             horas=round(horas_trabajadas, 2),
             viaje_ida=viaje_ida,
