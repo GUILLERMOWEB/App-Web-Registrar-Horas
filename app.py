@@ -182,8 +182,8 @@ def dashboard():
         almuerzo = timedelta(hours=almuerzo_horas, minutes=almuerzo_minutos)
 
         try:
-            viaje_ida = float(request.form.get('viaje_ida', 0) or 0)
-            viaje_vuelta = float(request.form.get('viaje_vuelta', 0) or 0)
+            horas_viaje_ida = float(request.form.get('horas_viaje_ida', 0) or 0)
+            horas_viaje_vuelta = float(request.form.get('horas_viaje_vuelta', 0) or 0)
             km_ida = float(request.form.get('km_ida', 0) or 0)
             km_vuelta = float(request.form.get('km_vuelta', 0) or 0)
         except ValueError:
@@ -239,7 +239,7 @@ def dashboard():
     registros = registros_query.order_by(Registro.fecha.desc()).all()
 
     total_horas = sum([
-        (r.horas or 0) + (r.viaje_ida or 0) + (r.viaje_vuelta or 0)
+        (r.horas or 0) + (r.horas_viaje_ida or 0) + (r.horas_viaje_vuelta or 0)
         for r in registros
     ])
     total_km = sum([
