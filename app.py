@@ -178,8 +178,6 @@ def dashboard():
             fecha=fecha,
             entrada=entrada,  # campo requerido por la DB
             salida=salida,    # campo requerido por la DB
-            entrada=entrada,
-            salida=salida,
             almuerzo=round(almuerzo.total_seconds() / 3600, 2),
             horas=round(horas_trabajadas, 2),
             viaje_ida=viaje_ida,
