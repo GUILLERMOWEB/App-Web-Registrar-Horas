@@ -57,12 +57,6 @@ migrate = Migrate(app, db)
 
 # Asegúrate de que la base de datos se cree si no existe
 # ─── Inicialización de la base de datos ─────────
-with app.app_context():
-    db.create_all()
-    if not User.query.filter(db.func.lower(User.username) == 'guillermo gutierrez').first():
-        superadmin = User(username='guillermo gutierrez', password='0000', role='superadmin')
-        db.session.add(superadmin)
-        db.session.commit()
 
 
 class User(db.Model):
@@ -73,6 +67,8 @@ class User(db.Model):
     role = db.Column(db.String(50), nullable=False)
 
     registros = db.relationship('Registro', backref='user', lazy=True)
+   
+
 
 
 class CentroCosto(db.Model):
@@ -129,7 +125,12 @@ class Cliente(db.Model):
         return f'<Cliente {self.nombre}>'
 
 
-
+with app.app_context():
+    db.create_all()
+    if not User.query.filter(db.func.lower(User.username) == 'guillermo gutierrez').first():
+        superadmin = User(username='guillermo gutierrez', password='0000', role='superadmin')
+        db.session.add(superadmin)
+        db.session.commit()
 
 
 # ─── Rutas ──────────────────────────────────────
