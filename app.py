@@ -16,6 +16,8 @@ from wtforms.validators import DataRequired
 from wtforms import StringField, SubmitField
 from flask_login import login_required, current_user
 from functools import wraps
+from dotenv import load_dotenv
+
 
 # Importar db de forma tardía para evitar importación circular
 from models import db, RegistroHoras, ClienteModel
