@@ -91,13 +91,13 @@ class Registro(db.Model):
 
     id = db.Column(db.Integer, primary_key=True)
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
+    user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
     fecha = db.Column(db.String(50))
-    hora_entrada = db.Column(db.Time, nullable=False)
-    hora_salida = db.Column(db.Time, nullable=False)
-    almuerzo = db.Column(db.Float, nullable=False, default=0.0)
-    horas_trabajadas = db.Column(db.Float, nullable=False, default=0.0)
-    horas_viaje_ida = db.Column(db.Float, nullable=True, default=0.0)
-    horas_viaje_vuelta = db.Column(db.Float, nullable=True, default=0.0)
+    entrada = db.Column(db.String(50))
+    salida = db.Column(db.String(50))
+    almuerzo = db.Column(db.Float)
+    viaje_ida = db.Column(db.Float, default=0)
+    viaje_vuelta = db.Column(db.Float, default=0)
     km_ida = db.Column(db.Float, default=0)
     km_vuelta = db.Column(db.Float, default=0)
     horas = db.Column(db.Float)
@@ -165,23 +165,21 @@ def dashboard():
 
     if request.method == 'POST':
         fecha = request.form['fecha']
-        hora_entrada = request.form.get('hora_entrada')
-        hora_salida = request.form.get('hora_salida')
-
-        if not hora_entrada or not hora_salida:
-            flash("Por favor, complete las horas de entrada y salida.", "danger")
-            return redirect(url_for('dashboard'))
+        entrada = request.form['entrada']
+        salida = request.form['salida']
 
         try:
-            horas_almuerzo = float(request.form.get('horas_almuerzo', 0) or 0)
-            almuerzo = timedelta(hours=horas_almuerzo)
+            almuerzo_horas = int(request.form.get('almuerzo_horas', 0))
+            almuerzo_minutos = int(request.form.get('almuerzo_minutos', 0))
         except ValueError:
-            flash("El tiempo de almuerzo debe ser un número válido.", "danger")
+            flash("El tiempo de almuerzo debe ser un número válido", "danger")
             return redirect(url_for('dashboard'))
 
+        almuerzo = timedelta(hours=almuerzo_horas, minutes=almuerzo_minutos)
+
         try:
-            viaje_ida = float(request.form.get('horas_viaje_ida', 0) or 0)
-            viaje_vuelta = float(request.form.get('horas_viaje_vuelta', 0) or 0)
+            viaje_ida = float(request.form.get('viaje_ida', 0) or 0)
+            viaje_vuelta = float(request.form.get('viaje_vuelta', 0) or 0)
             km_ida = float(request.form.get('km_ida', 0) or 0)
             km_vuelta = float(request.form.get('km_vuelta', 0) or 0)
         except ValueError:
@@ -194,8 +192,8 @@ def dashboard():
 
         try:
             formato_hora = "%H:%M"
-            t_entrada = datetime.strptime(hora_entrada, formato_hora)
-            t_salida = datetime.strptime(hora_salida, formato_hora)
+            t_entrada = datetime.strptime(entrada, formato_hora)
+            t_salida = datetime.strptime(salida, formato_hora)
 
             if t_salida < t_entrada:
                 t_salida += timedelta(days=1)
@@ -209,17 +207,17 @@ def dashboard():
         nuevo_registro = Registro(
             user_id=session['user_id'],
             fecha=fecha,
-            hora_entrada=t_entrada,
-            hora_salida=t_salida,
-            horas_almuerzo=round(almuerzo.total_seconds() / 3600, 2),
-            horas_trabajadas=round(horas_trabajadas, 2),
-            horas_viaje_ida=viaje_ida,
-            horas_viaje_vuelta=viaje_vuelta,
+            entrada=entrada,
+            salida=salida,
+            almuerzo=round(almuerzo.total_seconds() / 3600, 2),
+            horas=round(horas_trabajadas, 2),
+            viaje_ida=viaje_ida,
+            viaje_vuelta=viaje_vuelta,
             km_ida=km_ida,
             km_vuelta=km_vuelta,
             tarea=tarea,
             cliente=cliente,
-            comentarios=comentarios,
+            comentarios=comentarios
         )
 
         db.session.add(nuevo_registro)
