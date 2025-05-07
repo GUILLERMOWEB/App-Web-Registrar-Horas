@@ -23,28 +23,37 @@ from urllib.parse import urlparse
 # Inicializar la aplicación Flask
 app = Flask(__name__)
 
+
+# Configuración de la base de datos con PostgreSQL
+app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get("DATABASE_URL")
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+app.secret_key = 'clave_secreta_para_sesiones'
+
+
 # Definir una clave secreta para la sesión
 app.secret_key = 'tu_clave_secreta'
+
+db = SQLAlchemy(app)
+
 
 # Inicializar el LoginManager
 login_manager = LoginManager()
 login_manager.init_app(app)
 
+# Configurar la ruta de login
+login_manager.login_view = 'login'
 
 
-class User(UserMixin, db.Model):
-    __tablename__ = 'users'
-    id = db.Column(db.Integer, primary_key=True)
-    username = db.Column(db.String(100), unique=True, nullable=False)
-    password = db.Column(db.String(100), nullable=False)
-    role = db.Column(db.String(50), nullable=False)
+# Habilita la recarga automática de plantillas y la caché de Jinja
+app.config['TEMPLATES_AUTO_RELOAD'] = True
+app.jinja_env.cache = {}
 
-    registros = db.relationship('Registro', backref='user', lazy=True)
-
+# Inicializa la base de datos y el sistema de migración
+db.init_app(app)  # Se inicializa db antes de usarlo
+migrate = Migrate(app, db)
 
 
 # Función para cargar un usuario a partir de su ID
-@login_manager.user_loader
 @login_manager.user_loader
 def load_user(user_id):
     return db.session.get(User, int(user_id))
@@ -88,18 +97,14 @@ def superadmin_required(f):
     return wrapper
 
 
-# Configuración de la base de datos con PostgreSQL
-app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get("DATABASE_URL")
-app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-app.secret_key = 'clave_secreta_para_sesiones'
+class User(UserMixin, db.Model):
+    __tablename__ = 'users'
+    id = db.Column(db.Integer, primary_key=True)
+    username = db.Column(db.String(100), unique=True, nullable=False)
+    password = db.Column(db.String(100), nullable=False)
+    role = db.Column(db.String(50), nullable=False)
 
-# Habilita la recarga automática de plantillas y la caché de Jinja
-app.config['TEMPLATES_AUTO_RELOAD'] = True
-app.jinja_env.cache = {}
-
-# Inicializa la base de datos y el sistema de migración
-db.init_app(app)  # Se inicializa db antes de usarlo
-migrate = Migrate(app, db)
+    registros = db.relationship('Registro', backref='user', lazy=True)
 
 # Asegúrate de que la base de datos se cree si no existe
 # ─── Inicialización de la base de datos ─────────
