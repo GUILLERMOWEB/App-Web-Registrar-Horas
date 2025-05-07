@@ -703,8 +703,8 @@ def agregar_cliente():
 
 # Ruta para cargar el archivo SQL
 @app.route('/upload_sql', methods=['GET', 'POST'])
-@superadmin_required
 @login_required
+@superadmin_required
 def upload_sql():
     if request.method == 'POST':
         sql_file = request.files.get('sql_file')
