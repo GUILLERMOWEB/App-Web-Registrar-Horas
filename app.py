@@ -228,7 +228,7 @@ def dashboard():
             
         registro_id = request.form.get('registro_id')
 
-        fecha = request.form['fecha']
+        fecha = request.form.get('fecha')
         ntrada = request.form.get('entrada')
         salida = request.form.get('salida')
 
