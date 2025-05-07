@@ -228,7 +228,12 @@ def dashboard():
             
         registro_id = request.form.get('registro_id')
 
-        fecha = request.form.get('fecha')
+   
+        fecha = request.form.get('fecha', None)
+        if not fecha:
+            #Si la fecha no es proporcionada, usar la fecha actual
+            fecha = datetime.datetime.now().strftime('%Y-%m-%d')
+
         ntrada = request.form.get('entrada')
         salida = request.form.get('salida')
 
