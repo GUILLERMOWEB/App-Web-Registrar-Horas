@@ -198,52 +198,71 @@ def login():
             flash('Usuario o contraseña incorrectos', category='danger')
     return render_template('login.html')
 
-@app.route('/dashboard', methods=['GET', 'POST'])
-def dashboard():
-    if 'user_id' not in session:
-        return redirect(url_for('login'))
+if request.method == 'POST':
+    registro_id = request.form.get('registro_id')
 
-    if request.method == 'POST':
-        fecha = request.form['fecha']
-        entrada = request.form['entrada']
-        salida = request.form['salida']
+    fecha = request.form['fecha']
+    entrada = request.form['entrada']
+    salida = request.form['salida']
 
-        try:
-            almuerzo_horas = int(request.form.get('almuerzo_horas', 0))
-            almuerzo_minutos = int(request.form.get('almuerzo_minutos', 0))
-        except ValueError:
-            flash("El tiempo de almuerzo debe ser un número válido", "danger")
-            return redirect(url_for('dashboard'))
+    try:
+        almuerzo_horas = int(request.form.get('almuerzo_horas', 0))
+        almuerzo_minutos = int(request.form.get('almuerzo_minutos', 0))
+    except ValueError:
+        flash("El tiempo de almuerzo debe ser un número válido", "danger")
+        return redirect(url_for('dashboard'))
 
-        almuerzo = timedelta(hours=almuerzo_horas, minutes=almuerzo_minutos)
+    almuerzo = timedelta(hours=almuerzo_horas, minutes=almuerzo_minutos)
 
-        try:
-            viaje_ida = float(request.form.get('viaje_ida', 0) or 0)
-            viaje_vuelta = float(request.form.get('viaje_vuelta', 0) or 0)
-            km_ida = float(request.form.get('km_ida', 0) or 0)
-            km_vuelta = float(request.form.get('km_vuelta', 0) or 0)
-        except ValueError:
-            flash("Las horas de viaje y kilómetros deben ser números válidos.", "danger")
-            return redirect(url_for('dashboard'))
+    try:
+        viaje_ida = float(request.form.get('viaje_ida', 0) or 0)
+        viaje_vuelta = float(request.form.get('viaje_vuelta', 0) or 0)
+        km_ida = float(request.form.get('km_ida', 0) or 0)
+        km_vuelta = float(request.form.get('km_vuelta', 0) or 0)
+    except ValueError:
+        flash("Las horas de viaje y kilómetros deben ser números válidos.", "danger")
+        return redirect(url_for('dashboard'))
 
-        tarea = request.form.get('tarea', '').strip()
-        cliente = request.form.get('cliente', '').strip()
-        comentarios = request.form.get('comentarios', '').strip()
+    tarea = request.form.get('tarea', '').strip()
+    cliente = request.form.get('cliente', '').strip()
+    comentarios = request.form.get('comentarios', '').strip()
 
-        try:
-            formato_hora = "%H:%M"
-            t_entrada = datetime.strptime(entrada, formato_hora)
-            t_salida = datetime.strptime(salida, formato_hora)
+    try:
+        formato_hora = "%H:%M"
+        t_entrada = datetime.strptime(entrada, formato_hora)
+        t_salida = datetime.strptime(salida, formato_hora)
 
-            if t_salida < t_entrada:
-                t_salida += timedelta(days=1)
+        if t_salida < t_entrada:
+            t_salida += timedelta(days=1)
 
-            tiempo_total = t_salida - t_entrada - almuerzo
-            horas_trabajadas = tiempo_total.total_seconds() / 3600
-        except ValueError:
-            flash("Formato de hora incorrecto. Use HH:MM.", "danger")
-            return redirect(url_for('dashboard'))
+        tiempo_total = t_salida - t_entrada - almuerzo
+        horas_trabajadas = tiempo_total.total_seconds() / 3600
+    except ValueError:
+        flash("Formato de hora incorrecto. Use HH:MM.", "danger")
+        return redirect(url_for('dashboard'))
 
+    if registro_id:
+        # 🛠 EDITAR REGISTRO EXISTENTE
+        registro = Registro.query.get(int(registro_id))
+        if registro and registro.user_id == session['user_id']:
+            registro.fecha = fecha
+            registro.entrada = entrada
+            registro.salida = salida
+            registro.almuerzo = round(almuerzo.total_seconds() / 3600, 2)
+            registro.horas = round(horas_trabajadas, 2)
+            registro.viaje_ida = viaje_ida
+            registro.viaje_vuelta = viaje_vuelta
+            registro.km_ida = km_ida
+            registro.km_vuelta = km_vuelta
+            registro.tarea = tarea
+            registro.cliente = cliente
+            registro.comentarios = comentarios
+            db.session.commit()
+            flash('Registro actualizado exitosamente', 'success')
+        else:
+            flash('No se pudo editar el registro', 'danger')
+    else:
+        # ➕ CREAR NUEVO REGISTRO
         nuevo_registro = Registro(
             user_id=session['user_id'],
             fecha=fecha,
@@ -259,48 +278,12 @@ def dashboard():
             cliente=cliente,
             comentarios=comentarios
         )
-
         db.session.add(nuevo_registro)
         db.session.commit()
         flash('Registro guardado exitosamente', category='success')
-        return redirect(url_for('dashboard'))
 
-    # GET - mostrar los registros y total de horas
-    filtros = request.args
-    registros_query = Registro.query.filter_by(user_id=session['user_id'])
+    return redirect(url_for('dashboard'))
 
-    if 'fecha' in filtros:
-        registros_query = registros_query.filter_by(fecha=filtros['fecha'])
-
-    registros = registros_query.order_by(Registro.fecha.desc()).all()
-
-    total_horas = sum([
-        (r.horas or 0) + (r.viaje_ida or 0) + (r.viaje_vuelta or 0)
-        for r in registros
-    ])
-    total_km = sum([
-        (r.km_ida or 0) + (r.km_vuelta or 0)
-        for r in registros
-    ])
-
-    clientes = Cliente.query.order_by(Cliente.nombre).all()
-    centros_costo = CentroCosto.query.order_by(CentroCosto.nombre).all()
-    tipos_servicio = TipoServicio.query.order_by(TipoServicio.nombre).all()
-    lineas = Linea.query.order_by(Linea.nombre).all()
-
-    return render_template(
-        'dashboard.html',
-        username=session['username'],
-        role=session['role'],
-        registros=registros,
-        total_horas=round(total_horas, 2),
-        total_km=round(total_km, 2),
-        clientes=clientes,
-        centros_costo=centros_costo,
-        tipos_servicio=tipos_servicio,
-        lineas=lineas,
-        registro=None
-    )
 
 
 
