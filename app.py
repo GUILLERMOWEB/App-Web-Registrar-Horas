@@ -210,6 +210,9 @@ def dashboard():
         return redirect(url_for('login'))
 
     if request.method == 'POST':
+        print("🛠 DEBUG - Datos recibidos del formulario:")
+        print(request.form)
+
         # Verificar si todos los campos esperados están presentes
         required_fields = ['fecha', 'entrada', 'salida', 'almuerzo_horas', 'almuerzo_minutos', 'viaje_ida', 'viaje_vuelta', 'km_ida', 'km_vuelta', 'tarea', 'cliente']
         
@@ -218,9 +221,11 @@ def dashboard():
             if field not in request.form or not request.form[field].strip():
                 missing_fields.append(field)
         
-        if missing_fields:
-            flash(f"Faltan los siguientes campos: {', '.join(missing_fields)}", 'danger')
-            return redirect(url_for('dashboard'))
+            if missing_fields:
+                flash(f"Faltan los siguientes campos: {', '.join(missing_fields)}", 'danger')
+            return render_template('dashboard.html', form_data=request.form)
+
+            
         registro_id = request.form.get('registro_id')
 
         fecha = request.form['fecha']
