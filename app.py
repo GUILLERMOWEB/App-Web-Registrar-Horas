@@ -13,11 +13,12 @@ from flask_migrate import Migrate
 from flask_wtf import FlaskForm
 from wtforms.validators import DataRequired
 from wtforms import StringField, SubmitField
-from flask_login import login_required, current_user
+from flask_login import login_required, current_user, UserMixin, LoginManager
 from functools import wraps
 import psycopg2
 from werkzeug.utils import secure_filename
-from flask_login import LoginManager
+from urllib.parse import urlparse
+
 
 # Inicializar la aplicación Flask
 app = Flask(__name__)
@@ -29,38 +30,43 @@ app.secret_key = 'tu_clave_secreta'
 login_manager = LoginManager()
 login_manager.init_app(app)
 
-from flask_login import UserMixin
 
-# Clase User, puedes ajustarla según tu modelo de base de datos
-class User(UserMixin):
-    def __init__(self, id):
-        self.id = id
 
-    @classmethod
-    def get(cls, user_id):
-        # Aquí deberías hacer la consulta a tu base de datos para encontrar al usuario por ID
-        # Por ejemplo, si usas SQLAlchemy:
-        # return db.session.query(UserModel).filter_by(id=user_id).first()
-        pass
+class User(UserMixin, db.Model):
+    __tablename__ = 'users'
+    id = db.Column(db.Integer, primary_key=True)
+    username = db.Column(db.String(100), unique=True, nullable=False)
+    password = db.Column(db.String(100), nullable=False)
+    role = db.Column(db.String(50), nullable=False)
+
+    registros = db.relationship('Registro', backref='user', lazy=True)
+
+
 
 # Función para cargar un usuario a partir de su ID
 @login_manager.user_loader
+@login_manager.user_loader
 def load_user(user_id):
-    # Deberías cargar el usuario desde tu base de datos
-    # En este caso, supongo que 'User' tiene un método 'get' para cargarlo por ID
-    return User.get(user_id)
+    return db.session.get(User, int(user_id))
 
+ddef get_db_connection():
+    database_url = os.environ.get("DATABASE_URL")
+    if not database_url:
+        raise ValueError("DATABASE_URL no está definida en el entorno")
 
-# Importar db de forma tardía para evitar importación circular
-from models import db, RegistroHoras, ClienteModel
+    result = urlparse(database_url)
+    username = result.username
+    password = result.password
+    database = result.path[1:]
+    hostname = result.hostname
+    port = result.port
 
-def get_db_connection():
     conn = psycopg2.connect(
-        dbname="registro_horas_db", 
-        user="registro_horas_db_user", 
-        password="I4q95g2dcUWeERh2Ixd4SxRp8FxwFfZ7", 
-        host="dpg-cvv2qhh5pdvs73bvjaog-a.oregon-postgres.render.com", 
-        port="5432"
+        dbname=database,
+        user=username,
+        password=password,
+        host=hostname,
+        port=port
     )
     return conn
 
@@ -81,8 +87,6 @@ def superadmin_required(f):
         return f(*args, **kwargs)
     return wrapper
 
-# Inicialización de la aplicación Flask
-app = Flask(__name__)
 
 # Configuración de la base de datos con PostgreSQL
 app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get("DATABASE_URL")
@@ -99,16 +103,6 @@ migrate = Migrate(app, db)
 
 # Asegúrate de que la base de datos se cree si no existe
 # ─── Inicialización de la base de datos ─────────
-
-
-class User(db.Model):
-    __tablename__ = 'users'
-    id = db.Column(db.Integer, primary_key=True)
-    username = db.Column(db.String(100), unique=True, nullable=False)
-    password = db.Column(db.String(100), nullable=False)
-    role = db.Column(db.String(50), nullable=False)
-
-    registros = db.relationship('Registro', backref='user', lazy=True)
 
 
 class CentroCosto(db.Model):
@@ -700,40 +694,36 @@ def upload_sql():
     if request.method == 'POST':
         sql_file = request.files.get('sql_file')
         
-        # Verifica si se ha cargado un archivo y si es válido
         if sql_file and allowed_file(sql_file.filename):
             try:
-                # Lee el contenido del archivo SQL
                 sql_query = sql_file.read().decode('utf-8')
-
-                # Conéctate a la base de datos
                 conn = get_db_connection()
                 cursor = conn.cursor()
 
-                # Ejecuta el SQL cargado desde el archivo
-                cursor.execute(sql_query)
+                # Ejecutar cada sentencia por separado
+                for statement in sql_query.split(';'):
+                    stmt = statement.strip()
+                    if stmt:
+                        cursor.execute(stmt)
 
-                # Confirma los cambios en la base de datos
                 conn.commit()
-
-                # Cierra el cursor y la conexión
                 cursor.close()
                 conn.close()
 
                 flash('Archivo SQL ejecutado con éxito.', 'success')
-                return redirect(url_for('dashboard'))  # Redirige al dashboard
-                
+                return redirect(url_for('dashboard'))
 
             except Exception as e:
-                # Si hay un error al ejecutar el SQL, lo mostramos
                 print(f"Error al ejecutar el SQL: {e}")
                 flash(f'Error al ejecutar el archivo SQL: {str(e)}', 'danger')
-                return redirect(url_for('dashboard'))  # Redirige al dashboard en caso de error
+                return redirect(url_for('dashboard'))
+
         else:
             flash('El archivo no es un archivo SQL válido.', 'danger')
             return redirect(url_for('dashboard'))
 
-    return render_template('upload_sql.html')  # Si es GET, muestra el formulario
+    return render_template('upload_sql.html')
+
 
 
 
