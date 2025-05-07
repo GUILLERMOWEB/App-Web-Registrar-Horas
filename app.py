@@ -79,8 +79,6 @@ class User(db.Model):
     role = db.Column(db.String(50), nullable=False)
 
     registros = db.relationship('Registro', backref='user', lazy=True)
-   
-
 
 
 class CentroCosto(db.Model):
@@ -125,8 +123,7 @@ class Registro(db.Model):
     centro_costo   = db.relationship('CentroCosto')
     tipo_servicio  = db.relationship('TipoServicio')
     linea          = db.relationship('Linea')
-
-    
+   
     
 class Cliente(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -145,6 +142,8 @@ with app.app_context():
         db.session.add(superadmin)
         db.session.commit()
 
+def allowed_file(filename):
+    return '.' in filename and filename.rsplit('.', 1)[1].lower() == 'sql'
 
 # ─── Rutas ──────────────────────────────────────
 @app.route('/', methods=['GET', 'POST'])
@@ -666,10 +665,13 @@ def agregar_cliente():
 
 # Ruta para cargar el archivo SQL
 @app.route('/upload_sql', methods=['GET', 'POST'])
+@superadmin_required
 def upload_sql():
     if request.method == 'POST':
-        sql_file = request.files['sql_file']
-        if sql_file:
+        sql_file = request.files.get('sql_file')
+        
+        # Verifica si se ha cargado un archivo y si es válido
+        if sql_file and allowed_file(sql_file.filename):
             try:
                 # Lee el contenido del archivo SQL
                 sql_query = sql_file.read().decode('utf-8')
@@ -689,13 +691,20 @@ def upload_sql():
                 conn.close()
 
                 flash('Archivo SQL ejecutado con éxito.', 'success')
-                return redirect(url_for('dashboard'))  # Redirige a la página del dashboard
+                return redirect(url_for('dashboard'))  # Redirige al dashboard
+                
 
             except Exception as e:
-                flash(f'Error al ejecutar el archivo SQL: {e}', 'danger')
+                # Si hay un error al ejecutar el SQL, lo mostramos
+                print(f"Error al ejecutar el SQL: {e}")
+                flash(f'Error al ejecutar el archivo SQL: {str(e)}', 'danger')
                 return redirect(url_for('dashboard'))  # Redirige al dashboard en caso de error
+        else:
+            flash('El archivo no es un archivo SQL válido.', 'danger')
+            return redirect(url_for('dashboard'))
 
     return render_template('upload_sql.html')  # Si es GET, muestra el formulario
+
 
 
 if __name__ == '__main__':

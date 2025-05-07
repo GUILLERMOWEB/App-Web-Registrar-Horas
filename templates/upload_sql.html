@@ -19,12 +19,10 @@
       {% endif %}
     {% endwith %}
 
-    <form method="POST" enctype="multipart/form-data">
-        <div class="mb-3">
-            <label for="sqlfile" class="form-label">Seleccioná archivo .sql</label>
-            <input class="form-control" type="file" id="sqlfile" name="sqlfile" accept=".sql" required>
-        </div>
-        <button type="submit" class="btn btn-primary">Ejecutar</button>
+    <form method="POST" action="{{ url_for('upload_sql') }}" enctype="multipart/form-data">
+        <label for="sql_file">Seleccionar archivo SQL:</label>
+        <input type="file" name="sql_file" id="sql_file" required>
+        <button type="submit">Cargar SQL</button>
     </form>
 </div>
 </body>
