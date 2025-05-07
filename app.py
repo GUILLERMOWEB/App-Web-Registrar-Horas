@@ -17,8 +17,38 @@ from flask_login import login_required, current_user
 from functools import wraps
 import psycopg2
 from werkzeug.utils import secure_filename
+from flask_login import LoginManager
 
+# Inicializar la aplicación Flask
+app = Flask(__name__)
 
+# Definir una clave secreta para la sesión
+app.secret_key = 'tu_clave_secreta'
+
+# Inicializar el LoginManager
+login_manager = LoginManager()
+login_manager.init_app(app)
+
+from flask_login import UserMixin
+
+# Clase User, puedes ajustarla según tu modelo de base de datos
+class User(UserMixin):
+    def __init__(self, id):
+        self.id = id
+
+    @classmethod
+    def get(cls, user_id):
+        # Aquí deberías hacer la consulta a tu base de datos para encontrar al usuario por ID
+        # Por ejemplo, si usas SQLAlchemy:
+        # return db.session.query(UserModel).filter_by(id=user_id).first()
+        pass
+
+# Función para cargar un usuario a partir de su ID
+@login_manager.user_loader
+def load_user(user_id):
+    # Deberías cargar el usuario desde tu base de datos
+    # En este caso, supongo que 'User' tiene un método 'get' para cargarlo por ID
+    return User.get(user_id)
 
 
 # Importar db de forma tardía para evitar importación circular
