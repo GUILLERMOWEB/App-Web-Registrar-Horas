@@ -57,27 +57,20 @@
                         <li class="nav-item">
                             <a class="nav-link" href="{{ url_for('ver_cliente') }}">Clientes</a>
                         </li>
-                    {% endif %}
-
-
-                        {% if session['role'] == 'superadmin' %}
-                            <li class="nav-item">
-                                <a class="nav-link" href="{{ url_for('admin') }}">Administración</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" href="{{ url_for('crear_admin') }}">Crear Administrador</a>
-                            </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ url_for('admin') }}">Administración</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ url_for('crear_admin') }}">Crear Administrador</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ url_for('upload_sql') }}">📦 Ejecutar SQL</a>
+                        </li>
+                        {% elif session['role'] == 'admin' %}
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ url_for('admin') }}">Administración</a>
+                        </li>
                         {% endif %}
-                        {% if session['role'] == 'admin' %}
-                            <li class="nav-item">
-                                <a class="nav-link" href="{{ url_for('admin') }}">Administración</a>
-                                <a href="{{ url_for('upload_sql') }}" class="btn btn-secondary">Ejecutar SQL</a>
-
-                            </li>
-                        {% endif %}
-                        
-
-                        
                         <li class="nav-item">
                             <a class="nav-link" href="{{ url_for('cambiar_password') }}">Cambiar contraseña</a>
                         </li>
