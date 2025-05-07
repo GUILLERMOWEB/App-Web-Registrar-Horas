@@ -94,7 +94,7 @@ class Registro(db.Model):
     fecha = db.Column(db.String(50))
     hora_entrada = db.Column(db.Time, nullable=False)
     hora_salida = db.Column(db.Time, nullable=False)
-    horas_almuerzo = db.Column(db.Float, nullable=False, default=0.0)
+    almuerzo = db.Column(db.Float, nullable=False, default=0.0)
     horas_trabajadas = db.Column(db.Float, nullable=False, default=0.0)
     horas_viaje_ida = db.Column(db.Float, nullable=True, default=0.0)
     horas_viaje_vuelta = db.Column(db.Float, nullable=True, default=0.0)
