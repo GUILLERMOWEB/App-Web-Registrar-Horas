@@ -137,7 +137,7 @@ class Registro(db.Model):
 
     id = db.Column(db.Integer, primary_key=True)
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
-    fecha = db.Column(db.String(50))
+    fecha = db.Column(db.Date)  # Cambié a db.Date para almacenar solo la fecha
     entrada = db.Column(db.String(50))
     salida = db.Column(db.String(50))
     almuerzo = db.Column(db.Float)
@@ -150,13 +150,15 @@ class Registro(db.Model):
     cliente = db.Column(db.Text)
     comentarios = db.Column(db.Text)
     contrato = db.Column(db.Boolean, default=False)
-    centro_costo_id     = db.Column(db.Integer, db.ForeignKey('centros_costo.id'), nullable=True)
-    service_order       = db.Column(db.String(10), nullable=True)
-    tipo_servicio_id    = db.Column(db.Integer, db.ForeignKey('tipos_servicio.id'), nullable=True)
-    linea_id            = db.Column(db.Integer, db.ForeignKey('lineas.id'), nullable=True)
-    centro_costo   = db.relationship('CentroCosto')
-    tipo_servicio  = db.relationship('TipoServicio')
-    linea          = db.relationship('Linea')
+    centro_costo_id = db.Column(db.Integer, db.ForeignKey('centros_costo.id'), nullable=True)
+    service_order = db.Column(db.String(10), nullable=True)
+    tipo_servicio_id = db.Column(db.Integer, db.ForeignKey('tipos_servicio.id'), nullable=True)
+    linea_id = db.Column(db.Integer, db.ForeignKey('lineas.id'), nullable=True)
+    
+    centro_costo = db.relationship('CentroCosto')
+    tipo_servicio = db.relationship('TipoServicio')
+    linea = db.relationship('Linea')
+
    
     
 class Cliente(db.Model):
@@ -221,20 +223,18 @@ def dashboard():
             if field not in request.form or not request.form[field].strip():
                 missing_fields.append(field)
         
-            if missing_fields:
-                flash(f"Faltan los siguientes campos: {', '.join(missing_fields)}", 'danger')
+        if missing_fields:
+            flash(f"Faltan los siguientes campos: {', '.join(missing_fields)}", 'danger')
             return render_template('dashboard.html', form_data=request.form)
 
-            
         registro_id = request.form.get('registro_id')
 
-   
         fecha = request.form.get('fecha', None)
         if not fecha:
-            #Si la fecha no es proporcionada, usar la fecha actual
+            # Si la fecha no es proporcionada, usar la fecha actual
             fecha = datetime.datetime.now().strftime('%Y-%m-%d')
 
-        ntrada = request.form.get('entrada')
+        entrada = request.form.get('entrada')
         salida = request.form.get('salida')
 
         try:
@@ -319,6 +319,7 @@ def dashboard():
     # Si es GET, mostrar los registros
     registros = Registro.query.filter_by(user_id=session['user_id']).order_by(Registro.fecha.desc()).all()
     return render_template('dashboard.html', registros=registros)
+
 
 
 
