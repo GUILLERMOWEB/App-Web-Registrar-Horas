@@ -198,91 +198,101 @@ def login():
             flash('Usuario o contraseña incorrectos', category='danger')
     return render_template('login.html')
 
-if request.method == 'POST':
-    registro_id = request.form.get('registro_id')
+@app.route('/dashboard', methods=['GET', 'POST'])
+def dashboard():
+    if 'user_id' not in session:
+        return redirect(url_for('login'))
 
-    fecha = request.form['fecha']
-    entrada = request.form['entrada']
-    salida = request.form['salida']
+    if request.method == 'POST':
+        registro_id = request.form.get('registro_id')
 
-    try:
-        almuerzo_horas = int(request.form.get('almuerzo_horas', 0))
-        almuerzo_minutos = int(request.form.get('almuerzo_minutos', 0))
-    except ValueError:
-        flash("El tiempo de almuerzo debe ser un número válido", "danger")
-        return redirect(url_for('dashboard'))
+        fecha = request.form['fecha']
+        entrada = request.form['entrada']
+        salida = request.form['salida']
 
-    almuerzo = timedelta(hours=almuerzo_horas, minutes=almuerzo_minutos)
+        try:
+            almuerzo_horas = int(request.form.get('almuerzo_horas', 0))
+            almuerzo_minutos = int(request.form.get('almuerzo_minutos', 0))
+        except ValueError:
+            flash("El tiempo de almuerzo debe ser un número válido", "danger")
+            return redirect(url_for('dashboard'))
 
-    try:
-        viaje_ida = float(request.form.get('viaje_ida', 0) or 0)
-        viaje_vuelta = float(request.form.get('viaje_vuelta', 0) or 0)
-        km_ida = float(request.form.get('km_ida', 0) or 0)
-        km_vuelta = float(request.form.get('km_vuelta', 0) or 0)
-    except ValueError:
-        flash("Las horas de viaje y kilómetros deben ser números válidos.", "danger")
-        return redirect(url_for('dashboard'))
+        almuerzo = timedelta(hours=almuerzo_horas, minutes=almuerzo_minutos)
 
-    tarea = request.form.get('tarea', '').strip()
-    cliente = request.form.get('cliente', '').strip()
-    comentarios = request.form.get('comentarios', '').strip()
+        try:
+            viaje_ida = float(request.form.get('viaje_ida', 0) or 0)
+            viaje_vuelta = float(request.form.get('viaje_vuelta', 0) or 0)
+            km_ida = float(request.form.get('km_ida', 0) or 0)
+            km_vuelta = float(request.form.get('km_vuelta', 0) or 0)
+        except ValueError:
+            flash("Las horas de viaje y kilómetros deben ser números válidos.", "danger")
+            return redirect(url_for('dashboard'))
 
-    try:
-        formato_hora = "%H:%M"
-        t_entrada = datetime.strptime(entrada, formato_hora)
-        t_salida = datetime.strptime(salida, formato_hora)
+        tarea = request.form.get('tarea', '').strip()
+        cliente = request.form.get('cliente', '').strip()
+        comentarios = request.form.get('comentarios', '').strip()
 
-        if t_salida < t_entrada:
-            t_salida += timedelta(days=1)
+        try:
+            formato_hora = "%H:%M"
+            t_entrada = datetime.strptime(entrada, formato_hora)
+            t_salida = datetime.strptime(salida, formato_hora)
 
-        tiempo_total = t_salida - t_entrada - almuerzo
-        horas_trabajadas = tiempo_total.total_seconds() / 3600
-    except ValueError:
-        flash("Formato de hora incorrecto. Use HH:MM.", "danger")
-        return redirect(url_for('dashboard'))
+            if t_salida < t_entrada:
+                t_salida += timedelta(days=1)
 
-    if registro_id:
-        # 🛠 EDITAR REGISTRO EXISTENTE
-        registro = Registro.query.get(int(registro_id))
-        if registro and registro.user_id == session['user_id']:
-            registro.fecha = fecha
-            registro.entrada = entrada
-            registro.salida = salida
-            registro.almuerzo = round(almuerzo.total_seconds() / 3600, 2)
-            registro.horas = round(horas_trabajadas, 2)
-            registro.viaje_ida = viaje_ida
-            registro.viaje_vuelta = viaje_vuelta
-            registro.km_ida = km_ida
-            registro.km_vuelta = km_vuelta
-            registro.tarea = tarea
-            registro.cliente = cliente
-            registro.comentarios = comentarios
-            db.session.commit()
-            flash('Registro actualizado exitosamente', 'success')
+            tiempo_total = t_salida - t_entrada - almuerzo
+            horas_trabajadas = tiempo_total.total_seconds() / 3600
+        except ValueError:
+            flash("Formato de hora incorrecto. Use HH:MM.", "danger")
+            return redirect(url_for('dashboard'))
+
+        if registro_id:
+            # 🛠 EDITAR REGISTRO EXISTENTE
+            registro = Registro.query.get(int(registro_id))
+            if registro and registro.user_id == session['user_id']:
+                registro.fecha = fecha
+                registro.entrada = entrada
+                registro.salida = salida
+                registro.almuerzo = round(almuerzo.total_seconds() / 3600, 2)
+                registro.horas = round(horas_trabajadas, 2)
+                registro.viaje_ida = viaje_ida
+                registro.viaje_vuelta = viaje_vuelta
+                registro.km_ida = km_ida
+                registro.km_vuelta = km_vuelta
+                registro.tarea = tarea
+                registro.cliente = cliente
+                registro.comentarios = comentarios
+                db.session.commit()
+                flash('Registro actualizado exitosamente', 'success')
+            else:
+                flash('No se pudo editar el registro', 'danger')
         else:
-            flash('No se pudo editar el registro', 'danger')
-    else:
-        # ➕ CREAR NUEVO REGISTRO
-        nuevo_registro = Registro(
-            user_id=session['user_id'],
-            fecha=fecha,
-            entrada=entrada,
-            salida=salida,
-            almuerzo=round(almuerzo.total_seconds() / 3600, 2),
-            horas=round(horas_trabajadas, 2),
-            viaje_ida=viaje_ida,
-            viaje_vuelta=viaje_vuelta,
-            km_ida=km_ida,
-            km_vuelta=km_vuelta,
-            tarea=tarea,
-            cliente=cliente,
-            comentarios=comentarios
-        )
-        db.session.add(nuevo_registro)
-        db.session.commit()
-        flash('Registro guardado exitosamente', category='success')
+            # ➕ CREAR NUEVO REGISTRO
+            nuevo_registro = Registro(
+                user_id=session['user_id'],
+                fecha=fecha,
+                entrada=entrada,
+                salida=salida,
+                almuerzo=round(almuerzo.total_seconds() / 3600, 2),
+                horas=round(horas_trabajadas, 2),
+                viaje_ida=viaje_ida,
+                viaje_vuelta=viaje_vuelta,
+                km_ida=km_ida,
+                km_vuelta=km_vuelta,
+                tarea=tarea,
+                cliente=cliente,
+                comentarios=comentarios
+            )
+            db.session.add(nuevo_registro)
+            db.session.commit()
+            flash('Registro guardado exitosamente', category='success')
 
-    return redirect(url_for('dashboard'))
+        return redirect(url_for('dashboard'))
+
+    # Si es GET, mostrar los registros
+    registros = Registro.query.filter_by(user_id=session['user_id']).order_by(Registro.fecha.desc()).all()
+    return render_template('dashboard.html', registros=registros)
+
 
 
 
