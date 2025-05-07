@@ -275,7 +275,7 @@ def dashboard():
     registros = registros_query.order_by(Registro.fecha.desc()).all()
 
     total_horas = sum([
-        (r.horas or 0) + (r.horas_viaje_ida or 0) + (r.horas_viaje_vuelta or 0)
+        (r.horas or 0) + (r.viaje_ida or 0) + (r.viaje_vuelta or 0)
         for r in registros
     ])
     total_km = sum([
