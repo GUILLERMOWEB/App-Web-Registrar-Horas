@@ -421,9 +421,6 @@ def editar_registro(id):
     return render_template('editar_registro.html', registro=registro)
 
 
-
-
-
 @app.route('/borrar_registro/<int:id>', methods=['POST'])
 def borrar_registro(id):
     if 'user_id' not in session:
