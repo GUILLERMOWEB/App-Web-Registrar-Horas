@@ -18,6 +18,7 @@ from functools import wraps
 import psycopg2
 from werkzeug.utils import secure_filename
 from urllib.parse import urlparse
+from functools import wraps
 
 
 # Inicializar la aplicación Flask
@@ -90,9 +91,14 @@ def convertir_hora_a_decimal(hora_str):
 def superadmin_required(f):
     @wraps(f)
     def wrapper(*args, **kwargs):
+        if not current_user.is_authenticated:
+            flash('Debes iniciar sesión para acceder a esta página', 'warning')
+            return redirect(url_for('login'))  # Redirige al login si no está autenticado
+
         if current_user.role != 'superadmin':  # Verifica el rol del usuario
             flash('No tienes permisos para realizar esta acción', 'danger')
             return redirect(url_for('index'))  # Redirige a la página principal
+
         return f(*args, **kwargs)
     return wrapper
 
@@ -687,6 +693,7 @@ def agregar_cliente():
 # Ruta para cargar el archivo SQL
 @app.route('/upload_sql', methods=['GET', 'POST'])
 @superadmin_required
+@login_required
 def upload_sql():
     if request.method == 'POST':
         sql_file = request.files.get('sql_file')
