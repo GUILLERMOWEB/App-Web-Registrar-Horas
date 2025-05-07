@@ -49,7 +49,7 @@ class User(UserMixin, db.Model):
 def load_user(user_id):
     return db.session.get(User, int(user_id))
 
-ddef get_db_connection():
+def get_db_connection():
     database_url = os.environ.get("DATABASE_URL")
     if not database_url:
         raise ValueError("DATABASE_URL no está definida en el entorno")
