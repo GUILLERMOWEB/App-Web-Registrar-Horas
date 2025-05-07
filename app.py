@@ -18,6 +18,7 @@ from functools import wraps
 
 
 
+
 # Importar db de forma tardía para evitar importación circular
 from models import db, RegistroHoras, ClienteModel
 
@@ -645,6 +646,46 @@ def agregar_cliente():
     clientes = Cliente.query.all()
 
     return render_template('agregar_cliente.html')
+    
+    import psycopg2
+from flask import render_template, request, redirect, url_for, flash, session
+from werkzeug.utils import secure_filename
+
+# URL de conexión externa (Render PostgreSQL)
+DATABASE_URL = "postgresql://registro_horas_db_user:I4q95g2dcUWeERh2Ixd4SxRp8FxwFfZ7@dpg-cvv2qhh5pdvs73bvjaog-a.oregon-postgres.render.com/registro_horas_db"
+
+@app.route("/upload-sql", methods=["GET", "POST"])
+def upload_sql():
+    # Solo superadmin puede acceder (ajustá según cómo manejás roles)
+    if session.get("role") != "superadmin":
+        flash("Acceso denegado.")
+        return redirect(url_for("dashboard"))
+
+    if request.method == "POST":
+        sql_file = request.files.get("sqlfile")
+        if not sql_file or not sql_file.filename.endswith(".sql"):
+            flash("Archivo inválido. Solo se aceptan archivos .sql.")
+            return redirect(request.url)
+
+        try:
+            sql_content = sql_file.read().decode("utf-8")
+
+            # Conexión y ejecución SQL
+            conn = psycopg2.connect(DATABASE_URL)
+            cursor = conn.cursor()
+            cursor.execute(sql_content)
+            conn.commit()
+            cursor.close()
+            conn.close()
+
+            flash("Archivo SQL ejecutado correctamente.")
+        except Exception as e:
+            flash(f"Error al ejecutar SQL: {e}")
+
+        return redirect(request.url)
+
+    return render_template("upload_sql.html")
+
 
 
 if __name__ == '__main__':
