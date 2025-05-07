@@ -224,8 +224,8 @@ def dashboard():
         registro_id = request.form.get('registro_id')
 
         fecha = request.form['fecha']
-        entrada = request.form['entrada']
-        salida = request.form['salida']
+        ntrada = request.form.get('entrada')
+        salida = request.form.get('salida')
 
         try:
             almuerzo_horas = int(request.form.get('almuerzo_horas', 0))
