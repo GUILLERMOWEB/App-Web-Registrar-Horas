@@ -49,7 +49,7 @@ app.config['TEMPLATES_AUTO_RELOAD'] = True
 app.jinja_env.cache = {}
 
 # Inicializa la base de datos y el sistema de migración
-db.init_app(app)  # Se inicializa db antes de usarlo
+
 migrate = Migrate(app, db)
 
 
@@ -130,7 +130,6 @@ class Registro(db.Model):
     __table_args__ = {'extend_existing': True}  # Agrega esta línea
 
     id = db.Column(db.Integer, primary_key=True)
-    user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
     fecha = db.Column(db.String(50))
     entrada = db.Column(db.String(50))
