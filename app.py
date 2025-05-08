@@ -214,31 +214,20 @@ def dashboard():
         return redirect(url_for('login'))
 
     if request.method == 'POST':
-        print("🛠 DEBUG - Datos recibidos del formulario:")
-        print(request.form)
-
-        # Verificar si todos los campos esperados están presentes
+        # Obtener y validar datos del formulario
         required_fields = ['fecha', 'entrada', 'salida', 'almuerzo_horas', 'almuerzo_minutos', 'viaje_ida', 'viaje_vuelta', 'km_ida', 'km_vuelta', 'tarea', 'cliente']
-        
-        missing_fields = []
-        for field in required_fields:
-            if field not in request.form or not request.form[field].strip():
-                missing_fields.append(field)
+        missing_fields = [field for field in required_fields if field not in request.form or not request.form[field].strip()]
         
         if missing_fields:
             flash(f"Faltan los siguientes campos: {', '.join(missing_fields)}", 'danger')
             return render_template('dashboard.html', form_data=request.form)
 
-        registro_id = request.form.get('registro_id')
-
-        fecha = request.form.get('fecha', None)
-        if not fecha:
-            # Si la fecha no es proporcionada, usar la fecha actual
-            fecha = datetime.datetime.now().strftime('%Y-%m-%d')
-
+        # Obtener campos
+        fecha = request.form.get('fecha', datetime.now().strftime('%Y-%m-%d'))
         entrada = request.form.get('entrada')
         salida = request.form.get('salida')
 
+        # Validación de almuerzo
         try:
             almuerzo_horas = int(request.form.get('almuerzo_horas', 0))
             almuerzo_minutos = int(request.form.get('almuerzo_minutos', 0))
@@ -248,6 +237,7 @@ def dashboard():
 
         almuerzo = timedelta(hours=almuerzo_horas, minutes=almuerzo_minutos)
 
+        # Validación de viaje y kilómetros
         try:
             viaje_ida = float(request.form.get('viaje_ida', 0) or 0)
             viaje_vuelta = float(request.form.get('viaje_vuelta', 0) or 0)
@@ -276,7 +266,7 @@ def dashboard():
             return redirect(url_for('dashboard'))
 
         if registro_id:
-            # 🛠 EDITAR REGISTRO EXISTENTE
+            # Editar un registro existente
             registro = Registro.query.get(int(registro_id))
             if registro and registro.user_id == session['user_id']:
                 registro.fecha = fecha
@@ -293,10 +283,8 @@ def dashboard():
                 registro.comentarios = comentarios
                 db.session.commit()
                 flash('Registro actualizado exitosamente', 'success')
-            else:
-                flash('No se pudo editar el registro', 'danger')
         else:
-            # ➕ CREAR NUEVO REGISTRO
+            # Crear nuevo registro
             nuevo_registro = Registro(
                 user_id=session['user_id'],
                 fecha=fecha,
@@ -318,15 +306,8 @@ def dashboard():
 
         return redirect(url_for('dashboard'))
 
-    # Si es GET, mostrar los registros
     registros = Registro.query.filter_by(user_id=session['user_id']).order_by(Registro.fecha.desc()).all()
     return render_template('dashboard.html', registros=registros)
-
-
-
-
-
-
 
 @app.route('/exportar_excel')
 def exportar_excel():
