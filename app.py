@@ -13,7 +13,7 @@ from flask_migrate import Migrate
 from flask_wtf import FlaskForm
 from wtforms.validators import DataRequired
 from wtforms import StringField, SubmitField
-from flask_login import login_required, current_user, UserMixin, LoginManager
+from flask_login import login_required, current_user, UserMixin, LoginManager, login_user
 from functools import wraps
 from werkzeug.utils import secure_filename
 from urllib.parse import urlparse
@@ -110,18 +110,15 @@ def superadmin_required(f):
     return wrapper
 
 
-class User(UserMixin, db.Model):
-    __tablename__ = 'users'
+class User(db.Model, UserMixin):
     id = db.Column(db.Integer, primary_key=True)
-    username = db.Column(db.String(100), unique=True, nullable=False)
-    password = db.Column(db.String(100), nullable=False)
-    role = db.Column(db.String(50), nullable=False)
+    username = db.Column(db.String(150), unique=True, nullable=False)
+    password = db.Column(db.String(150), nullable=False)
+    role = db.Column(db.String(50), nullable=False)  # 'user', 'admin', 'superadmin'
 
     registros = db.relationship('Registro', backref='user', lazy=True)
 
 # Asegúrate de que la base de datos se cree si no existe
-# ─── Inicialización de la base de datos ─────────
-
 
 class CentroCosto(db.Model):
     __tablename__ = 'centros_costo'
@@ -167,7 +164,6 @@ class Registro(db.Model):
     linea = db.relationship('Linea')
 
    
-    
 class Cliente(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     nombre = db.Column(db.String(100), nullable=False)
@@ -176,7 +172,6 @@ class Cliente(db.Model):
 
     def __repr__(self):
         return f'<Cliente {self.nombre}>'
-
 
 with app.app_context():
     db.create_all()
@@ -205,7 +200,7 @@ def login():
         ).first()
 
         if user:
-            session['user_id'] = user.id
+            login_user(user)  # Asegúrate de usar login_user aquí
             session['username'] = user.username
             session['role'] = user.role
             return redirect(url_for('dashboard'))
