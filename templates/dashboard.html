@@ -11,12 +11,12 @@
         <input type="date" name="fecha" class="form-control">
       </div>
       <div class="col-md-2">
-        <label class="form-label">Hora de Entrada</label>
-        <input type="time" name="entrada" class="form-control" value="{{ form_data['entrada'] if form_data and 'entrada' in form_data else '' }}">
+        <label for="entrada" class="form-label">Hora de Entrada</label>
+        <input type="time" name="entrada" class="form-control" required>
       </div>
       <div class="col-md-2">
-        <label class="form-label">Hora de Salida</label>
-        <input type="time" name="salida" class="form-control" value="{{ form_data['salida'] if form_data and 'salida' in form_data else (registro.salida if registro else '') }}">
+        <label for="salida" class="form-label">Hora de Salida</label>
+        <input type="time" name="salida" class="form-control" required>
       </div>
       <div class="col-md-2">
         <label class="form-label">Duración Almuerzo (h)</label>

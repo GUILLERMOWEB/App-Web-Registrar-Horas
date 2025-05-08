@@ -234,10 +234,8 @@ def dashboard():
 
         # Convertir strings a objetos time
         try:
-            entrada_str = request.form.get('entrada', '08:00')
-            salida_str = request.form.get('salida', '17:00')
-            entrada = datetime.strptime(entrada_str, '%H:%M').time()
-            salida = datetime.strptime(salida_str, '%H:%M').time()
+            entrada = request.form['entrada']
+            salida = request.form['salida']
         except ValueError:
             flash("Formato de hora incorrecto. Use HH:MM.", "danger")
             return redirect(url_for('dashboard'))
