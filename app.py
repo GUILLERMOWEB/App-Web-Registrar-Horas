@@ -697,6 +697,25 @@ def agregar_cliente():
     return render_template('agregar_cliente.html', clientes=clientes)
 
 
+@app.route('/editar_cliente/<int:id>', methods=['GET', 'POST'])
+@login_required
+def editar_cliente(id):
+    if current_user.rol != 'superadmin':
+        flash('Acceso no autorizado.', 'danger')
+        return redirect(url_for('dashboard'))
+
+    cliente = Cliente.query.get_or_404(id)
+
+    if request.method == 'POST':
+        cliente.nombre = request.form['nombre']
+        cliente.descripcion = request.form['descripcion']
+        db.session.commit()
+        flash('Cliente actualizado correctamente.', 'success')
+        return redirect(url_for('ver_cliente'))
+
+    return render_template('editar_cliente.html', cliente=cliente)
+
+
 # URL de conexión externa (Render PostgreSQL)
 #DATABASE_URL = "postgresql://registro_horas_db_user:I4q95g2dcUWeERh2Ixd4SxRp8FxwFfZ7@dpg-cvv2qhh5pdvs73bvjaog-a.oregon-postgres.render.com/registro_horas_db"
 
