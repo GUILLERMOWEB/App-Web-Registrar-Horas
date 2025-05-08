@@ -19,6 +19,7 @@ from werkzeug.utils import secure_filename
 from urllib.parse import urlparse
 from functools import wraps
 from sqlalchemy import text
+from app import db, Cliente
 
 ALLOWED_EXTENSIONS = {'sql'}
 
@@ -310,7 +311,10 @@ def dashboard():
         return redirect(url_for('dashboard'))
 
     registros = Registro.query.filter_by(user_id=session['user_id']).order_by(Registro.fecha.desc()).all()
-    return render_template('dashboard.html', registros=registros)
+    clientes = Cliente.query.order_by(Cliente.nombre).all()
+
+    return render_template('dashboard.html', registros=registros, clientes=clientes)
+
 
 @app.route('/exportar_excel')
 def exportar_excel():
@@ -677,7 +681,7 @@ def agregar_cliente():
             return redirect(url_for('agregar_cliente'))
 
         # Crear un nuevo cliente
-        nuevo_cliente = Cliente(nombre=nombre, direccion=direccion, telefono=telefono)
+        nuevo_cliente = Cliente(nombre=nombre)
 
         try:
             db.session.add(nuevo_cliente)
