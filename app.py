@@ -1,6 +1,6 @@
 from flask import Flask, render_template, request, redirect, url_for, session, flash, send_file
 from flask_sqlalchemy import SQLAlchemy
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, date
 import os
 # Carga de variables de entorno desde .env
 from dotenv import load_dotenv
@@ -211,73 +211,68 @@ def login():
             flash('Usuario o contraseña incorrectos', category='danger')
     return render_template('login.html')
 
+from flask import Flask, render_template, request, redirect, url_for, session, flash
+from datetime import datetime, timedelta
+from models import db, Registro, Cliente  # ajustá según tu estructura
+
 @app.route('/dashboard', methods=['GET', 'POST'])
 def dashboard():
     if 'user_id' not in session:
         return redirect(url_for('login'))
 
     if request.method == 'POST':
-        # Obtener y validar datos del formulario
         required_fields = ['fecha', 'entrada', 'salida', 'almuerzo_horas', 'viaje_ida', 'viaje_vuelta', 'km_ida', 'km_vuelta', 'tarea', 'cliente']
         missing_fields = [field for field in required_fields if field not in request.form or not request.form[field].strip()]
-        
         if missing_fields:
             flash(f"Faltan los siguientes campos: {', '.join(missing_fields)}", 'danger')
             return render_template('dashboard.html', form_data=request.form)
 
-        # Obtener campos
+        # Datos base
         fecha = request.form.get('fecha', datetime.now().strftime('%Y-%m-%d'))
-        entrada = datetime.strptime(request.form.get('entrada', '08:00'), '%H:%M').time()
-        salida = datetime.strptime(request.form.get('salida', '17:00'), '%H:%M').time()
+        entrada_str = request.form.get('entrada', '08:00').strip()
+        salida_str = request.form.get('salida', '17:00').strip()
 
+        # Convertir a datetime para cálculos
+        try:
+            formato_hora = "%H:%M"
+            t_entrada = datetime.strptime(entrada_str, formato_hora)
+            t_salida = datetime.strptime(salida_str, formato_hora)
+        except ValueError:
+            flash("Formato de hora incorrecto. Use HH:MM.", "danger")
+            return redirect(url_for('dashboard'))
 
-        # Validación de almuerzo
+        if t_salida < t_entrada:
+            t_salida += timedelta(days=1)
+
+        # Almuerzo
         try:
             almuerzo_horas = int(request.form.get('almuerzo_horas', 0))
-         
         except ValueError:
             flash("El tiempo de almuerzo debe ser un número válido", "danger")
             return redirect(url_for('dashboard'))
-
         almuerzo = timedelta(hours=almuerzo_horas)
 
-        # Validación de viaje y kilómetros
-        try:
-            viaje_ida = float(request.form.get('viaje_ida', 0) or 0)
-            viaje_vuelta = float(request.form.get('viaje_vuelta', 0) or 0)
-            km_ida = float(request.form.get('km_ida', 0) or 0)
-            km_vuelta = float(request.form.get('km_vuelta', 0) or 0)
-        except ValueError:
-            flash("Las horas de viaje y kilómetros deben ser números válidos.", "danger")
-            return redirect(url_for('dashboard'))
+        # Cálculo de horas
+        tiempo_total = t_salida - t_entrada - almuerzo
+        horas_trabajadas = tiempo_total.total_seconds() / 3600
 
+        # Otros campos
+        viaje_ida = float(request.form.get('viaje_ida', 0) or 0)
+        viaje_vuelta = float(request.form.get('viaje_vuelta', 0) or 0)
+        km_ida = float(request.form.get('km_ida', 0) or 0)
+        km_vuelta = float(request.form.get('km_vuelta', 0) or 0)
         tarea = request.form.get('tarea', '').strip()
         cliente = request.form.get('cliente', '').strip()
         comentarios = request.form.get('comentarios', '').strip()
 
-        try:
-            formato_hora = "%H:%M"
-            t_entrada = datetime.strptime(entrada, formato_hora)
-            t_salida = datetime.strptime(salida, formato_hora)
-
-            if t_salida < t_entrada:
-                t_salida += timedelta(days=1)
-
-            tiempo_total = t_salida - t_entrada - almuerzo
-            horas_trabajadas = tiempo_total.total_seconds() / 3600
-        except ValueError:
-            flash("Formato de hora incorrecto. Use HH:MM.", "danger")
-            return redirect(url_for('dashboard'))
-            
         registro_id = request.form.get('registro_id')
 
         if registro_id:
-            # Editar un registro existente
             registro = Registro.query.get(int(registro_id))
             if registro and registro.user_id == session['user_id']:
                 registro.fecha = fecha
-                registro.entrada = entrada
-                registro.salida = salida
+                registro.entrada = entrada_str  # Guardar como string
+                registro.salida = salida_str    # Guardar como string
                 registro.almuerzo = round(almuerzo.total_seconds() / 3600, 2)
                 registro.horas = round(horas_trabajadas, 2)
                 registro.viaje_ida = viaje_ida
@@ -290,12 +285,11 @@ def dashboard():
                 db.session.commit()
                 flash('Registro actualizado exitosamente', 'success')
         else:
-            # Crear nuevo registro
             nuevo_registro = Registro(
                 user_id=session['user_id'],
                 fecha=fecha,
-                entrada=entrada,
-                salida=salida,
+                entrada=entrada_str,  # Guardar como string
+                salida=salida_str,    # Guardar como string
                 almuerzo=round(almuerzo.total_seconds() / 3600, 2),
                 horas=round(horas_trabajadas, 2),
                 viaje_ida=viaje_ida,
@@ -308,14 +302,14 @@ def dashboard():
             )
             db.session.add(nuevo_registro)
             db.session.commit()
-            flash('Registro guardado exitosamente', category='success')
+            flash('Registro guardado exitosamente', 'success')
 
         return redirect(url_for('dashboard'))
 
     registros = Registro.query.filter_by(user_id=session['user_id']).order_by(Registro.fecha.desc()).all()
     clientes = Cliente.query.order_by(Cliente.nombre).all()
-
     return render_template('dashboard.html', registros=registros, clientes=clientes)
+
 
 
 @app.route('/exportar_excel')
