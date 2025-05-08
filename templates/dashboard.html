@@ -11,35 +11,35 @@
         <input type="date" name="fecha" class="form-control">
       </div>
       <div class="col-md-2">
-        <label class="form-label">Entrada</label>
+        <label class="form-label">Hora de Entrada</label>
         <input type="time" name="entrada" class="form-control" value="{{ form_data['entrada'] if form_data and 'entrada' in form_data else '' }}">
       </div>
       <div class="col-md-2">
-        <label class="form-label">Salida</label>
+        <label class="form-label">Hora de Salida</label>
         <input type="time" name="salida" class="form-control" value="{{ form_data['salida'] if form_data and 'salida' in form_data else (registro.salida if registro else '') }}">
       </div>
       <div class="col-md-2">
-        <label class="form-label">Almuerzo (h)</label>
+        <label class="form-label">Duración Almuerzo (h)</label>
         <input type="number" step="0.5" min="0" name="almuerzo" class="form-control" value="{{ form_data['almuerzo'] if form_data and 'almuerzo' in form_data else (registro.almuerzo if registro else '') }}">
       </div>
       <div class="col-md-2">
-        <label class="form-label">Viaje Ida</label>
+        <label class="form-label">Duración Viaje de Ida</label>
         <input type="number" step="0.01" name="viaje_ida" class="form-control" value="{{ form_data['viaje_ida'] if form_data and 'viaje_ida' in form_data else (registro.viaje_ida if registro else '') }}">
       </div>
       <div class="col-md-2">
-        <label class="form-label">Viaje Vuelta</label>
+        <label class="form-label">Duración Viaje de Vuelta</label>
         <input type="number" step="0.01" name="viaje_vuelta" class="form-control" value="{{ form_data['viaje_vuelta'] if form_data and 'viaje_vuelta' in form_data else (registro.viaje_vuelta if registro else '') }}">
       </div>
       <div class="col-md-2">
-        <label class="form-label">KM Ida</label>
+        <label class="form-label">KM Viaje de Ida</label>
         <input type="number" step="0.1" name="km_ida" class="form-control" value="{{ form_data['km_ida'] if form_data and 'km_ida' in form_data else (registro.km_ida if registro else '') }}">
       </div>
       <div class="col-md-2">
-        <label class="form-label">KM Vuelta</label>
+        <label class="form-label">KM Viaje de Vuelta</label>
         <input type="number" step="0.1" name="km_vuelta" class="form-control" value="{{ form_data['km_vuelta'] if form_data and 'km_vuelta' in form_data else (registro.km_vuelta if registro else '') }}">
       </div>
       <div class="col-md-4">
-        <label class="form-label">Tarea</label>
+        <label class="form-label">Tarea Realizada</label>
         <input type="text" name="tarea" class="form-control" value="{{ form_data['tarea'] if form_data and 'tarea' in form_data else (registro.tarea if registro else '') }}">
       </div>
       <div class="col-md-4">
