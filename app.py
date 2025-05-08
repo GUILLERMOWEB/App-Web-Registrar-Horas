@@ -267,6 +267,8 @@ def dashboard():
         except ValueError:
             flash("Formato de hora incorrecto. Use HH:MM.", "danger")
             return redirect(url_for('dashboard'))
+            
+        registro_id = request.form.get('registro_id')
 
         if registro_id:
             # Editar un registro existente
