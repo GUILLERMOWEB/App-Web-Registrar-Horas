@@ -19,7 +19,7 @@ from werkzeug.utils import secure_filename
 from urllib.parse import urlparse
 from functools import wraps
 from sqlalchemy import text
-from .app import db, Cliente
+from app import db, Cliente
 
 ALLOWED_EXTENSIONS = {'sql'}
 

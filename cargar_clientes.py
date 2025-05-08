@@ -3,6 +3,7 @@ sys.path.append('.')  # Agrega el directorio actual al path para evitar el confl
 
 from app import db, Cliente
 
+
 # Definición de los clientes a cargar
 clientes = [
     {"nombre": "Barraca Deambrosi SA", "direccion": "Sin dirección", "telefono": ""},
