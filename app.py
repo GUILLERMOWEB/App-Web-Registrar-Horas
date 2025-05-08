@@ -217,38 +217,31 @@ def dashboard():
         return redirect(url_for('login'))
 
     if request.method == 'POST':
-        # Validar campos obligatorios
-        required_fields = [
-            'fecha', 'entrada', 'salida', 'almuerzo_horas',
-            'viaje_ida', 'viaje_vuelta', 'km_ida', 'km_vuelta',
-            'tarea', 'cliente'
-        ]
+        # Obtener y validar datos del formulario
+        required_fields = ['fecha', 'entrada', 'salida', 'almuerzo_horas', 'viaje_ida', 'viaje_vuelta', 'km_ida', 'km_vuelta', 'tarea', 'cliente']
         missing_fields = [field for field in required_fields if field not in request.form or not request.form[field].strip()]
         
         if missing_fields:
             flash(f"Faltan los siguientes campos: {', '.join(missing_fields)}", 'danger')
             return render_template('dashboard.html', form_data=request.form)
 
-        # Obtener campos del formulario
+        # Obtener campos
         fecha = request.form.get('fecha', datetime.now().strftime('%Y-%m-%d'))
+        entrada = request.form['entrada']
+        salida = request.form['salida']
 
-        # Convertir strings a objetos time
-        try:
-            entrada = request.form['entrada']
-            salida = request.form['salida']
-        except ValueError:
-            flash("Formato de hora incorrecto. Use HH:MM.", "danger")
-            return redirect(url_for('dashboard'))
 
-        # Validar y convertir almuerzo a timedelta
+        # Validación de almuerzo
         try:
-            almuerzo_horas = float(request.form.get('almuerzo_horas', 0))
-            almuerzo = timedelta(hours=almuerzo_horas)
+            almuerzo_horas = int(request.form.get('almuerzo_horas', 0))
+         
         except ValueError:
             flash("El tiempo de almuerzo debe ser un número válido", "danger")
             return redirect(url_for('dashboard'))
 
-        # Validar viajes y kilómetros
+        almuerzo = timedelta(hours=almuerzo_horas)
+
+        # Validación de viaje y kilómetros
         try:
             viaje_ida = float(request.form.get('viaje_ida', 0) or 0)
             viaje_vuelta = float(request.form.get('viaje_vuelta', 0) or 0)
@@ -258,29 +251,28 @@ def dashboard():
             flash("Las horas de viaje y kilómetros deben ser números válidos.", "danger")
             return redirect(url_for('dashboard'))
 
-        # Combinar fecha + hora para calcular duración
-        try:
-            t_entrada = datetime.combine(datetime.strptime(fecha, '%Y-%m-%d').date(), entrada)
-            t_salida = datetime.combine(datetime.strptime(fecha, '%Y-%m-%d').date(), salida)
+        tarea = request.form.get('tarea', '').strip()
+        cliente = request.form.get('cliente', '').strip()
+        comentarios = request.form.get('comentarios', '').strip()
 
-            # Si salida es menor que entrada, asumimos que terminó al día siguiente
+        try:
+            formato_hora = "%H:%M"
+            t_entrada = datetime.strptime(entrada, formato_hora)
+            t_salida = datetime.strptime(salida, formato_hora)
+
             if t_salida < t_entrada:
                 t_salida += timedelta(days=1)
 
             tiempo_total = t_salida - t_entrada - almuerzo
             horas_trabajadas = tiempo_total.total_seconds() / 3600
-        except Exception as e:
-            flash(f"Error al calcular las horas trabajadas: {str(e)}", "danger")
+        except ValueError:
+            flash("Formato de hora incorrecto. Use HH:MM.", "danger")
             return redirect(url_for('dashboard'))
-
-        # Otros campos
-        tarea = request.form.get('tarea', '').strip()
-        cliente = request.form.get('cliente', '').strip()
-        comentarios = request.form.get('comentarios', '').strip()
+            
         registro_id = request.form.get('registro_id')
 
         if registro_id:
-            # Editar registro existente
+            # Editar un registro existente
             registro = Registro.query.get(int(registro_id))
             if registro and registro.user_id == session['user_id']:
                 registro.fecha = fecha
@@ -320,7 +312,6 @@ def dashboard():
 
         return redirect(url_for('dashboard'))
 
-    # Si es GET, mostrar registros y formulario
     registros = Registro.query.filter_by(user_id=session['user_id']).order_by(Registro.fecha.desc()).all()
     clientes = Cliente.query.order_by(Cliente.nombre).all()
 
