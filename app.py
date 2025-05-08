@@ -227,8 +227,8 @@ def dashboard():
 
         # Obtener campos
         fecha = request.form.get('fecha', datetime.now().strftime('%Y-%m-%d'))
-        entrada = request.form.get('entrada')
-        salida = request.form.get('salida')
+        entrada = datetime.strptime('05:42', '%H:%M').time()
+        salida = datetime.strptime('17:42', '%H:%M').time()
 
         # Validación de almuerzo
         try:
