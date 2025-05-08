@@ -20,8 +20,9 @@
       </div>
       <div class="col-md-2">
         <label class="form-label">Duración Almuerzo (h)</label>
-        <input type="number" step="0.5" min="0" name="almuerzo" class="form-control" value="{{ form_data['almuerzo'] if form_data and 'almuerzo' in form_data else (registro.almuerzo if registro else '') }}">
+        <input type="number" step="0.5" min="0" name="almuerzo_horas" class="form-control" value="{{ form_data['almuerzo_horas'] if form_data and 'almuerzo_horas' in form_data else (registro.almuerzo if registro else '') }}">
       </div>
+    
       <div class="col-md-2">
         <label class="form-label">Duración Viaje de Ida</label>
         <input type="number" step="0.01" name="viaje_ida" class="form-control" value="{{ form_data['viaje_ida'] if form_data and 'viaje_ida' in form_data else (registro.viaje_ida if registro else '') }}">
