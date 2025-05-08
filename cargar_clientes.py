@@ -1,7 +1,5 @@
-import sys
-sys.path.append('.')  # Agrega el directorio actual al path para evitar el conflicto de importación
-
-from app import db, Cliente
+from app import db
+from app import Cliente
 
 
 # Definición de los clientes a cargar

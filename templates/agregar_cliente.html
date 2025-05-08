@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Agregar Cliente</title>
+</head>
+<body>
+    <h1>Agregar Nuevo Cliente</h1>
+
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            <ul>
+            {% for category, message in messages %}
+                <li class="{{ category }}">{{ message }}</li>
+            {% endfor %}
+            </ul>
+        {% endif %}
+    {% endwith %}
+
+    <form action="/agregar_cliente" method="POST">
+        <label for="nombre">Nombre del Cliente:</label>
+        <input type="text" id="nombre" name="nombre" required><br><br>
+
+        <label for="direccion">Dirección (opcional):</label>
+        <input type="text" id="direccion" name="direccion"><br><br>
+
+        <label for="telefono">Teléfono (opcional):</label>
+        <input type="text" id="telefono" name="telefono"><br><br>
+
+        <button type="submit">Guardar Cliente</button>
+    </form>
+
+    <br>
+    <a href="{{ url_for('dashboard') }}">Volver al Dashboard</a>
+
+    <hr>
+    <h2>Clientes Existentes</h2>
+    <ul>
+        {% for cliente in clientes %}
+            <li>{{ cliente.nombre }} - {{ cliente.direccion or 'No disponible' }} - {{ cliente.telefono or 'No disponible' }}</li>
+        {% endfor %}
+    </ul>
+</body>
+</html>

@@ -672,16 +672,16 @@ def agregar_cliente():
 
     if request.method == 'POST':
         nombre = request.form['nombre']
-        direccion = request.form['direccion']
-        telefono = request.form.get('telefono')
+        direccion = request.form.get('direccion')  # Dirección ahora es opcional
+        telefono = request.form.get('telefono')  # Teléfono ahora es opcional
 
-        # Validación de datos antes de guardarlos
-        if not nombre or not direccion:
-            flash('El nombre y la dirección son campos obligatorios.', 'danger')
+        # Validación de que el nombre no esté vacío
+        if not nombre:
+            flash('El nombre es obligatorio.', 'danger')
             return redirect(url_for('agregar_cliente'))
 
-        # Crear un nuevo cliente
-        nuevo_cliente = Cliente(nombre=nombre)
+        # Crear un nuevo cliente solo con el nombre, dirección y teléfono opcionales
+        nuevo_cliente = Cliente(nombre=nombre, direccion=direccion, telefono=telefono)
 
         try:
             db.session.add(nuevo_cliente)
@@ -695,8 +695,7 @@ def agregar_cliente():
     # Obtener todos los clientes para mostrarlos en el formulario
     clientes = Cliente.query.all()
 
-    return render_template('agregar_cliente.html')
-    
+    return render_template('agregar_cliente.html', clientes=clientes)
 
 
 # URL de conexión externa (Render PostgreSQL)
