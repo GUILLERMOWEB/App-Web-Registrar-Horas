@@ -22,13 +22,18 @@ from sqlalchemy import text
 
 ALLOWED_EXTENSIONS = {'sql'}
 
-def allowed_file(filename):
-    return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
-
 # Inicializar la aplicación Flask
 app = Flask(__name__)
 
+# Clave secreta y configuración de sesión (si no lo has hecho)
+app.secret_key = os.environ.get('SECRET_KEY', 'mi_clave_secreta_aleatoria')
 
+app.config['SESSION_TYPE'] = 'filesystem'
+
+
+def allowed_file(filename):
+    return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
+    
 # Configuración de la base de datos con PostgreSQL
 app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get("DATABASE_URL")
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
@@ -57,7 +62,26 @@ app.jinja_env.cache = {}
 
 migrate = Migrate(app, db)
 
+def get_db_connection():
+    database_url = os.environ.get("DATABASE_URL")
+    if not database_url:
+        raise ValueError("DATABASE_URL no está definida en el entorno")
 
+    result = urlparse(database_url)
+    username = result.username
+    password = result.password
+    database = result.path[1:]
+    hostname = result.hostname
+    port = result.port
+
+    conn = psycopg2.connect(
+        dbname=database,
+        user=username,
+        password=password,
+        host=hostname,
+        port=port
+    )
+    return conn
 # Función para cargar un usuario a partir de su ID
 @login_manager.user_loader
 def load_user(user_id):
