@@ -218,7 +218,7 @@ def dashboard():
 
     if request.method == 'POST':
         # Obtener y validar datos del formulario
-        required_fields = ['fecha', 'entrada', 'salida', 'almuerzo_horas', 'almuerzo_minutos', 'viaje_ida', 'viaje_vuelta', 'km_ida', 'km_vuelta', 'tarea', 'cliente']
+        required_fields = ['fecha', 'entrada', 'salida', 'almuerzo_horas', 'viaje_ida', 'viaje_vuelta', 'km_ida', 'km_vuelta', 'tarea', 'cliente']
         missing_fields = [field for field in required_fields if field not in request.form or not request.form[field].strip()]
         
         if missing_fields:
@@ -233,12 +233,12 @@ def dashboard():
         # Validación de almuerzo
         try:
             almuerzo_horas = int(request.form.get('almuerzo_horas', 0))
-            almuerzo_minutos = int(request.form.get('almuerzo_minutos', 0))
+         
         except ValueError:
             flash("El tiempo de almuerzo debe ser un número válido", "danger")
             return redirect(url_for('dashboard'))
 
-        almuerzo = timedelta(hours=almuerzo_horas, minutes=almuerzo_minutos)
+        almuerzo = timedelta(hours=almuerzo_horas)
 
         # Validación de viaje y kilómetros
         try:
