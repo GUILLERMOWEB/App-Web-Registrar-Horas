@@ -15,11 +15,15 @@ from wtforms.validators import DataRequired
 from wtforms import StringField, SubmitField
 from flask_login import login_required, current_user, UserMixin, LoginManager
 from functools import wraps
-import psycopg2
 from werkzeug.utils import secure_filename
 from urllib.parse import urlparse
 from functools import wraps
+from sqlalchemy import text
 
+ALLOWED_EXTENSIONS = {'sql'}
+
+def allowed_file(filename):
+    return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
 # Inicializar la aplicación Flask
 app = Flask(__name__)
@@ -58,27 +62,6 @@ migrate = Migrate(app, db)
 @login_manager.user_loader
 def load_user(user_id):
     return db.session.get(User, int(user_id))
-
-def get_db_connection():
-    database_url = os.environ.get("DATABASE_URL")
-    if not database_url:
-        raise ValueError("DATABASE_URL no está definida en el entorno")
-
-    result = urlparse(database_url)
-    username = result.username
-    password = result.password
-    database = result.path[1:]
-    hostname = result.hostname
-    port = result.port
-
-    conn = psycopg2.connect(
-        dbname=database,
-        user=username,
-        password=password,
-        host=hostname,
-        port=port
-    )
-    return conn
 
 # Función para convertir una hora en formato de texto a un número decimal
 def convertir_hora_a_decimal(hora_str):
@@ -719,22 +702,17 @@ def agregar_cliente():
 def upload_sql():
     if request.method == 'POST':
         sql_file = request.files.get('sql_file')
-        
+
         if sql_file and allowed_file(sql_file.filename):
             try:
                 sql_query = sql_file.read().decode('utf-8')
-                conn = get_db_connection()
-                cursor = conn.cursor()
 
-                # Ejecutar cada sentencia por separado
-                for statement in sql_query.split(';'):
-                    stmt = statement.strip()
-                    if stmt:
-                        cursor.execute(stmt)
-
-                conn.commit()
-                cursor.close()
-                conn.close()
+                # Ejecutar sentencias usando SQLAlchemy
+                with db.engine.connect() as conn:
+                    for statement in sql_query.split(';'):
+                        stmt = statement.strip()
+                        if stmt:
+                            conn.execute(text(stmt))
 
                 flash('Archivo SQL ejecutado con éxito.', 'success')
                 return redirect(url_for('dashboard'))
