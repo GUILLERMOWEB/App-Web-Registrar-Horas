@@ -1,5 +1,9 @@
+import sys
+sys.path.append('.')  # Agrega el directorio actual al path para evitar el conflicto de importación
+
 from app import db, Cliente
 
+# Definición de los clientes a cargar
 clientes = [
     {"nombre": "Barraca Deambrosi SA", "direccion": "Sin dirección", "telefono": ""},
     {"nombre": "Cooperativa Agraria de (CALCAR)", "direccion": "Sin dirección", "telefono": ""},
@@ -14,9 +18,12 @@ clientes = [
     {"nombre": "Tetrapak San Fernando", "direccion": "Sin dirección", "telefono": ""}
 ]
 
+# Cargar los clientes a la base de datos
 for datos in clientes:
     cliente = Cliente(**datos)
     db.session.add(cliente)
 
+# Confirmar los cambios en la base de datos
 db.session.commit()
+
 print("Clientes cargados.")
