@@ -110,8 +110,8 @@ def superadmin_required(f):
     return wrapper
 
 # Modelo Usuario
-class User(db.Model):
-    __tablename__ = 'users'  # ¡esto debe coincidir con 'users.id' en Registro.user_id!
+class User(db.Model, UserMixin):
+    __tablename__ = 'users'
 
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(80), unique=True, nullable=False)
