@@ -48,7 +48,7 @@
         <select name="cliente" class="form-select">
           <option value="">Seleccionar cliente...</option>
           {% for c in clientes %}
-            <option value="{{ c.nombre }}" {% if c.nombre == registro.cliente %} selected {% endif %}>{{ c.nombre }}</option>
+            <option value="{{ c.nombre }}">{{ c.nombre }}</option>
           {% endfor %}
         </select>
       </div>
