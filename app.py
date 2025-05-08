@@ -109,14 +109,15 @@ def superadmin_required(f):
         return f(*args, **kwargs)
     return wrapper
 
-
-class User(db.Model, UserMixin):
+# Modelo Usuario
+class User(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    username = db.Column(db.String(150), unique=True, nullable=False)
-    password = db.Column(db.String(150), nullable=False)
-    role = db.Column(db.String(50), nullable=False)  # 'user', 'admin', 'superadmin'
+    username = db.Column(db.String(80), unique=True, nullable=False)
+    password = db.Column(db.String(120), nullable=False)
+    role = db.Column(db.String(20), nullable=False)
 
-    registros = db.relationship('Registro', backref='user', lazy=True)
+    registros = db.relationship('Registro', backref='usuario', lazy=True)
+
 
 # Asegúrate de que la base de datos se cree si no existe
 
