@@ -715,6 +715,18 @@ def editar_cliente(id):
 
     return render_template('editar_cliente.html', cliente=cliente)
 
+@app.route('/borrar_cliente/<int:id>', methods=['POST'])
+@login_required
+def borrar_cliente(id):
+    if session.get("rol") != "superadmin":
+        flash("Acceso denegado.")
+        return redirect(url_for("dashboard"))
+
+    cliente = Cliente.query.get_or_404(id)
+    db.session.delete(cliente)
+    db.session.commit()
+    flash("Cliente eliminado exitosamente.")
+    return redirect(url_for("ver_cliente"))
 
 # URL de conexión externa (Render PostgreSQL)
 #DATABASE_URL = "postgresql://registro_horas_db_user:I4q95g2dcUWeERh2Ixd4SxRp8FxwFfZ7@dpg-cvv2qhh5pdvs73bvjaog-a.oregon-postgres.render.com/registro_horas_db"
