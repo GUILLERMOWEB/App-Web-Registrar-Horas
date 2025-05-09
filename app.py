@@ -25,11 +25,13 @@ ALLOWED_EXTENSIONS = {'sql'}
 # Inicializar la aplicación Flask
 app = Flask(__name__)
 
-# Clave secreta y configuración de sesión (si no lo has hecho)
-app = Flask(__name__)
-app.secret_key = 'f7R#8s2k!Xc9m$PqL@e1Z'  # poné una aleatoria como esta
+app.secret_key = os.environ.get('SECRET_KEY', 'clave-secreta-desarrollo')
 
-
+# Configuración adicional para asegurar sesiones en Render (HTTPS)
+app.config.update(
+    SESSION_COOKIE_SAMESITE='Lax',
+    SESSION_COOKIE_SECURE=True
+)
 def allowed_file(filename):
     return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
     
@@ -197,9 +199,7 @@ def login():
         ).first()
 
         if user:
-            login_user(user)  # Asegúrate de usar login_user aquí
-            session['username'] = user.username
-            session['role'] = user.role
+            login_user(user)  # Flask-Login maneja la sesión
             return redirect(url_for('dashboard'))
         else:
             flash('Usuario o contraseña incorrectos', category='danger')
@@ -208,11 +208,7 @@ def login():
 @app.route('/dashboard', methods=['GET', 'POST'])
 @login_required
 def dashboard():
-    if 'user_id' not in session:
-        return redirect(url_for('login'))
-
     if request.method == 'POST':
-        # Obtener y validar datos del formulario
         required_fields = ['fecha', 'entrada', 'salida', 'almuerzo_horas', 'viaje_ida', 'viaje_vuelta', 'km_ida', 'km_vuelta', 'tarea', 'cliente']
         missing_fields = [field for field in required_fields if field not in request.form or not request.form[field].strip()]
         
@@ -220,23 +216,25 @@ def dashboard():
             flash(f"Faltan los siguientes campos: {', '.join(missing_fields)}", 'danger')
             return render_template('dashboard.html', form_data=request.form)
 
-        # Obtener campos
         fecha = request.form.get('fecha', datetime.now().strftime('%Y-%m-%d'))
-        entrada = datetime.strptime(request.form.get('entrada', '08:00'), '%H:%M').time()
-        salida = datetime.strptime(request.form.get('salida', '17:00'), '%H:%M').time()
+        entrada_str = request.form.get('entrada', '08:00')
+        salida_str = request.form.get('salida', '17:00')
 
+        try:
+            entrada = datetime.strptime(entrada_str, '%H:%M').time()
+            salida = datetime.strptime(salida_str, '%H:%M').time()
+        except ValueError:
+            flash("Formato de hora incorrecto. Use HH:MM.", "danger")
+            return redirect(url_for('dashboard'))
 
-        # Validación de almuerzo
         try:
             almuerzo_horas = int(request.form.get('almuerzo_horas', 0))
-         
         except ValueError:
             flash("El tiempo de almuerzo debe ser un número válido", "danger")
             return redirect(url_for('dashboard'))
 
         almuerzo = timedelta(hours=almuerzo_horas)
 
-        # Validación de viaje y kilómetros
         try:
             viaje_ida = float(request.form.get('viaje_ida', 0) or 0)
             viaje_vuelta = float(request.form.get('viaje_vuelta', 0) or 0)
@@ -252,8 +250,8 @@ def dashboard():
 
         try:
             formato_hora = "%H:%M"
-            t_entrada = datetime.strptime(entrada, formato_hora)
-            t_salida = datetime.strptime(salida, formato_hora)
+            t_entrada = datetime.strptime(entrada_str, formato_hora)
+            t_salida = datetime.strptime(salida_str, formato_hora)
 
             if t_salida < t_entrada:
                 t_salida += timedelta(days=1)
@@ -261,15 +259,14 @@ def dashboard():
             tiempo_total = t_salida - t_entrada - almuerzo
             horas_trabajadas = tiempo_total.total_seconds() / 3600
         except ValueError:
-            flash("Formato de hora incorrecto. Use HH:MM.", "danger")
+            flash("Error calculando las horas trabajadas", "danger")
             return redirect(url_for('dashboard'))
-            
+
         registro_id = request.form.get('registro_id')
 
         if registro_id:
-            # Editar un registro existente
             registro = Registro.query.get(int(registro_id))
-            if registro and registro.user_id == session['user_id']:
+            if registro and registro.user_id == current_user.id:
                 registro.fecha = fecha
                 registro.entrada = entrada
                 registro.salida = salida
@@ -285,9 +282,8 @@ def dashboard():
                 db.session.commit()
                 flash('Registro actualizado exitosamente', 'success')
         else:
-            # Crear nuevo registro
             nuevo_registro = Registro(
-                user_id=session['user_id'],
+                user_id=current_user.id,
                 fecha=fecha,
                 entrada=entrada,
                 salida=salida,
@@ -307,7 +303,7 @@ def dashboard():
 
         return redirect(url_for('dashboard'))
 
-    registros = Registro.query.filter_by(user_id=session['user_id']).order_by(Registro.fecha.desc()).all()
+    registros = Registro.query.filter_by(user_id=current_user.id).order_by(Registro.fecha.desc()).all()
     clientes = Cliente.query.order_by(Cliente.nombre).all()
 
     return render_template('dashboard.html', registros=registros, clientes=clientes)
