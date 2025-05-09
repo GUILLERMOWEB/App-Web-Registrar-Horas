@@ -136,31 +136,27 @@ class Linea(db.Model):
 
 class Registro(db.Model):
     __tablename__ = 'registros'
-    __table_args__ = {'extend_existing': True}  # Agrega esta línea
 
     id = db.Column(db.Integer, primary_key=True)
-    user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
-    fecha = db.Column(db.Date)  # Cambié a db.Date para almacenar solo la fecha
-    entrada = db.Column(db.String(50))
-    salida = db.Column(db.String(50))
-    almuerzo = db.Column(db.Float)
-    viaje_ida = db.Column(db.Float, default=0)
-    viaje_vuelta = db.Column(db.Float, default=0)
-    km_ida = db.Column(db.Float, default=0)
-    km_vuelta = db.Column(db.Float, default=0)
-    horas = db.Column(db.Float)
-    tarea = db.Column(db.Text)
-    cliente = db.Column(db.Text)
-    comentarios = db.Column(db.Text)
-    contrato = db.Column(db.Boolean, default=False)
-    centro_costo_id = db.Column(db.Integer, db.ForeignKey('centros_costo.id'), nullable=True)
-    service_order = db.Column(db.String(10), nullable=True)
-    tipo_servicio_id = db.Column(db.Integer, db.ForeignKey('tipos_servicio.id'), nullable=True)
-    linea_id = db.Column(db.Integer, db.ForeignKey('lineas.id'), nullable=True)
-    
-    centro_costo = db.relationship('CentroCosto')
-    tipo_servicio = db.relationship('TipoServicio')
-    linea = db.relationship('Linea')
+    user_id = db.Column(db.Integer, db.ForeignKey('usuarios.id'), nullable=False)
+    fecha = db.Column(db.Date, nullable=False)
+    entrada = db.Column(db.Time, nullable=False)
+    salida = db.Column(db.Time, nullable=False)
+    almuerzo = db.Column(db.Float, nullable=False)
+    viaje_ida = db.Column(db.Float, nullable=True)
+    viaje_vuelta = db.Column(db.Float, nullable=True)
+    km_ida = db.Column(db.Float, nullable=True)
+    km_vuelta = db.Column(db.Float, nullable=True)
+    horas = db.Column(db.Float, nullable=False)
+    tarea = db.Column(db.String(255), nullable=True)
+    cliente = db.Column(db.String(255), nullable=True)
+    comentarios = db.Column(db.Text, nullable=True)
+    contrato = db.Column(db.Boolean, nullable=True)
+
+    centro_costo_id = db.Column(db.Integer, nullable=True)  # <- Asegurate que sea nullable
+    service_order = db.Column(db.String(100), nullable=True)
+    tipo_servicio_id = db.Column(db.Integer, nullable=True)
+    linea_id = db.Column(db.Integer, nullable=True)
 
    
 class Cliente(db.Model):
@@ -264,6 +260,18 @@ def dashboard():
 
         registro_id = request.form.get('registro_id')
 
+        # Campos adicionales
+        centro_costo_id = request.form.get('centro_costo_id')
+        service_order = request.form.get('service_order')
+        tipo_servicio_id = request.form.get('tipo_servicio_id')
+        linea_id = request.form.get('linea_id')
+
+        # Sanitizar
+        centro_costo_id = int(centro_costo_id) if centro_costo_id else None
+        tipo_servicio_id = int(tipo_servicio_id) if tipo_servicio_id else None
+        linea_id = int(linea_id) if linea_id else None
+        service_order = service_order or None
+
         if registro_id:
             registro = Registro.query.get(int(registro_id))
             if registro and registro.user_id == current_user.id:
@@ -279,10 +287,14 @@ def dashboard():
                 registro.tarea = tarea
                 registro.cliente = cliente
                 registro.comentarios = comentarios
+                registro.contrato = request.form.get('contrato') == 'on' if 'contrato' in request.form else None
+                registro.centro_costo_id = centro_costo_id
+                registro.service_order = service_order
+                registro.tipo_servicio_id = tipo_servicio_id
+                registro.linea_id = linea_id
                 db.session.commit()
                 flash('Registro actualizado exitosamente', 'success')
         else:
-            # Crear nuevo registro
             nuevo_registro = Registro(
                 user_id=current_user.id,
                 fecha=fecha,
@@ -298,22 +310,22 @@ def dashboard():
                 cliente=cliente,
                 comentarios=comentarios,
                 contrato=request.form.get('contrato') == 'on' if 'contrato' in request.form else None,
-                centro_costo_id=request.form.get('centro_costo_id') or None,
-                service_order=request.form.get('service_order') or None,
-                tipo_servicio_id=request.form.get('tipo_servicio_id') or None,
-                linea_id=request.form.get('linea_id') or None
-)
-
+                centro_costo_id=centro_costo_id,
+                service_order=service_order,
+                tipo_servicio_id=tipo_servicio_id,
+                linea_id=linea_id
+            )
             db.session.add(nuevo_registro)
             db.session.commit()
             flash('Registro guardado exitosamente', category='success')
 
         return redirect(url_for('dashboard'))
 
+    # GET
     registros = Registro.query.filter_by(user_id=current_user.id).order_by(Registro.fecha.desc()).all()
     clientes = Cliente.query.order_by(Cliente.nombre).all()
+    return render_template('dashboard.html', registros=registros, clientes=clientes, form_data={})
 
-    return render_template('dashboard.html', registros=registros, clientes=clientes)
 
 
 @app.route('/exportar_excel')
