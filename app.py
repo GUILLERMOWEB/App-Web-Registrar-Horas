@@ -282,8 +282,9 @@ def dashboard():
                 db.session.commit()
                 flash('Registro actualizado exitosamente', 'success')
         else:
+            # Crear nuevo registro
             nuevo_registro = Registro(
-                user_id=current_user.id,
+                user_id=session['user_id'],
                 fecha=fecha,
                 entrada=entrada,
                 salida=salida,
@@ -295,8 +296,14 @@ def dashboard():
                 km_vuelta=km_vuelta,
                 tarea=tarea,
                 cliente=cliente,
-                comentarios=comentarios
-            )
+                comentarios=comentarios,
+                contrato=request.form.get('contrato') == 'on' if 'contrato' in request.form else None,
+                centro_costo_id=request.form.get('centro_costo_id') or None,
+                service_order=request.form.get('service_order') or None,
+                tipo_servicio_id=request.form.get('tipo_servicio_id') or None,
+                linea_id=request.form.get('linea_id') or None
+)
+
             db.session.add(nuevo_registro)
             db.session.commit()
             flash('Registro guardado exitosamente', category='success')
