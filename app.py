@@ -136,27 +136,31 @@ class Linea(db.Model):
 
 class Registro(db.Model):
     __tablename__ = 'registros'
+    __table_args__ = {'extend_existing': True}  # Agrega esta línea
 
     id = db.Column(db.Integer, primary_key=True)
-    user_id = db.Column(db.Integer, db.ForeignKey('usuarios.id'), nullable=False)
-    fecha = db.Column(db.Date, nullable=False)
-    entrada = db.Column(db.Time, nullable=False)
-    salida = db.Column(db.Time, nullable=False)
-    almuerzo = db.Column(db.Float, nullable=False)
-    viaje_ida = db.Column(db.Float, nullable=True)
-    viaje_vuelta = db.Column(db.Float, nullable=True)
-    km_ida = db.Column(db.Float, nullable=True)
-    km_vuelta = db.Column(db.Float, nullable=True)
-    horas = db.Column(db.Float, nullable=False)
-    tarea = db.Column(db.String(255), nullable=True)
-    cliente = db.Column(db.String(255), nullable=True)
-    comentarios = db.Column(db.Text, nullable=True)
-    contrato = db.Column(db.Boolean, nullable=True)
-
-    centro_costo_id = db.Column(db.Integer, nullable=True)  # <- Asegurate que sea nullable
-    service_order = db.Column(db.String(100), nullable=True)
-    tipo_servicio_id = db.Column(db.Integer, nullable=True)
-    linea_id = db.Column(db.Integer, nullable=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
+    fecha = db.Column(db.Date)  # Cambié a db.Date para almacenar solo la fecha
+    entrada = db.Column(db.String(50))
+    salida = db.Column(db.String(50))
+    almuerzo = db.Column(db.Float)
+    viaje_ida = db.Column(db.Float, default=0)
+    viaje_vuelta = db.Column(db.Float, default=0)
+    km_ida = db.Column(db.Float, default=0)
+    km_vuelta = db.Column(db.Float, default=0)
+    horas = db.Column(db.Float)
+    tarea = db.Column(db.Text)
+    cliente = db.Column(db.Text)
+    comentarios = db.Column(db.Text)
+    contrato = db.Column(db.Boolean, default=False)
+    centro_costo_id = db.Column(db.Integer, db.ForeignKey('centros_costo.id'), nullable=True)
+    service_order = db.Column(db.String(10), nullable=True)
+    tipo_servicio_id = db.Column(db.Integer, db.ForeignKey('tipos_servicio.id'), nullable=True)
+    linea_id = db.Column(db.Integer, db.ForeignKey('lineas.id'), nullable=True)
+    
+    centro_costo = db.relationship('CentroCosto')
+    tipo_servicio = db.relationship('TipoServicio')
+    linea = db.relationship('Linea')
 
    
 class Cliente(db.Model):
@@ -183,28 +187,16 @@ def allowed_file(filename):
 def inicio():
     return redirect(url_for('login'))
 
-@app.route('/login', methods=['GET', 'POST'])
-def login():
-    if request.method == 'POST':
-        username = request.form['username'].strip().lower()
-        password = request.form['password']
 
-        user = User.query.filter(
-            db.func.lower(User.username) == username,
-            User.password == password
-        ).first()
-
-        if user:
-            login_user(user)  # Flask-Login maneja la sesión
-            return redirect(url_for('dashboard'))
-        else:
-            flash('Usuario o contraseña incorrectos', category='danger')
-    return render_template('login.html')
 
 @app.route('/dashboard', methods=['GET', 'POST'])
 @login_required
 def dashboard():
+    if 'user_id' not in session:
+        return redirect(url_for('login'))
+
     if request.method == 'POST':
+        # Obtener y validar datos del formulario
         required_fields = ['fecha', 'entrada', 'salida', 'almuerzo_horas', 'viaje_ida', 'viaje_vuelta', 'km_ida', 'km_vuelta', 'tarea', 'cliente']
         missing_fields = [field for field in required_fields if field not in request.form or not request.form[field].strip()]
         
@@ -212,25 +204,23 @@ def dashboard():
             flash(f"Faltan los siguientes campos: {', '.join(missing_fields)}", 'danger')
             return render_template('dashboard.html', form_data=request.form)
 
+        # Obtener campos
         fecha = request.form.get('fecha', datetime.now().strftime('%Y-%m-%d'))
-        entrada_str = request.form.get('entrada', '08:00')
-        salida_str = request.form.get('salida', '17:00')
+        entrada = datetime.strptime(request.form.get('entrada', '08:00'), '%H:%M').time()
+        salida = datetime.strptime(request.form.get('salida', '17:00'), '%H:%M').time()
 
-        try:
-            entrada = datetime.strptime(entrada_str, '%H:%M').time()
-            salida = datetime.strptime(salida_str, '%H:%M').time()
-        except ValueError:
-            flash("Formato de hora incorrecto. Use HH:MM.", "danger")
-            return redirect(url_for('dashboard'))
 
+        # Validación de almuerzo
         try:
             almuerzo_horas = int(request.form.get('almuerzo_horas', 0))
+         
         except ValueError:
             flash("El tiempo de almuerzo debe ser un número válido", "danger")
             return redirect(url_for('dashboard'))
 
         almuerzo = timedelta(hours=almuerzo_horas)
 
+        # Validación de viaje y kilómetros
         try:
             viaje_ida = float(request.form.get('viaje_ida', 0) or 0)
             viaje_vuelta = float(request.form.get('viaje_vuelta', 0) or 0)
@@ -246,8 +236,8 @@ def dashboard():
 
         try:
             formato_hora = "%H:%M"
-            t_entrada = datetime.strptime(entrada_str, formato_hora)
-            t_salida = datetime.strptime(salida_str, formato_hora)
+            t_entrada = datetime.strptime(entrada, formato_hora)
+            t_salida = datetime.strptime(salida, formato_hora)
 
             if t_salida < t_entrada:
                 t_salida += timedelta(days=1)
@@ -255,26 +245,15 @@ def dashboard():
             tiempo_total = t_salida - t_entrada - almuerzo
             horas_trabajadas = tiempo_total.total_seconds() / 3600
         except ValueError:
-            flash("Error calculando las horas trabajadas", "danger")
+            flash("Formato de hora incorrecto. Use HH:MM.", "danger")
             return redirect(url_for('dashboard'))
-
+            
         registro_id = request.form.get('registro_id')
 
-        # Campos adicionales
-        centro_costo_id = request.form.get('centro_costo_id')
-        service_order = request.form.get('service_order')
-        tipo_servicio_id = request.form.get('tipo_servicio_id')
-        linea_id = request.form.get('linea_id')
-
-        # Sanitizar
-        centro_costo_id = int(centro_costo_id) if centro_costo_id else None
-        tipo_servicio_id = int(tipo_servicio_id) if tipo_servicio_id else None
-        linea_id = int(linea_id) if linea_id else None
-        service_order = service_order or None
-
         if registro_id:
+            # Editar un registro existente
             registro = Registro.query.get(int(registro_id))
-            if registro and registro.user_id == current_user.id:
+            if registro and registro.user_id == session['user_id']:
                 registro.fecha = fecha
                 registro.entrada = entrada
                 registro.salida = salida
@@ -287,16 +266,12 @@ def dashboard():
                 registro.tarea = tarea
                 registro.cliente = cliente
                 registro.comentarios = comentarios
-                registro.contrato = request.form.get('contrato') == 'on' if 'contrato' in request.form else None
-                registro.centro_costo_id = centro_costo_id
-                registro.service_order = service_order
-                registro.tipo_servicio_id = tipo_servicio_id
-                registro.linea_id = linea_id
                 db.session.commit()
                 flash('Registro actualizado exitosamente', 'success')
         else:
+            # Crear nuevo registro
             nuevo_registro = Registro(
-                user_id=current_user.id,
+                user_id=session['user_id'],
                 fecha=fecha,
                 entrada=entrada,
                 salida=salida,
@@ -308,12 +283,7 @@ def dashboard():
                 km_vuelta=km_vuelta,
                 tarea=tarea,
                 cliente=cliente,
-                comentarios=comentarios,
-                contrato=request.form.get('contrato') == 'on' if 'contrato' in request.form else None,
-                centro_costo_id=centro_costo_id,
-                service_order=service_order,
-                tipo_servicio_id=tipo_servicio_id,
-                linea_id=linea_id
+                comentarios=comentarios
             )
             db.session.add(nuevo_registro)
             db.session.commit()
@@ -321,11 +291,10 @@ def dashboard():
 
         return redirect(url_for('dashboard'))
 
-    # GET
-    registros = Registro.query.filter_by(user_id=current_user.id).order_by(Registro.fecha.desc()).all()
+    registros = Registro.query.filter_by(user_id=session['user_id']).order_by(Registro.fecha.desc()).all()
     clientes = Cliente.query.order_by(Cliente.nombre).all()
-    return render_template('dashboard.html', registros=registros, clientes=clientes, form_data={})
 
+    return render_template('dashboard.html', registros=registros, clientes=clientes)
 
 
 @app.route('/exportar_excel')
