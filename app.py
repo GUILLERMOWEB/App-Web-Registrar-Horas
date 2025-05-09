@@ -25,13 +25,7 @@ ALLOWED_EXTENSIONS = {'sql'}
 # Inicializar la aplicación Flask
 app = Flask(__name__)
 
-app.secret_key = os.environ.get('SECRET_KEY', 'clave-secreta-desarrollo')
 
-# Configuración adicional para asegurar sesiones en Render (HTTPS)
-app.config.update(
-    SESSION_COOKIE_SAMESITE='Lax',
-    SESSION_COOKIE_SECURE=True
-)
 def allowed_file(filename):
     return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
     
@@ -187,7 +181,25 @@ def allowed_file(filename):
 def inicio():
     return redirect(url_for('login'))
 
+@app.route('/login', methods=['GET', 'POST'])
+def login():
+    if request.method == 'POST':
+        username = request.form['username'].strip().lower()
+        password = request.form['password']
 
+        user = User.query.filter(
+            db.func.lower(User.username) == username,
+            User.password == password
+        ).first()
+
+        if user:
+            login_user(user)  # Asegúrate de usar login_user aquí
+            session['username'] = user.username
+            session['role'] = user.role
+            return redirect(url_for('dashboard'))
+        else:
+            flash('Usuario o contraseña incorrectos', category='danger')
+    return render_template('login.html')
 
 @app.route('/dashboard', methods=['GET', 'POST'])
 @login_required
@@ -381,9 +393,6 @@ def exportar_excel():
         as_attachment=True,
         download_name=f"registros_{session['username']}.xlsx"
     )
-
-
-
 
 
 @app.route('/editar_registro/<int:id>', methods=['GET', 'POST'])
