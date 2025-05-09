@@ -2,7 +2,7 @@ from flask import Flask, render_template, request, redirect, url_for, session, f
 from flask_sqlalchemy import SQLAlchemy
 from datetime import datetime, timedelta
 import os
-# Carga de variables de entorno desde .env
+# Carga de variables de entorno desde .envy listo
 from dotenv import load_dotenv
 load_dotenv()
 import pandas as pd
@@ -10,131 +10,44 @@ from io import BytesIO
 from openpyxl.utils import get_column_letter
 from openpyxl import load_workbook
 from flask_migrate import Migrate
-from flask_wtf import FlaskForm
-from wtforms.validators import DataRequired
-from wtforms import StringField, SubmitField
-from flask_login import login_required, current_user, UserMixin, LoginManager, login_user
-from functools import wraps
-from werkzeug.utils import secure_filename
-from urllib.parse import urlparse
-from functools import wraps
-from sqlalchemy import text
-
-ALLOWED_EXTENSIONS = {'sql'}
-
-# Inicializar la aplicación Flask
-app = Flask(__name__)
 
 
-def allowed_file(filename):
-    return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
-    
-# Configuración de la base de datos con PostgreSQL
-app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get("DATABASE_URL")
-app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-
-db = SQLAlchemy(app)
-
-
-# Inicializar el LoginManager
-login_manager = LoginManager()
-login_manager.init_app(app)
-
-# Configurar la ruta de login
-login_manager.login_view = 'login'
-
-
-# Habilita la recarga automática de plantillas y la caché de Jinja
-app.config['TEMPLATES_AUTO_RELOAD'] = True
-app.jinja_env.cache = {}
-
-# Inicializa la base de datos y el sistema de migración
-
-migrate = Migrate(app, db)
-
-def get_db_connection():
-    database_url = os.environ.get("DATABASE_URL")
-    if not database_url:
-        raise ValueError("DATABASE_URL no está definida en el entorno")
-
-    result = urlparse(database_url)
-    username = result.username
-    password = result.password
-    database = result.path[1:]
-    hostname = result.hostname
-    port = result.port
-
-    conn = psycopg2.connect(
-        dbname=database,
-        user=username,
-        password=password,
-        host=hostname,
-        port=port
-    )
-    return conn
-# Función para cargar un usuario a partir de su ID
-@login_manager.user_loader
-def load_user(user_id):
-    return db.session.get(User, int(user_id))
-
-# Función para convertir una hora en formato de texto a un número decimal
 def convertir_hora_a_decimal(hora_str):
     try:
         return float(int(hora_str.strip()))
     except ValueError:
         return 0.0
 
-# Decorador para asegurarse de que solo el superadministrador pueda acceder
-def superadmin_required(f):
-    @wraps(f)
-    def wrapper(*args, **kwargs):
-        if not current_user.is_authenticated:
-            flash('Debes iniciar sesión para acceder a esta página', 'warning')
-            return redirect(url_for('login'))  # Redirige al login si no está autenticado
 
-        if current_user.role != 'superadmin':  # Verifica el rol del usuario
-            flash('No tienes permisos para realizar esta acción', 'danger')
-            return redirect(url_for('index'))  # Redirige a la página principal
 
-        return f(*args, **kwargs)
-    return wrapper
+app = Flask(__name__)
+app.secret_key = 'clave_secreta_para_sesiones'
 
-# Modelo Usuario
-class User(db.Model, UserMixin):
+app.config['TEMPLATES_AUTO_RELOAD'] = True
+app.jinja_env.cache = {}
+
+# Configuración para PostgreSQL
+app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get("DATABASE_URL")
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+db = SQLAlchemy(app)
+# Inicializar Flask-Migrate
+migrate = Migrate(app, db)
+
+# ─── Modelos ─────────────────────────────────────
+class User(db.Model):
     __tablename__ = 'users'
-
     id = db.Column(db.Integer, primary_key=True)
-    username = db.Column(db.String(80), unique=True, nullable=False)
-    password = db.Column(db.String(120), nullable=False)
-    role = db.Column(db.String(20), nullable=False)
+    username = db.Column(db.String(100), unique=True, nullable=False)
+    password = db.Column(db.String(100), nullable=False)
+    role = db.Column(db.String(50), nullable=False)
 
-    registros = db.relationship('Registro', backref='usuario', lazy=True)
-
-
-# Asegúrate de que la base de datos se cree si no existe
-
-class CentroCosto(db.Model):
-    __tablename__ = 'centros_costo'
-    id     = db.Column(db.Integer, primary_key=True)
-    nombre = db.Column(db.String(100), nullable=False, unique=True)
-
-class TipoServicio(db.Model):
-    __tablename__ = 'tipos_servicio'
-    id     = db.Column(db.Integer, primary_key=True)
-    nombre = db.Column(db.String(100), nullable=False, unique=True)
-
-class Linea(db.Model):
-    __tablename__ = 'lineas'
-    id     = db.Column(db.Integer, primary_key=True)
-    nombre = db.Column(db.String(100), nullable=False, unique=True)
+    registros = db.relationship('Registro', backref='user', lazy=True)
 
 class Registro(db.Model):
     __tablename__ = 'registros'
-    __table_args__ = {'extend_existing': True}  # Agrega esta línea
-
     id = db.Column(db.Integer, primary_key=True)
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
-    fecha = db.Column(db.Date)  # Cambié a db.Date para almacenar solo la fecha
+    fecha = db.Column(db.String(50))
     entrada = db.Column(db.String(50))
     salida = db.Column(db.String(50))
     almuerzo = db.Column(db.Float)
@@ -146,35 +59,14 @@ class Registro(db.Model):
     tarea = db.Column(db.Text)
     cliente = db.Column(db.Text)
     comentarios = db.Column(db.Text)
-    contrato = db.Column(db.Boolean, default=False)
-    centro_costo_id = db.Column(db.Integer, db.ForeignKey('centros_costo.id'), nullable=True)
-    service_order = db.Column(db.String(10), nullable=True)
-    tipo_servicio_id = db.Column(db.Integer, db.ForeignKey('tipos_servicio.id'), nullable=True)
-    linea_id = db.Column(db.Integer, db.ForeignKey('lineas.id'), nullable=True)
-    
-    centro_costo = db.relationship('CentroCosto')
-    tipo_servicio = db.relationship('TipoServicio')
-    linea = db.relationship('Linea')
 
-   
-class Cliente(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    nombre = db.Column(db.String(100), nullable=False)
-    direccion = db.Column(db.String(200), nullable=False)
-    telefono = db.Column(db.String(50), nullable=True)
-
-    def __repr__(self):
-        return f'<Cliente {self.nombre}>'
-
+# ─── Inicialización de la base de datos ─────────
 with app.app_context():
     db.create_all()
     if not User.query.filter(db.func.lower(User.username) == 'guillermo gutierrez').first():
         superadmin = User(username='guillermo gutierrez', password='0000', role='superadmin')
         db.session.add(superadmin)
         db.session.commit()
-
-def allowed_file(filename):
-    return '.' in filename and filename.rsplit('.', 1)[1].lower() == 'sql'
 
 # ─── Rutas ──────────────────────────────────────
 @app.route('/', methods=['GET', 'POST'])
@@ -193,7 +85,7 @@ def login():
         ).first()
 
         if user:
-            login_user(user)  # Asegúrate de usar login_user aquí
+            session['user_id'] = user.id
             session['username'] = user.username
             session['role'] = user.role
             return redirect(url_for('dashboard'))
@@ -202,37 +94,24 @@ def login():
     return render_template('login.html')
 
 @app.route('/dashboard', methods=['GET', 'POST'])
-@login_required
 def dashboard():
     if 'user_id' not in session:
         return redirect(url_for('login'))
 
     if request.method == 'POST':
-        # Obtener y validar datos del formulario
-        required_fields = ['fecha', 'entrada', 'salida', 'almuerzo_horas', 'viaje_ida', 'viaje_vuelta', 'km_ida', 'km_vuelta', 'tarea', 'cliente']
-        missing_fields = [field for field in required_fields if field not in request.form or not request.form[field].strip()]
-        
-        if missing_fields:
-            flash(f"Faltan los siguientes campos: {', '.join(missing_fields)}", 'danger')
-            return render_template('dashboard.html', form_data=request.form)
+        fecha = request.form['fecha']
+        entrada = request.form['entrada']
+        salida = request.form['salida']
 
-        # Obtener campos
-        fecha = request.form.get('fecha', datetime.now().strftime('%Y-%m-%d'))
-        entrada = datetime.strptime(request.form.get('entrada', '08:00'), '%H:%M').time()
-        salida = datetime.strptime(request.form.get('salida', '17:00'), '%H:%M').time()
-
-
-        # Validación de almuerzo
         try:
             almuerzo_horas = int(request.form.get('almuerzo_horas', 0))
-         
+            almuerzo_minutos = int(request.form.get('almuerzo_minutos', 0))
         except ValueError:
             flash("El tiempo de almuerzo debe ser un número válido", "danger")
             return redirect(url_for('dashboard'))
 
-        almuerzo = timedelta(hours=almuerzo_horas)
+        almuerzo = timedelta(hours=almuerzo_horas, minutes=almuerzo_minutos)
 
-        # Validación de viaje y kilómetros
         try:
             viaje_ida = float(request.form.get('viaje_ida', 0) or 0)
             viaje_vuelta = float(request.form.get('viaje_vuelta', 0) or 0)
@@ -259,55 +138,61 @@ def dashboard():
         except ValueError:
             flash("Formato de hora incorrecto. Use HH:MM.", "danger")
             return redirect(url_for('dashboard'))
-            
-        registro_id = request.form.get('registro_id')
 
-        if registro_id:
-            # Editar un registro existente
-            registro = Registro.query.get(int(registro_id))
-            if registro and registro.user_id == session['user_id']:
-                registro.fecha = fecha
-                registro.entrada = entrada
-                registro.salida = salida
-                registro.almuerzo = round(almuerzo.total_seconds() / 3600, 2)
-                registro.horas = round(horas_trabajadas, 2)
-                registro.viaje_ida = viaje_ida
-                registro.viaje_vuelta = viaje_vuelta
-                registro.km_ida = km_ida
-                registro.km_vuelta = km_vuelta
-                registro.tarea = tarea
-                registro.cliente = cliente
-                registro.comentarios = comentarios
-                db.session.commit()
-                flash('Registro actualizado exitosamente', 'success')
-        else:
-            # Crear nuevo registro
-            nuevo_registro = Registro(
-                user_id=session['user_id'],
-                fecha=fecha,
-                entrada=entrada,
-                salida=salida,
-                almuerzo=round(almuerzo.total_seconds() / 3600, 2),
-                horas=round(horas_trabajadas, 2),
-                viaje_ida=viaje_ida,
-                viaje_vuelta=viaje_vuelta,
-                km_ida=km_ida,
-                km_vuelta=km_vuelta,
-                tarea=tarea,
-                cliente=cliente,
-                comentarios=comentarios
-            )
-            db.session.add(nuevo_registro)
-            db.session.commit()
-            flash('Registro guardado exitosamente', category='success')
+        nuevo_registro = Registro(
+            user_id=session['user_id'],
+            fecha=fecha,
+            entrada=entrada,
+            salida=salida,
+            almuerzo=round(almuerzo.total_seconds() / 3600, 2),
+            horas=round(horas_trabajadas, 2),
+            viaje_ida=viaje_ida,
+            viaje_vuelta=viaje_vuelta,
+            km_ida=km_ida,
+            km_vuelta=km_vuelta,
+            tarea=tarea,
+            cliente=cliente,
+            comentarios=comentarios
+        )
 
+        db.session.add(nuevo_registro)
+        db.session.commit()
+        flash('Registro guardado exitosamente', category='success')
         return redirect(url_for('dashboard'))
 
-    registros = Registro.query.filter_by(user_id=session['user_id']).order_by(Registro.fecha.desc()).all()
-    clientes = Cliente.query.order_by(Cliente.nombre).all()
+    # GET - mostrar los registros y total de horas
+    filtros = request.args
+    registros_query = Registro.query.filter_by(user_id=session['user_id'])
 
-    return render_template('dashboard.html', registros=registros, clientes=clientes)
+    if 'fecha' in filtros:
+        registros_query = registros_query.filter_by(fecha=filtros['fecha'])
 
+    registros = registros_query.order_by(Registro.fecha.desc()).all()
+
+    total_horas = sum([
+        (r.horas or 0) + (r.viaje_ida or 0) + (r.viaje_vuelta or 0)
+        for r in registros
+    ])
+    total_km = sum([
+        (r.km_ida or 0) + (r.km_vuelta or 0)
+        for r in registros
+    ])
+
+    return render_template(
+        'dashboard.html',
+        username=session['username'],
+        role=session['role'],
+        registros=registros,
+        total_horas=round(total_horas, 2),
+        total_km=round(total_km, 2)
+    )
+
+
+
+from flask import send_file, request, session, redirect, url_for
+from io import BytesIO
+from openpyxl.utils import get_column_letter
+import pandas as pd
 
 @app.route('/exportar_excel')
 def exportar_excel():
@@ -395,6 +280,9 @@ def exportar_excel():
     )
 
 
+
+
+
 @app.route('/editar_registro/<int:id>', methods=['GET', 'POST'])
 def editar_registro(id):
     if 'user_id' not in session:
@@ -458,6 +346,9 @@ def editar_registro(id):
         return redirect(url_for('admin') if session['role'] in ['admin', 'superadmin'] else url_for('dashboard'))
 
     return render_template('editar_registro.html', registro=registro)
+
+
+
 
 
 @app.route('/borrar_registro/<int:id>', methods=['POST'])
@@ -627,135 +518,6 @@ def eliminar_usuario(id):
     db.session.commit()
     flash('Usuario eliminado correctamente', 'danger')
     return redirect(url_for('lista_usuarios'))  # Cambio aquí
-    
-    
-@app.route('/ver_cliente', methods=['GET', 'POST'])
-def ver_cliente():
-    clientes = Cliente.query.all()  # Obtener todos los clientes
-
-    if request.method == 'POST':
-        cliente_id = request.form['cliente']  # Obtener el ID del cliente seleccionado
-        
-        if not cliente_id:
-            flash('Debe seleccionar un cliente.', 'danger')
-            return redirect(url_for('ver_cliente'))
-        
-        cliente = Cliente.query.get(cliente_id)  # Obtener el cliente por su ID
-
-        if cliente:
-            return render_template('detalle_cliente.html', cliente=cliente)  # Muestra los detalles del cliente
-        else:
-            flash('Cliente no encontrado.', 'danger')
-            return redirect(url_for('ver_cliente'))  # Redirige de vuelta si no se encuentra el cliente
-
-    return render_template('ver_cliente.html', clientes=clientes)
-
-
-
-@app.route('/agregar_cliente', methods=['GET', 'POST'])
-@login_required
-def agregar_cliente():
-    # Solo el superadmin puede agregar clientes
-    if current_user.role != 'superadmin':
-        flash('Acceso denegado: solo el superadministrador puede agregar clientes.', 'danger')
-        return redirect(url_for('dashboard'))
-
-    if request.method == 'POST':
-        nombre = request.form['nombre']
-        direccion = request.form.get('direccion')  # Dirección ahora es opcional
-        telefono = request.form.get('telefono')  # Teléfono ahora es opcional
-
-        # Validación de que el nombre no esté vacío
-        if not nombre:
-            flash('El nombre es obligatorio.', 'danger')
-            return redirect(url_for('agregar_cliente'))
-
-        # Crear un nuevo cliente solo con el nombre, dirección y teléfono opcionales
-        nuevo_cliente = Cliente(nombre=nombre, direccion=direccion, telefono=telefono)
-
-        try:
-            db.session.add(nuevo_cliente)
-            db.session.commit()
-            flash('Cliente agregado exitosamente.', 'success')
-            return redirect(url_for('dashboard'))  # Redirige al dashboard superadmin
-        except Exception as e:
-            db.session.rollback()
-            flash(f'Error al agregar el cliente: {e}', 'danger')
-
-    # Obtener todos los clientes para mostrarlos en el formulario
-    clientes = Cliente.query.all()
-
-    return render_template('agregar_cliente.html', clientes=clientes)
-
-
-@app.route('/editar_cliente/<int:id>', methods=['GET', 'POST'])
-@login_required
-def editar_cliente(id):
-    if current_user.rol != 'superadmin':
-        flash('Acceso no autorizado.', 'danger')
-        return redirect(url_for('dashboard'))
-
-    cliente = Cliente.query.get_or_404(id)
-
-    if request.method == 'POST':
-        cliente.nombre = request.form['nombre']
-        cliente.descripcion = request.form['descripcion']
-        db.session.commit()
-        flash('Cliente actualizado correctamente.', 'success')
-        return redirect(url_for('ver_cliente'))
-
-    return render_template('editar_cliente.html', cliente=cliente)
-
-@app.route('/borrar_cliente/<int:id>', methods=['POST'])
-@login_required
-def borrar_cliente(id):
-    if session.get("rol") != "superadmin":
-        flash("Acceso denegado.")
-        return redirect(url_for("dashboard"))
-
-    cliente = Cliente.query.get_or_404(id)
-    db.session.delete(cliente)
-    db.session.commit()
-    flash("Cliente eliminado exitosamente.")
-    return redirect(url_for("ver_cliente"))
-
-# URL de conexión externa (Render PostgreSQL)
-#DATABASE_URL = "postgresql://registro_horas_db_user:I4q95g2dcUWeERh2Ixd4SxRp8FxwFfZ7@dpg-cvv2qhh5pdvs73bvjaog-a.oregon-postgres.render.com/registro_horas_db"
-
-# Ruta para cargar el archivo SQL
-@app.route('/upload_sql', methods=['GET', 'POST'])
-@login_required
-@superadmin_required
-def upload_sql():
-    if request.method == 'POST':
-        sql_file = request.files.get('sql_file')
-
-        if sql_file and allowed_file(sql_file.filename):
-            try:
-                sql_query = sql_file.read().decode('utf-8')
-
-                # Ejecutar sentencias usando SQLAlchemy
-                with db.engine.connect() as conn:
-                    for statement in sql_query.split(';'):
-                        stmt = statement.strip()
-                        if stmt:
-                            conn.execute(text(stmt))
-
-                flash('Archivo SQL ejecutado con éxito.', 'success')
-                return redirect(url_for('dashboard'))
-
-            except Exception as e:
-                print(f"Error al ejecutar el SQL: {e}")
-                flash(f'Error al ejecutar el archivo SQL: {str(e)}', 'danger')
-                return redirect(url_for('dashboard'))
-
-        else:
-            flash('El archivo no es un archivo SQL válido.', 'danger')
-            return redirect(url_for('dashboard'))
-
-    return render_template('upload_sql.html')
-
-
 
 
 if __name__ == '__main__':
