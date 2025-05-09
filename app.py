@@ -1,6 +1,6 @@
 from flask import Flask, render_template, request, redirect, url_for, session, flash, send_file
 from flask_sqlalchemy import SQLAlchemy
-from datetime import datetime, timedelta, date
+from datetime import datetime, timedelta
 import os
 # Carga de variables de entorno desde .env
 from dotenv import load_dotenv
@@ -28,8 +28,6 @@ app = Flask(__name__)
 # Clave secreta y configuración de sesión (si no lo has hecho)
 app.secret_key = os.environ.get('SECRET_KEY', 'mi_clave_secreta_aleatoria')
 
-app.config['SESSION_TYPE'] = 'filesystem'
-
 
 def allowed_file(filename):
     return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
@@ -37,11 +35,6 @@ def allowed_file(filename):
 # Configuración de la base de datos con PostgreSQL
 app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get("DATABASE_URL")
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-app.secret_key = 'clave_secreta_para_sesiones'
-
-
-# Definir una clave secreta para la sesión
-app.secret_key = 'tu_clave_secreta'
 
 db = SQLAlchemy(app)
 
@@ -212,6 +205,7 @@ def login():
     return render_template('login.html')
 
 @app.route('/dashboard', methods=['GET', 'POST'])
+@login_required
 def dashboard():
     if 'user_id' not in session:
         return redirect(url_for('login'))
@@ -227,8 +221,8 @@ def dashboard():
 
         # Obtener campos
         fecha = request.form.get('fecha', datetime.now().strftime('%Y-%m-%d'))
-        entrada = request.form['entrada']
-        salida = request.form['salida']
+        entrada = datetime.strptime(request.form.get('entrada', '08:00'), '%H:%M').time()
+        salida = datetime.strptime(request.form.get('salida', '17:00'), '%H:%M').time()
 
 
         # Validación de almuerzo
