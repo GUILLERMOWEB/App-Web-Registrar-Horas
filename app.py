@@ -284,7 +284,7 @@ def dashboard():
         else:
             # Crear nuevo registro
             nuevo_registro = Registro(
-                user_id=session['user_id'],
+                user_id=current_user.id,
                 fecha=fecha,
                 entrada=entrada,
                 salida=salida,
