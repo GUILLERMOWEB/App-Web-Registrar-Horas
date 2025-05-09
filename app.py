@@ -26,7 +26,7 @@ ALLOWED_EXTENSIONS = {'sql'}
 app = Flask(__name__)
 
 # Clave secreta y configuración de sesión (si no lo has hecho)
-app.secret_key = os.environ.get('SECRET_KEY', 'mi_clave_secreta_aleatoria')
+#app.secret_key = os.environ.get('SECRET_KEY', 'mi_clave_secreta_aleatoria')
 
 
 def allowed_file(filename):
