@@ -2,7 +2,7 @@ from flask import Flask, render_template, request, redirect, url_for, session, f
 from flask_sqlalchemy import SQLAlchemy
 from datetime import datetime, timedelta
 import os
-# Carga de variables de entorno desde .envy listo
+# Carga de variables de entorno desde .env
 from dotenv import load_dotenv
 load_dotenv()
 import pandas as pd
@@ -10,6 +10,15 @@ from io import BytesIO
 from openpyxl.utils import get_column_letter
 from openpyxl import load_workbook
 from flask_migrate import Migrate
+from flask_wtf import FlaskForm
+from wtforms import StringField
+from wtforms.validators import DataRequired
+from wtforms import StringField, SubmitField
+from flask_login import login_required, current_user
+from functools import wraps
+
+# Importar db de forma tardía para evitar importación circular
+from models import db, RegistroHoras, ClienteModel
 
 
 def convertir_hora_a_decimal(hora_str):
@@ -519,6 +528,122 @@ def eliminar_usuario(id):
     flash('Usuario eliminado correctamente', 'danger')
     return redirect(url_for('lista_usuarios'))  # Cambio aquí
 
+# ─── CRUD Clientes (solo superadmin) ───────────────────────────
+
+@app.route('/ver_cliente', methods=['GET', 'POST'])
+def ver_cliente():
+    clientes = Cliente.query.all()  # Obtener todos los clientes
+
+    if request.method == 'POST':
+        cliente_id = request.form['cliente']  # Obtener el ID del cliente seleccionado
+        
+        if not cliente_id:
+            flash('Debe seleccionar un cliente.', 'danger')
+            return redirect(url_for('ver_cliente'))
+        
+        cliente = Cliente.query.get(cliente_id)  # Obtener el cliente por su ID
+
+        if cliente:
+            return render_template('detalle_cliente.html', cliente=cliente)  # Muestra los detalles del cliente
+        else:
+            flash('Cliente no encontrado.', 'danger')
+            return redirect(url_for('ver_cliente'))  # Redirige de vuelta si no se encuentra el cliente
+
+    return render_template('ver_cliente.html', clientes=clientes)
+
+
+
+@app.route('/agregar_cliente', methods=['GET', 'POST'])
+@login_required
+def agregar_cliente():
+    # Solo el superadmin puede agregar clientes
+    if current_user.role != 'superadmin':
+        flash('Acceso denegado: solo el superadministrador puede agregar clientes.', 'danger')
+        return redirect(url_for('dashboard'))
+
+    if request.method == 'POST':
+        nombre = request.form['nombre']
+        direccion = request.form['direccion']
+        telefono = request.form.get('telefono')
+
+        # Validación de datos antes de guardarlos
+        if not nombre or not direccion:
+            flash('El nombre y la dirección son campos obligatorios.', 'danger')
+            return redirect(url_for('agregar_cliente'))
+
+        # Crear un nuevo cliente
+        nuevo_cliente = Cliente(nombre=nombre, direccion=direccion, telefono=telefono)
+
+        try:
+            db.session.add(nuevo_cliente)
+            db.session.commit()
+            flash('Cliente agregado exitosamente.', 'success')
+            return redirect(url_for('dashboard'))  # Redirige al dashboard superadmin
+        except Exception as e:
+            db.session.rollback()
+            flash(f'Error al agregar el cliente: {e}', 'danger')
+
+    # Obtener todos los clientes para mostrarlos en el formulario
+    clientes = Cliente.query.all()
+
+    return render_template('agregar_cliente.html')
+
+@app.route('/editar_cliente/<int:cliente_id>', methods=['GET', 'POST'])
+@login_required
+def editar_cliente(cliente_id):
+    # Verificación de rol
+    if session.get('role') != 'superadmin':
+        flash("Acceso denegado: solo el superadministrador puede editar clientes.", "danger")
+        return redirect(url_for('dashboard'))
+
+    cliente = ClienteModel.query.get_or_404(cliente_id)
+
+    if request.method == 'POST':
+        nuevo_nombre = request.form.get('nombre', '').strip()
+        nueva_direccion = request.form.get('direccion', '').strip()
+        nuevo_telefono = request.form.get('telefono', '').strip()
+
+        # Validaciones básicas
+        if not nuevo_nombre:
+            flash("El nombre no puede estar vacío.", "danger")
+        elif ClienteModel.query.filter(
+            ClienteModel.nombre == nuevo_nombre,
+            ClienteModel.id != cliente_id
+        ).first():
+            flash("Ya existe otro cliente con ese nombre.", "warning")
+        else:
+            cliente.nombre = nuevo_nombre
+            cliente.direccion = nueva_direccion
+            cliente.telefono = nuevo_telefono
+
+            try:
+                db.session.commit()
+                flash("Cliente actualizado con éxito.", "success")
+                return redirect(url_for('ver_cliente'))
+            except Exception as e:
+                db.session.rollback()
+                flash(f"Error al actualizar el cliente: {e}", "danger")
+
+    return render_template('editar_cliente.html', cliente=cliente)
+
+@app.route('/borrar_cliente/<int:cliente_id>', methods=['POST'])
+@login_required
+def borrar_cliente(cliente_id):
+    # Solo permite si el usuario es superadmin
+    if session.get('role') != 'superadmin':
+        flash("Acceso denegado: solo el superadministrador puede eliminar clientes.", "danger")
+        return redirect(url_for('dashboard'))
+
+    try:
+        cliente = ClienteModel.query.get_or_404(cliente_id)
+        db.session.delete(cliente)
+        db.session.commit()
+        flash("Cliente eliminado correctamente.", "success")
+    except Exception as e:
+        db.session.rollback()
+        flash(f"Error al eliminar el cliente: {e}", "danger")
+
+    return redirect(url_for('ver_cliente'))
 
 if __name__ == '__main__':
     port = int(os.environ.get("PORT", 5000))
