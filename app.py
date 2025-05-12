@@ -115,8 +115,8 @@ def dashboard():
         salida = request.form['salida']
 
         try:
-            almuerzo_horas = int(request.form.get('almuerzo_horas', 0))
-            almuerzo_minutos = int(request.form.get('almuerzo_minutos', 0))
+            almuerzo_horas = int(request.form.get('almuerzo_horas') or 0)
+            almuerzo_minutos = int(request.form.get('almuerzo_minutos') or 0)
         except ValueError:
             flash("El tiempo de almuerzo debe ser un número válido", "danger")
             return redirect(url_for('dashboard'))
@@ -124,10 +124,10 @@ def dashboard():
         almuerzo = timedelta(hours=almuerzo_horas, minutes=almuerzo_minutos)
 
         try:
-            viaje_ida = float(request.form.get('viaje_ida', 0) or 0)
-            viaje_vuelta = float(request.form.get('viaje_vuelta', 0) or 0)
-            km_ida = float(request.form.get('km_ida', 0) or 0)
-            km_vuelta = float(request.form.get('km_vuelta', 0) or 0)
+            viaje_ida = float(request.form.get('viaje_ida') or 0)
+            viaje_vuelta = float(request.form.get('viaje_vuelta') or 0)
+            km_ida = float(request.form.get('km_ida') or 0)
+            km_vuelta = float(request.form.get('km_vuelta') or 0)
         except ValueError:
             flash("Las horas de viaje y kilómetros deben ser números válidos.", "danger")
             return redirect(url_for('dashboard'))
@@ -197,6 +197,7 @@ def dashboard():
         total_horas=round(total_horas, 2),
         total_km=round(total_km, 2)
     )
+
 
 
 

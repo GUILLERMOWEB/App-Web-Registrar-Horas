@@ -23,6 +23,7 @@
         <input type="number" step="0.5" min="0" name="almuerzo_horas" class="form-control" value="{{ form_data['almuerzo_horas'] if form_data and 'almuerzo_horas' in form_data else (registro.almuerzo if registro else '') }}">
       </div>
     
+      <!-- NUEVOS CAMPOS DE VIAJE Y KM -->
       <div class="col-md-2">
         <label class="form-label">Duración Viaje de Ida</label>
         <input type="number" step="0.01" name="viaje_ida" class="form-control" value="{{ form_data['viaje_ida'] if form_data and 'viaje_ida' in form_data else (registro.viaje_ida if registro else '') }}">
@@ -39,6 +40,7 @@
         <label class="form-label">KM Viaje de Vuelta</label>
         <input type="number" step="0.1" name="km_vuelta" class="form-control" value="{{ form_data['km_vuelta'] if form_data and 'km_vuelta' in form_data else (registro.km_vuelta if registro else '') }}">
       </div>
+
       <div class="col-md-4">
         <label class="form-label">Tarea Realizada</label>
         <input type="text" name="tarea" class="form-control" value="{{ form_data['tarea'] if form_data and 'tarea' in form_data else (registro.tarea if registro else '') }}">
