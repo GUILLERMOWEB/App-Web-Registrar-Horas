@@ -102,6 +102,8 @@ def login():
             flash('Usuario o contraseña incorrectos', category='danger')
     return render_template('login.html')
 
+from datetime import datetime, timedelta
+
 @app.route('/dashboard', methods=['GET', 'POST'])
 def dashboard():
     if 'user_id' not in session:
@@ -151,8 +153,8 @@ def dashboard():
         nuevo_registro = Registro(
             user_id=session['user_id'],
             fecha=fecha,
-            entrada=entrada,
-            salida=salida,
+            entrada=t_entrada.time(),  # Convertido a datetime.time
+            salida=t_salida.time(),    # Convertido a datetime.time
             almuerzo=round(almuerzo.total_seconds() / 3600, 2),
             horas=round(horas_trabajadas, 2),
             viaje_ida=viaje_ida,
@@ -287,10 +289,6 @@ def exportar_excel():
         as_attachment=True,
         download_name=f"registros_{session['username']}.xlsx"
     )
-
-
-
-
 
 @app.route('/editar_registro/<int:id>', methods=['GET', 'POST'])
 def editar_registro(id):
