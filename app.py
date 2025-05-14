@@ -39,6 +39,14 @@ app.jinja_env.cache = {}
 app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get("DATABASE_URL")
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db = SQLAlchemy(app)
+
+# Ejecutar migraciones automáticamente al arrancar
+@app.before_first_request
+def activate_migrations():
+    try:
+        upgrade()
+    except Exception as e:
+        print(f"Error al aplicar migraciones: {e}")
 # Inicializar Flask-Migrate
 migrate = Migrate(app, db)
 
