@@ -11,6 +11,8 @@ from openpyxl.utils import get_column_letter
 from openpyxl import load_workbook
 from flask_migrate import Migrate
 
+#C:\Users\Guillermo\AppData\Local\Programs\Python\Python313\python.exe "$(FULL_CURRENT_PATH)"
+
 
 def convertir_hora_a_decimal(hora_str):
     try:
