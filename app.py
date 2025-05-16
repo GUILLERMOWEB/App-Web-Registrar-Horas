@@ -160,7 +160,7 @@ def dashboard():
         tarea = request.form.get('tarea', '').strip()
         cliente = request.form.get('cliente', '').strip()  # Si cliente es texto, OK
         comentarios = request.form.get('comentarios', '').strip()
-        contrato = request.form.get('contrato', '').strip()
+        contrato = bool(int(request.form.get("contrato")))
         service_order = request.form.get('service_order', '').strip()
 
         try:
@@ -184,7 +184,7 @@ def dashboard():
             flash("Formato de hora incorrecto. Use HH:MM.", "danger")
             return redirect(url_for('dashboard'))
 
-        contrato = bool(int(request.form.get("contrato")))
+        
             
 
         nuevo_registro = Registro(
@@ -276,9 +276,10 @@ def exportar_excel():
         'Comentarios': r.comentarios,
         'Contrato': 'Sí' if r.contrato else 'No',
         'Service Order': r.service_order or '',
-        'Centro de Costo': r.centro_costo.nombre if r.centro_costo else '',
-        'Tipo de Servicio': r.tipo_servicio.nombre if r.tipo_servicio else '',
-        'Línea': r.linea.nombre if r.linea else ''
+        'Centro de Costo': r.centro_costo or '',
+        'Tipo de Servicio': r.tipo_servicio or '',
+        'Línea': r.linea or ''
+
     } for r in registros if r.user is not None])
 
     archivo = BytesIO()
