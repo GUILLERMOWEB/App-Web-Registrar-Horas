@@ -117,6 +117,25 @@ def dashboard():
     if 'user_id' not in session:
         return redirect(url_for('login'))
 
+    # Ejemplo de listas de opciones (reemplazar por consulta a DB luego)
+    clientes = ['Cliente A', 'Cliente B', 'Cliente C']
+    contratos = ['Contrato 1', 'Contrato 2', 'Contrato 3']
+    centros_costo = [
+        {'id': 1, 'nombre': 'Centro 1'},
+        {'id': 2, 'nombre': 'Centro 2'},
+        {'id': 3, 'nombre': 'Centro 3'}
+    ]
+    tipos_servicio = [
+        {'id': 1, 'nombre': 'Servicio 1'},
+        {'id': 2, 'nombre': 'Servicio 2'},
+        {'id': 3, 'nombre': 'Servicio 3'}
+    ]
+    lineas = [
+        {'id': 1, 'nombre': 'Línea 1'},
+        {'id': 2, 'nombre': 'Línea 2'},
+        {'id': 3, 'nombre': 'Línea 3'}
+    ]
+
     if request.method == 'POST':
         fecha = request.form['fecha']
         entrada = request.form['entrada']
@@ -141,17 +160,25 @@ def dashboard():
             return redirect(url_for('dashboard'))
 
         tarea = request.form.get('tarea', '').strip()
-        cliente = request.form.get('cliente', '').strip()
+        cliente = request.form.get('cliente', '').strip()  # Si cliente es texto, OK
         comentarios = request.form.get('comentarios', '').strip()
+        contrato = request.form.get('contrato', '').strip()
+        service_order = request.form.get('service_order', '').strip()
+
+        try:
+            centro_costo_id = int(request.form.get('centro_costo_id')) if request.form.get('centro_costo_id') else None
+            tipo_servicio_id = int(request.form.get('tipo_servicio_id')) if request.form.get('tipo_servicio_id') else None
+            linea_id = int(request.form.get('linea_id')) if request.form.get('linea_id') else None
+        except ValueError:
+            flash("Los campos de selección deben ser valores válidos.", "danger")
+            return redirect(url_for('dashboard'))
 
         try:
             formato_hora = "%H:%M"
             t_entrada = datetime.strptime(entrada, formato_hora)
             t_salida = datetime.strptime(salida, formato_hora)
-
             if t_salida < t_entrada:
                 t_salida += timedelta(days=1)
-
             tiempo_total = t_salida - t_entrada - almuerzo
             horas_trabajadas = tiempo_total.total_seconds() / 3600
         except ValueError:
@@ -174,9 +201,9 @@ def dashboard():
             comentarios=comentarios,
             contrato=contrato,
             service_order=service_order,
-            centro_costo_id=centro_costo_id or None,
-            tipo_servicio_id=tipo_servicio_id or None,
-            linea_id=linea_id or None
+            centro_costo_id=centro_costo_id,
+            tipo_servicio_id=tipo_servicio_id,
+            linea_id=linea_id
         )
 
         db.session.add(nuevo_registro)
@@ -184,23 +211,15 @@ def dashboard():
         flash('Registro guardado exitosamente', category='success')
         return redirect(url_for('dashboard'))
 
-    # GET - mostrar los registros y total de horas
+    # GET - mostrar registros y total de horas
     filtros = request.args
     registros_query = Registro.query.filter_by(user_id=session['user_id'])
-
     if 'fecha' in filtros:
         registros_query = registros_query.filter_by(fecha=filtros['fecha'])
-
     registros = registros_query.order_by(Registro.fecha.desc()).all()
 
-    total_horas = sum([
-        (r.horas or 0) + (r.viaje_ida or 0) + (r.viaje_vuelta or 0)
-        for r in registros
-    ])
-    total_km = sum([
-        (r.km_ida or 0) + (r.km_vuelta or 0)
-        for r in registros
-    ])
+    total_horas = sum([(r.horas or 0) + (r.viaje_ida or 0) + (r.viaje_vuelta or 0) for r in registros])
+    total_km = sum([(r.km_ida or 0) + (r.km_vuelta or 0) for r in registros])
 
     return render_template(
         'dashboard.html',
@@ -208,8 +227,15 @@ def dashboard():
         role=session['role'],
         registros=registros,
         total_horas=round(total_horas, 2),
-        total_km=round(total_km, 2)
+        total_km=round(total_km, 2),
+        clientes=clientes,
+        contratos=contratos,
+        centros_costo=centros_costo,
+        tipos_servicio=tipos_servicio,
+        lineas=lineas
     )
+
+
 
 
 @app.route('/exportar_excel')
