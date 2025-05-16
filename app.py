@@ -116,10 +116,11 @@ def dashboard():
         return redirect(url_for('login'))
 
     # Ejemplo de listas de opciones (reemplazar por consulta a DB luego)
-    clientes = ['Cliente A', 'Cliente B', 'Cliente C']
+    clientes = ['Guillermo', 'Maira', 'Euge']
     contratos = ['Contrato 1', 'Contrato 2', 'Contrato 3']
+    service_orders = ['SM02', 'SM03']
     centros_costo = [
-        {Molinedas rio de ls plata},
+        {'id': 1, 'nombre': 'Centro 1'},
         {'id': 2, 'nombre': 'Centro 2'},
         {'id': 3, 'nombre': 'Centro 3'}
     ]

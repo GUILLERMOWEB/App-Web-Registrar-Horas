@@ -65,9 +65,14 @@
     
   
     <!-- Select para Service Order (si querés, puede quedar input) -->
-    <div class="col-md-2">
-      <label for="service_order" class="form-label">Service Order</label>
-      <input type="text" name="service_order" maxlength="10" class="form-control">
+    <!-- Service Order -->
+    <div class="form-group">
+      <label for="service_order">Service Order:</label>
+      <select name="service_order" class="form-control">
+          {% for so in service_orders %}
+              <option value="{{ so }}">{{ so }}</option>
+          {% endfor %}
+      </select>
     </div>
   
     <!-- Select para Centro de Costo -->
