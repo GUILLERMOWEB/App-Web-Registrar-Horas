@@ -10,6 +10,9 @@ from io import BytesIO
 from openpyxl.utils import get_column_letter
 from openpyxl import load_workbook
 from flask_migrate import Migrate
+from openpyxl.drawing.image import Image as ExcelImage
+from openpyxl.styles import Font, PatternFill, Border, Side, Alignment
+
 
 #C:\Users\Guillermo\AppData\Local\Programs\Python\Python313\python.exe "$(FULL_CURRENT_PATH)"
 
@@ -189,13 +192,6 @@ def dashboard():
         total_km=round(total_km, 2)
     )
 
-
-
-from flask import send_file, request, session, redirect, url_for
-from io import BytesIO
-from openpyxl.utils import get_column_letter
-import pandas as pd
-
 @app.route('/exportar_excel')
 def exportar_excel():
     if 'user_id' not in session:
@@ -207,72 +203,86 @@ def exportar_excel():
 
     query = Registro.query
 
-    # Si no es admin o superadmin, se filtra por el usuario actual
     if role not in ['admin', 'superadmin']:
         query = query.filter_by(user_id=session['user_id'])
 
-    # Si hay filtros de fechas, se aplican
     if fecha_desde and fecha_hasta:
         query = query.filter(Registro.fecha.between(fecha_desde, fecha_hasta))
 
-    registros = query.all()
+    # Filtrar registros con usuario válido
+    registros = [r for r in query.all() if r.user is not None]
 
-    # Armar el DataFrame para exportar, usando verificación segura para r.user
+    # Si no hay registros válidos, evitar generar archivo
+    if not registros:
+        flash("No hay registros válidos para exportar.", "warning")
+        return redirect(request.referrer or url_for('dashboard'))
+
     df = pd.DataFrame([{
-        'usuario': r.user.username if r.user else 'Desconocido',
-        'fecha': r.fecha,
-        'entrada': r.entrada,
-        'salida': r.salida,
-        'almuerzo': r.almuerzo,
-        'viaje_ida': r.viaje_ida,
-        'viaje_vuelta': r.viaje_vuelta,
-        'horas_laborales': r.horas,
-        'horas_totales': round((r.horas or 0) + (r.viaje_ida or 0) + (r.viaje_vuelta or 0), 2),
-        'km_ida': r.km_ida,
-        'km_vuelta': r.km_vuelta,
-        'km_totales': (r.km_ida or 0) + (r.km_vuelta or 0),
-        'tarea': r.tarea,
-        'cliente': r.cliente,
-        'comentarios': r.comentarios
+        'Usuario': r.user.username,
+        'Fecha': r.fecha,
+        'Entrada': r.entrada,
+        'Salida': r.salida,
+        'Almuerzo (hs)': r.almuerzo,
+        'Viaje ida (hs)': r.viaje_ida,
+        'Viaje vuelta (hs)': r.viaje_vuelta,
+        'Horas laborales': r.horas,
+        'Horas totales': round((r.horas or 0) + (r.viaje_ida or 0) + (r.viaje_vuelta or 0), 2),
+        'Km ida': r.km_ida,
+        'Km vuelta': r.km_vuelta,
+        'Km totales': (r.km_ida or 0) + (r.km_vuelta or 0),
+        'Tarea': r.tarea,
+        'Cliente': r.cliente,
+        'Comentarios': r.comentarios
     } for r in registros])
 
-    # Crear archivo en memoria
     archivo = BytesIO()
     with pd.ExcelWriter(archivo, engine='openpyxl') as writer:
         df.to_excel(writer, index=False, sheet_name='Registros')
         ws = writer.sheets['Registros']
 
-        from openpyxl.styles import Font, PatternFill, Border, Side
-        from openpyxl.utils import get_column_letter
+        # Insertar logo si existe
+        logo_path = os.path.join('static', 'LOGO RH MOBILITY.png')
+        if os.path.exists(logo_path):
+            logo_img = ExcelImage(logo_path)
+            logo_img.height = 80
+            logo_img.width = 160
+            ws.add_image(logo_img, "A1")
 
         # Estilos
-        header_font = Font(bold=True, color="FFFFFF")
-        header_fill = PatternFill(start_color="4F81BD", end_color="4F81BD", fill_type="solid")
+        header_font = Font(bold=True, color="FFFFFF", name='Calibri')
+        header_fill = PatternFill(start_color="305496", end_color="305496", fill_type="solid")
+        zebra_fill = PatternFill(start_color="F9F9F9", end_color="F9F9F9", fill_type="solid")
         thin_border = Border(
             left=Side(style='thin'), right=Side(style='thin'),
             top=Side(style='thin'), bottom=Side(style='thin')
         )
-        zebra_fill = PatternFill(start_color="F2F2F2", end_color="F2F2F2", fill_type="solid")
+        center_alignment = Alignment(horizontal="center", vertical="center", wrap_text=True)
 
-        # Aplicar estilos a los encabezados
-        for cell in ws[1]:
+        # Encabezados
+        for cell in ws[2]:  # fila 2 porque el logo ocupa la primera
             cell.font = header_font
             cell.fill = header_fill
             cell.border = thin_border
+            cell.alignment = center_alignment
 
-        # Aplicar estilos al resto de las filas
-        for row in ws.iter_rows(min_row=2, max_row=ws.max_row):
+        # Datos
+        for row in ws.iter_rows(min_row=3, max_row=ws.max_row):
             for cell in row:
+                cell.font = Font(name='Calibri', size=11)
                 cell.border = thin_border
-            if row[0].row % 2 == 0:  # zebra stripe
+                cell.alignment = center_alignment
+            if row[0].row % 2 == 1:
                 for cell in row:
                     cell.fill = zebra_fill
 
-        # Aplicar filtros y ajustar anchos
-        ws.auto_filter.ref = ws.dimensions
+        # Autoajuste columnas
         for col_num, column_cells in enumerate(ws.columns, 1):
             max_length = max((len(str(cell.value)) for cell in column_cells if cell.value), default=0)
-            ws.column_dimensions[get_column_letter(col_num)].width = max_length + 2
+            adjusted_width = min((max_length + 4), 50)
+            ws.column_dimensions[get_column_letter(col_num)].width = adjusted_width
+
+        ws.auto_filter.ref = ws.dimensions
+        ws.freeze_panes = 'A3'  # Fija fila de encabezado debajo del logo
 
     archivo.seek(0)
 
@@ -281,6 +291,8 @@ def exportar_excel():
         as_attachment=True,
         download_name=f"registros_{session['username']}.xlsx"
     )
+
+
 
 
 
