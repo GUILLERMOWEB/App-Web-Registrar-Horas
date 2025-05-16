@@ -117,22 +117,22 @@ def dashboard():
 
     # Ejemplo de listas de opciones (reemplazar por consulta a DB luego)
     clientes = ['Guillermo', 'Maira', 'Euge']
-    contratos = ['Contrato 1', 'Contrato 2', 'Contrato 3']
+    contratos = ['Contrato legal 1', 'Contrato legal 2', 'Contrato legal 3']
     service_orders = ['SM02', 'SM03']
     centros_costo = [
-        {'id': 1, 'nombre': 'Centro 1'},
-        {'id': 2, 'nombre': 'Centro 2'},
-        {'id': 3, 'nombre': 'Centro 3'}
+        {'id': 1, 'nombre': 'Tetar '},
+        {'id': 2, 'nombre': 'Tetra 2'},
+        {'id': 3, 'nombre': 'Tetra 3'}
     ]
     tipos_servicio = [
-        {'id': 1, 'nombre': 'Servicio 1'},
-        {'id': 2, 'nombre': 'Servicio 2'},
-        {'id': 3, 'nombre': 'Servicio 3'}
+        {'id': 1, 'nombre': 'Reparacion'},
+        {'id': 2, 'nombre': 'Correctivo'},
+        {'id': 3, 'nombre': 'Preventivo'}
     ]
     lineas = [
-        {'id': 1, 'nombre': 'Línea 1'},
-        {'id': 2, 'nombre': 'Línea 2'},
-        {'id': 3, 'nombre': 'Línea 3'}
+        {'id': 1, 'nombre': 'Línea z'},
+        {'id': 2, 'nombre': 'Línea T'},
+        {'id': 3, 'nombre': 'Línea X'}
     ]
 
     if request.method == 'POST':
