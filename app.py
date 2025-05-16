@@ -67,13 +67,11 @@ class Registro(db.Model):
     tarea           = db.Column(db.Text)
     cliente         = db.Column(db.Text)
     comentarios     = db.Column(db.Text)
-
-    contrato        = db.Column(db.Boolean, default=False)
-    service_order   = db.Column(db.String(100), nullable=True)
-
-    centro_costo    = db.Column(db.String(100), nullable=True)
-    tipo_servicio   = db.Column(db.String(100), nullable=True)
-    linea           = db.Column(db.String(100), nullable=True)
+    contrato = db.Column(db.String(100))
+    service_order = db.Column(db.String(100))
+    centro_costo = db.Column(db.String(100))  # ← Simple texto, no ID
+    tipo_servicio = db.Column(db.String(100))  # ← Texto
+    linea = db.Column(db.String(100))  # ← Texto
 
     # (opcional) si querés acceder al usuario desde el registro:
     # user = db.relationship('User', backref='registros')
@@ -166,9 +164,10 @@ def dashboard():
         service_order = request.form.get('service_order', '').strip()
 
         try:
-            centro_costo_id = int(request.form.get('centro_costo_id')) if request.form.get('centro_costo_id') else None
-            tipo_servicio_id = int(request.form.get('tipo_servicio_id')) if request.form.get('tipo_servicio_id') else None
-            linea_id = int(request.form.get('linea_id')) if request.form.get('linea_id') else None
+            centro_costo = request.form.get('centro_costo', '').strip()
+            tipo_servicio = request.form.get('tipo_servicio', '').strip()
+            linea = request.form.get('linea', '').strip()
+
         except ValueError:
             flash("Los campos de selección deben ser valores válidos.", "danger")
             return redirect(url_for('dashboard'))
@@ -201,9 +200,9 @@ def dashboard():
             comentarios=comentarios,
             contrato=contrato,
             service_order=service_order,
-            centro_costo_id=centro_costo_id,
-            tipo_servicio_id=tipo_servicio_id,
-            linea_id=linea_id
+            centro_costo=centro_costo,
+            tipo_servicio=tipo_servicio,
+            linea=linea
         )
 
         db.session.add(nuevo_registro)
