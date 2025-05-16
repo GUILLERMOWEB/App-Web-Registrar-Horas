@@ -13,6 +13,7 @@ from flask_migrate import Migrate
 from openpyxl.drawing.image import Image as ExcelImage
 from openpyxl.styles import Font, PatternFill, Border, Side, Alignment
 
+
 #C:\Users\Guillermo\AppData\Local\Programs\Python\Python313\python.exe "$(FULL_CURRENT_PATH)"
 
 
@@ -34,8 +35,10 @@ app.jinja_env.cache = {}
 app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get("DATABASE_URL")
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db = SQLAlchemy(app)
+
 # Inicializar Flask-Migrate
 migrate = Migrate(app, db)
+migrate.init_app(app, db)
 
 # ─── Modelos ─────────────────────────────────────
 class User(db.Model):
@@ -66,15 +69,11 @@ class Registro(db.Model):
     comentarios     = db.Column(db.Text)
 
     contrato        = db.Column(db.Boolean, default=False)
-    service_order   = db.Column(db.String(10), nullable=True)
+    service_order   = db.Column(db.String(100), nullable=True)
 
-    centro_costo_id     = db.Column(db.Integer, db.ForeignKey('centros_costo.id'), nullable=True)
-    tipo_servicio_id    = db.Column(db.Integer, db.ForeignKey('tipos_servicio.id'), nullable=True)
-    linea_id            = db.Column(db.Integer, db.ForeignKey('lineas.id'), nullable=True)
-
-    centro_costo        = db.relationship('CentroCosto')
-    tipo_servicio       = db.relationship('TipoServicio')
-    linea               = db.relationship('Linea')
+    centro_costo    = db.Column(db.String(100), nullable=True)
+    tipo_servicio   = db.Column(db.String(100), nullable=True)
+    linea           = db.Column(db.String(100), nullable=True)
 
     # (opcional) si querés acceder al usuario desde el registro:
     # user = db.relationship('User', backref='registros')
@@ -172,7 +171,7 @@ def dashboard():
             km_vuelta=km_vuelta,
             tarea=tarea,
             cliente=cliente,
-            comentarios=comentarios
+            comentarios=comentarios,
             contrato=contrato,
             service_order=service_order,
             centro_costo_id=centro_costo_id or None,

@@ -59,33 +59,18 @@
     </div>
   
     <div class="col-md-4">
-      <label for="centro_costo_id" class="form-label">Centro de Costo</label>
-      <select name="centro_costo_id" class="form-select">
-        <option value="" selected disabled>Seleccione</option>
-        {% for cc in centros_costo %}
-          <option value="{{ cc.id }}">{{ cc.nombre }}</option>
-        {% endfor %}
-      </select>
+      <label for="centro_costo" class="form-label">Centro de Costo</label>
+      <input type="text" name="centro_costo" class="form-control">
     </div>
   
     <div class="col-md-4">
-      <label for="tipo_servicio_id" class="form-label">Tipo de Servicio</label>
-      <select name="tipo_servicio_id" class="form-select">
-        <option value="" selected disabled>Seleccione</option>
-        {% for ts in tipos_servicio %}
-          <option value="{{ ts.id }}">{{ ts.nombre }}</option>
-        {% endfor %}
-      </select>
+      <label for="tipo_servicio" class="form-label">Tipo de Servicio</label>
+      <input type="text" name="tipo_servicio" class="form-control">
     </div>
   
     <div class="col-md-4">
-      <label for="linea_id" class="form-label">Línea</label>
-      <select name="linea_id" class="form-select">
-        <option value="" selected disabled>Seleccione</option>
-        {% for linea in lineas %}
-          <option value="{{ linea.id }}">{{ linea.nombre }}</option>
-        {% endfor %}
-      </select>
+      <label for="linea" class="form-label">Línea</label>
+      <input type="text" name="linea" class="form-control">
     </div>
   
     <div class="col-md-12">
@@ -98,9 +83,8 @@
     </div>
   </form>
   
-
   <!-- Botones para exportar y cerrar sesión -->
-<div class="mb-4 d-flex align-items-end gap-3">
+  <div class="mb-4 d-flex align-items-end gap-3">
     <form method="GET" action="/exportar_excel">
       <div class="row g-2 align-items-end">
         <div class="col-auto">
@@ -119,7 +103,6 @@
     <a href="/logout" class="btn btn-secondary">Cerrar sesión</a>
   </div>
   
-
   <!-- Información del total de horas trabajadas -->
   <div class="alert alert-info">
     Total de horas trabajadas (incluyendo viaje): <strong>{{ total_horas }}</strong>
@@ -171,9 +154,9 @@
           <td>{{ registro.comentarios }}</td>
           <td>{{ 'Sí' if registro.contrato else 'No' }}</td>
           <td>{{ registro.service_order or '' }}</td>
-          <td>{{ registro.centro_costo.nombre if registro.centro_costo else '' }}</td>
-          <td>{{ registro.tipo_servicio.nombre if registro.tipo_servicio else '' }}</td>
-          <td>{{ registro.linea.nombre if registro.linea else '' }}</td>
+          <td>{{ registro.centro_costo or '' }}</td>
+          <td>{{ registro.tipo_servicio or '' }}</td>
+          <td>{{ registro.linea or '' }}</td>
           <td>{{ registro.id }}</td>
           <td>
             <a href="{{ url_for('editar_registro', id=registro.id) }}" class="btn btn-warning btn-sm">Editar</a>
@@ -187,7 +170,6 @@
         </tr>
         {% endfor %}
       </tbody>
-      
     </table>
   </div>
 </div>
