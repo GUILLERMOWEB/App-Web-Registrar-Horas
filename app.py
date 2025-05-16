@@ -119,7 +119,7 @@ def dashboard():
     clientes = ['Cliente A', 'Cliente B', 'Cliente C']
     contratos = ['Contrato 1', 'Contrato 2', 'Contrato 3']
     centros_costo = [
-        {'id': 1, 'nombre': 'Centro 1'},
+        {Molinedas rio de ls plata},
         {'id': 2, 'nombre': 'Centro 2'},
         {'id': 3, 'nombre': 'Centro 3'}
     ]
