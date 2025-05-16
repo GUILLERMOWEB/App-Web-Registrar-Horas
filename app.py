@@ -49,20 +49,36 @@ class User(db.Model):
 
 class Registro(db.Model):
     __tablename__ = 'registros'
-    id = db.Column(db.Integer, primary_key=True)
-    user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
-    fecha = db.Column(db.String(50))
-    entrada = db.Column(db.String(50))
-    salida = db.Column(db.String(50))
-    almuerzo = db.Column(db.Float)
-    viaje_ida = db.Column(db.Float, default=0)
-    viaje_vuelta = db.Column(db.Float, default=0)
-    km_ida = db.Column(db.Float, default=0)
-    km_vuelta = db.Column(db.Float, default=0)
-    horas = db.Column(db.Float)
-    tarea = db.Column(db.Text)
-    cliente = db.Column(db.Text)
-    comentarios = db.Column(db.Text)
+
+    id              = db.Column(db.Integer, primary_key=True)
+    user_id         = db.Column(db.Integer, db.ForeignKey('users.id'))
+    fecha           = db.Column(db.String(50))
+    entrada         = db.Column(db.String(50))
+    salida          = db.Column(db.String(50))
+    almuerzo        = db.Column(db.Float)
+    viaje_ida       = db.Column(db.Float, default=0)
+    viaje_vuelta    = db.Column(db.Float, default=0)
+    km_ida          = db.Column(db.Float, default=0)
+    km_vuelta       = db.Column(db.Float, default=0)
+    horas           = db.Column(db.Float)
+    tarea           = db.Column(db.Text)
+    cliente         = db.Column(db.Text)
+    comentarios     = db.Column(db.Text)
+
+    contrato        = db.Column(db.Boolean, default=False)
+    service_order   = db.Column(db.String(10), nullable=True)
+
+    centro_costo_id     = db.Column(db.Integer, db.ForeignKey('centros_costo.id'), nullable=True)
+    tipo_servicio_id    = db.Column(db.Integer, db.ForeignKey('tipos_servicio.id'), nullable=True)
+    linea_id            = db.Column(db.Integer, db.ForeignKey('lineas.id'), nullable=True)
+
+    centro_costo        = db.relationship('CentroCosto')
+    tipo_servicio       = db.relationship('TipoServicio')
+    linea               = db.relationship('Linea')
+
+    # (opcional) si querés acceder al usuario desde el registro:
+    # user = db.relationship('User', backref='registros')
+
 
 # ─── Inicialización de la base de datos ─────────
 with app.app_context():
@@ -157,6 +173,11 @@ def dashboard():
             tarea=tarea,
             cliente=cliente,
             comentarios=comentarios
+            contrato=contrato,
+            service_order=service_order,
+            centro_costo_id=centro_costo_id or None,
+            tipo_servicio_id=tipo_servicio_id or None,
+            linea_id=linea_id or None
         )
 
         db.session.add(nuevo_registro)
@@ -225,7 +246,12 @@ def exportar_excel():
         'Km totales': (r.km_ida or 0) + (r.km_vuelta or 0),
         'Tarea': r.tarea,
         'Cliente': r.cliente,
-        'Comentarios': r.comentarios
+        'Comentarios': r.comentarios,
+        'Contrato': 'Sí' if r.contrato else 'No',
+        'Service Order': r.service_order or '',
+        'Centro de Costo': r.centro_costo.nombre if r.centro_costo else '',
+        'Tipo de Servicio': r.tipo_servicio.nombre if r.tipo_servicio else '',
+        'Línea': r.linea.nombre if r.linea else ''
     } for r in registros if r.user is not None])
 
     archivo = BytesIO()
@@ -243,14 +269,14 @@ def exportar_excel():
         )
         center_alignment = Alignment(horizontal="center", vertical="center", wrap_text=True)
 
-        # Encabezados (fila 1 porque `startrow=0`)
+        # Encabezados
         for cell in ws[1]:
             cell.font = header_font
             cell.fill = header_fill
             cell.border = thin_border
             cell.alignment = center_alignment
 
-        # Datos (desde fila 2)
+        # Celdas
         for row in ws.iter_rows(min_row=2, max_row=ws.max_row):
             for cell in row:
                 cell.font = Font(name='Calibri', size=11)
@@ -260,14 +286,14 @@ def exportar_excel():
                 for cell in row:
                     cell.fill = zebra_fill
 
-        # Autoajuste de columnas
+        # Ajuste de columnas
         for col_num, column_cells in enumerate(ws.columns, 1):
             max_length = max((len(str(cell.value)) for cell in column_cells if cell.value), default=0)
             adjusted_width = min((max_length + 4), 50)
             ws.column_dimensions[get_column_letter(col_num)].width = adjusted_width
 
         ws.auto_filter.ref = ws.dimensions
-        ws.freeze_panes = 'A2'  # Congela encabezados
+        ws.freeze_panes = 'A2'
 
     archivo.seek(0)
     return send_file(
