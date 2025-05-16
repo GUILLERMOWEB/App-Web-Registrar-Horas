@@ -202,7 +202,6 @@ def exportar_excel():
     fecha_hasta = request.args.get('fecha_hasta')
 
     query = Registro.query
-
     if role not in ['admin', 'superadmin']:
         query = query.filter_by(user_id=session['user_id'])
 
@@ -227,26 +226,27 @@ def exportar_excel():
         'Tarea': r.tarea,
         'Cliente': r.cliente,
         'Comentarios': r.comentarios
-    } for r in registros if r.user is not None])  # <== Solo registros válidos
+    } for r in registros if r.user is not None])
 
     archivo = BytesIO()
     with pd.ExcelWriter(archivo, engine='openpyxl') as writer:
-        df.to_excel(writer, index=False, sheet_name='Registros', startrow=1)
+        # Empezamos en la fila 4 para dejar espacio al logo y al título
+        df.to_excel(writer, index=False, sheet_name='Registros', startrow=3)
         ws = writer.sheets['Registros']
 
-        # Título institucional
+        # Insertar título en A1
         ws.merge_cells('A1:N1')
         ws['A1'] = "Reporte de Horas - RH MOBILITY"
         ws['A1'].font = Font(bold=True, size=14, name='Calibri')
         ws['A1'].alignment = Alignment(horizontal='center', vertical='center')
 
-        # Insertar logo en una columna alejada (fuera de los datos)
+        # Insertar logo en A2
         logo_path = os.path.join('static', 'LOGO RH MOBILITY.png')
         if os.path.exists(logo_path):
             logo_img = ExcelImage(logo_path)
             logo_img.height = 80
             logo_img.width = 160
-            ws.add_image(logo_img, "N1")  # Lejos de los datos
+            ws.add_image(logo_img, "A2")
 
         # Estilos
         header_font = Font(bold=True, color="FFFFFF", name='Calibri')
@@ -258,15 +258,15 @@ def exportar_excel():
         )
         center_alignment = Alignment(horizontal="center", vertical="center", wrap_text=True)
 
-        # Encabezados (fila 2, porque datos comienzan en 2 por el título en la fila 1)
-        for cell in ws[2]:
+        # Encabezados (fila 4 porque `startrow=3`)
+        for cell in ws[4]:
             cell.font = header_font
             cell.fill = header_fill
             cell.border = thin_border
             cell.alignment = center_alignment
 
-        # Datos (desde fila 3)
-        for row in ws.iter_rows(min_row=3, max_row=ws.max_row):
+        # Datos (desde fila 5)
+        for row in ws.iter_rows(min_row=5, max_row=ws.max_row):
             for cell in row:
                 cell.font = Font(name='Calibri', size=11)
                 cell.border = thin_border
@@ -282,7 +282,7 @@ def exportar_excel():
             ws.column_dimensions[get_column_letter(col_num)].width = adjusted_width
 
         ws.auto_filter.ref = ws.dimensions
-        ws.freeze_panes = 'A3'  # Fija encabezados correctamente
+        ws.freeze_panes = 'A5'  # Encabezado congelado
 
     archivo.seek(0)
     return send_file(
