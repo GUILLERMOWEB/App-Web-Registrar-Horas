@@ -217,9 +217,9 @@ def exportar_excel():
 
     registros = query.all()
 
-    # Armar el DataFrame para exportar
+    # Armar el DataFrame para exportar, usando verificación segura para r.user
     df = pd.DataFrame([{
-        'usuario': r.user.username,
+        'usuario': r.user.username if r.user else 'Desconocido',
         'fecha': r.fecha,
         'entrada': r.entrada,
         'salida': r.salida,
@@ -241,8 +241,9 @@ def exportar_excel():
     with pd.ExcelWriter(archivo, engine='openpyxl') as writer:
         df.to_excel(writer, index=False, sheet_name='Registros')
         ws = writer.sheets['Registros']
-        
+
         from openpyxl.styles import Font, PatternFill, Border, Side
+        from openpyxl.utils import get_column_letter
 
         # Estilos
         header_font = Font(bold=True, color="FFFFFF")
@@ -280,6 +281,7 @@ def exportar_excel():
         as_attachment=True,
         download_name=f"registros_{session['username']}.xlsx"
     )
+
 
 
 
