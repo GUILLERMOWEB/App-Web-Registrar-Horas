@@ -58,11 +58,11 @@
       <label for="contrato" class="form-label">Contrato</label>
       <select name="contrato" class="form-control" required>
         <option value="">-- Seleccione Contrato --</option>
-        {% for contrato in contratos %}
-          <option value="{{ contrato }}">{{ contrato }}</option>
-        {% endfor %}
+        <option value="1">Sí</option>
+        <option value="0">No</option>
       </select>
     </div>
+    
   
     <!-- Select para Service Order (si querés, puede quedar input) -->
     <div class="col-md-2">

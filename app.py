@@ -184,6 +184,9 @@ def dashboard():
             flash("Formato de hora incorrecto. Use HH:MM.", "danger")
             return redirect(url_for('dashboard'))
 
+        contrato = bool(int(request.form.get("contrato")))
+            
+
         nuevo_registro = Registro(
             user_id=session['user_id'],
             fecha=fecha,
