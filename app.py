@@ -13,7 +13,6 @@ from flask_migrate import Migrate
 from openpyxl.drawing.image import Image as ExcelImage
 from openpyxl.styles import Font, PatternFill, Border, Side, Alignment
 
-
 #C:\Users\Guillermo\AppData\Local\Programs\Python\Python313\python.exe "$(FULL_CURRENT_PATH)"
 
 
@@ -192,6 +191,7 @@ def dashboard():
         total_km=round(total_km, 2)
     )
 
+
 @app.route('/exportar_excel')
 def exportar_excel():
     if 'user_id' not in session:
@@ -209,16 +209,10 @@ def exportar_excel():
     if fecha_desde and fecha_hasta:
         query = query.filter(Registro.fecha.between(fecha_desde, fecha_hasta))
 
-    # Filtrar registros con usuario válido
-    registros = [r for r in query.all() if r.user is not None]
-
-    # Si no hay registros válidos, evitar generar archivo
-    if not registros:
-        flash("No hay registros válidos para exportar.", "warning")
-        return redirect(request.referrer or url_for('dashboard'))
+    registros = query.all()
 
     df = pd.DataFrame([{
-        'Usuario': r.user.username,
+        'Usuario': r.user.username if r.user else None,
         'Fecha': r.fecha,
         'Entrada': r.entrada,
         'Salida': r.salida,
@@ -233,20 +227,26 @@ def exportar_excel():
         'Tarea': r.tarea,
         'Cliente': r.cliente,
         'Comentarios': r.comentarios
-    } for r in registros])
+    } for r in registros if r.user is not None])  # <== Solo registros válidos
 
     archivo = BytesIO()
     with pd.ExcelWriter(archivo, engine='openpyxl') as writer:
-        df.to_excel(writer, index=False, sheet_name='Registros')
+        df.to_excel(writer, index=False, sheet_name='Registros', startrow=1)
         ws = writer.sheets['Registros']
 
-        # Insertar logo si existe
+        # Título institucional
+        ws.merge_cells('A1:N1')
+        ws['A1'] = "Reporte de Horas - RH MOBILITY"
+        ws['A1'].font = Font(bold=True, size=14, name='Calibri')
+        ws['A1'].alignment = Alignment(horizontal='center', vertical='center')
+
+        # Insertar logo en una columna alejada (fuera de los datos)
         logo_path = os.path.join('static', 'LOGO RH MOBILITY.png')
         if os.path.exists(logo_path):
             logo_img = ExcelImage(logo_path)
             logo_img.height = 80
             logo_img.width = 160
-            ws.add_image(logo_img, "A1")
+            ws.add_image(logo_img, "N1")  # Lejos de los datos
 
         # Estilos
         header_font = Font(bold=True, color="FFFFFF", name='Calibri')
@@ -258,14 +258,14 @@ def exportar_excel():
         )
         center_alignment = Alignment(horizontal="center", vertical="center", wrap_text=True)
 
-        # Encabezados
-        for cell in ws[2]:  # fila 2 porque el logo ocupa la primera
+        # Encabezados (fila 2, porque datos comienzan en 2 por el título en la fila 1)
+        for cell in ws[2]:
             cell.font = header_font
             cell.fill = header_fill
             cell.border = thin_border
             cell.alignment = center_alignment
 
-        # Datos
+        # Datos (desde fila 3)
         for row in ws.iter_rows(min_row=3, max_row=ws.max_row):
             for cell in row:
                 cell.font = Font(name='Calibri', size=11)
@@ -275,17 +275,16 @@ def exportar_excel():
                 for cell in row:
                     cell.fill = zebra_fill
 
-        # Autoajuste columnas
+        # Autoajuste de columnas
         for col_num, column_cells in enumerate(ws.columns, 1):
             max_length = max((len(str(cell.value)) for cell in column_cells if cell.value), default=0)
             adjusted_width = min((max_length + 4), 50)
             ws.column_dimensions[get_column_letter(col_num)].width = adjusted_width
 
         ws.auto_filter.ref = ws.dimensions
-        ws.freeze_panes = 'A3'  # Fija fila de encabezado debajo del logo
+        ws.freeze_panes = 'A3'  # Fija encabezados correctamente
 
     archivo.seek(0)
-
     return send_file(
         archivo,
         as_attachment=True,
