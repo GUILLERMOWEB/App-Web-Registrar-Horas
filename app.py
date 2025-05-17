@@ -160,25 +160,25 @@ def dashboard():
         {'id': 9, 'nombre': 'Claims'}
     ]
     lineas = [
-        {'id': 1,  'nombre': 'UYC-BARRACA   MVD-LIN01', 'Máquina': 'TBA/3',    'N/S': '11443/05537'},
-        {'id': 2,  'nombre': 'UYC-BARRACA   MVD-LIN02', 'Máquina': 'TBA/8',    'N/S': '20201/82004'},
-        {'id': 3,  'nombre': 'UYC-BARRACA   MVD-LIN03', 'Máquina': 'SIMPLY8',  'N/S': '21222/00018'},
-        {'id': 4,  'nombre': 'UYC-BARRACA   MVD-LIN04', 'Máquina': 'TBA/19',   'N/S': '20562/83308'},
-        {'id': 5,  'nombre': 'UYC-COAGRARIA CAR-LN 01', 'Máquina': 'TBA/8',    'N/S': '13037/10830'},
-        {'id': 6,  'nombre': 'UYC-COAGRARIA CAR-LN 02', 'Máquina': 'TP C3/F',  'N/S': '15034/00004'},
-        {'id': 7,  'nombre': 'UYC-NOLIR     MVD-LIN01', 'Máquina': 'TBA/19',   'N/S': '20591/83337'},
-        {'id': 8,  'nombre': 'UYC-NOLIR     MVD-LIN02', 'Máquina': 'TBA/8',    'N/S': '15010/00889'},
-        {'id': 9,  'nombre': 'UYC-CEREALIN  SJO-LIN01', 'Máquina': 'TBA/8',    'N/S': '13588/11417'},
-        {'id': 10, 'nombre': 'UYC-CEREALIN  SJO-LIN04', 'Máquina': 'TP A3/CF', 'N/S': '21220/00466'},
-        {'id': 11, 'nombre': 'UYC-CONAPROLE CIM-LIN02', 'Máquina': 'TBA/19',   'N/S': '20258/82571'},
-        {'id': 12, 'nombre': 'UYC-CONAPROLE CIM-LIN03', 'Máquina': 'TT/3',     'N/S': '63202/20090'},
-        {'id': 13, 'nombre': 'UYC-CONAPROLE P08-LIN01', 'Máquina': 'TBA/8',    'N/S': '20239/82382'},
-        {'id': 14, 'nombre': 'UYC-CONAPROLE P08-LIN02', 'Máquina': 'TBA/8',    'N/S': '13879/11665'},
-        {'id': 15, 'nombre': 'UYC-CONAPROLE P08-LIN03', 'Máquina': 'TBA/8',    'N/S': '13457/11304'},
-        {'id': 16, 'nombre': 'UYC-CONAPROLE P08-LIN04', 'Máquina': 'TBA/8',    'N/S': '13486/11332'},
-        {'id': 17, 'nombre': 'UYC-GIBUR     MVD-LIN01', 'Máquina': 'TBA/8',    'N/S': '17010/00018'},
-        {'id': 18, 'nombre': 'UYC-RECALCO   MVD-LIN01', 'Máquina': 'TBA/3',    'N/S': '20078/80780'},
-        {'id': 19, 'nombre': 'UYC-RECALCO   MVD-LIN02', 'Máquina': 'TBA/8',    'N/S': '12967/10664'}
+        {'id': 1,  'nombre': 'UYC-BARRACA   MVD-LIN01   Máquina-TBA/3       N/S-11443/05537'},
+        {'id': 2,  'nombre': 'UYC-BARRACA   MVD-LIN02   Máquina-TBA/8       N/S-20201/82004'},
+        {'id': 3,  'nombre': 'UYC-BARRACA   MVD-LIN03   Máquina-SIMPLY8     N/S-21222/00018'},
+        {'id': 4,  'nombre': 'UYC-BARRACA   MVD-LIN04   Máquina-TBA/19      N/S-20562/83308'},
+        {'id': 5,  'nombre': 'UYC-COAGRARIA CAR-LN 01   Máquina-TBA/8       N/S-13037/10830'},
+        {'id': 6,  'nombre': 'UYC-COAGRARIA CAR-LN 02   Máquina-TP C3/F     N/S-15034/00004'},
+        {'id': 7,  'nombre': 'UYC-NOLIR     MVD-LIN01   Máquina-TBA/19      N/S-20591/83337'},
+        {'id': 8,  'nombre': 'UYC-NOLIR     MVD-LIN02   Máquina-TBA/8       N/S-15010/00889'},
+        {'id': 9,  'nombre': 'UYC-CEREALIN  SJO-LIN01   Máquina-TBA/8       N/S-13588/11417'},
+        {'id': 10, 'nombre': 'UYC-CEREALIN  SJO-LIN04   Máquina-TP A3/CF    N/S-21220/00466'},
+        {'id': 11, 'nombre': 'UYC-CONAPROLE CIM-LIN02   Máquina-TBA/19      N/S-20258/82571'},
+        {'id': 12, 'nombre': 'UYC-CONAPROLE CIM-LIN03   Máquina-TT/3        N/S-63202/20090'},
+        {'id': 13, 'nombre': 'UYC-CONAPROLE P08-LIN01   Máquina-TBA/8       N/S-20239/82382'},
+        {'id': 14, 'nombre': 'UYC-CONAPROLE P08-LIN02   Máquina-TBA/8       N/S-13879/11665'},
+        {'id': 15, 'nombre': 'UYC-CONAPROLE P08-LIN03   Máquina-TBA/8       N/S-13457/11304'},
+        {'id': 16, 'nombre': 'UYC-CONAPROLE P08-LIN04   Máquina-TBA/8       N/S-13486/11332'},
+        {'id': 17, 'nombre': 'UYC-GIBUR     MVD-LIN01   Máquina-TBA/8       N/S-17010/00018'},
+        {'id': 18, 'nombre': 'UYC-RECALCO   MVD-LIN01   Máquina-TBA/3       N/S-20078/80780'},
+        {'id': 19, 'nombre': 'UYC-RECALCO   MVD-LIN02   Máquina-TBA/8       N/S-12967/10664'}
     ]
 
 
