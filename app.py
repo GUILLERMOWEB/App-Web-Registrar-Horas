@@ -204,7 +204,7 @@ def dashboard():
             comentarios=comentarios,
             contrato=contrato,
             service_order=service_order,
-            centros_costo=centros_costo,
+            centro_costo=centro_costo,
             tipo_servicio=tipo_servicio,
             linea=linea
         )
@@ -233,7 +233,7 @@ def dashboard():
         total_km=round(total_km, 2),
         clientes=clientes,
         contratos=contratos,
-        centro_costo=centro_costo,
+        centros_costo=centros_costo,
         tipos_servicio=tipos_servicio,
         lineas=lineas
     )
