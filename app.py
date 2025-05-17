@@ -117,24 +117,70 @@ def dashboard():
 
     # Ejemplo de listas de opciones (reemplazar por consulta a DB luego)
     
-    clientes = ['Guillermo', 'Maira', 'Euge']
+    clientes = [
+        'Barraca Deambrosi SA',
+        'Cooperativa Agraria de (CALCAR)',
+        'Gibur S.A.',
+        'Nolir S.A.',
+        'Recalco SA (ex Suadil)',
+        'CONAPROLE Planta CIM',
+        'CONAPROLE Planta VIII',
+        'Cerealin San Jose',
+        'Jugos del Uruguay SA',
+        'OTRO CLIENTE CLUSTER',
+        'Tetrapak San Fernando'
+    ]
+
     contratos = ['Contrato legal 1', 'Contrato legal 2', 'Contrato legal 3']
     service_orders = ['SM02', 'SM03']
     centros_costo = [
-        {'id': 1, 'nombre': 'Tetar '},
-        {'id': 2, 'nombre': 'Tetra 2'},
-        {'id': 3, 'nombre': 'Tetra 3'}
-    ]
+        {'id': 1, 'nombre': 'Barraca Deambrosi SA C.Costo=1'},
+        {'id': 2, 'nombre': 'Cooperativa Agraria de (CALCAR) C.Costo=2'},
+        {'id': 3, 'nombre': 'Gibur S.A. C.Costo=3'},
+        {'id': 4, 'nombre': 'Nolir S.A. C.Costo=4'},
+        {'id': 5, 'nombre': 'Recalco SA (ex Suadil) C.Costo=5'},
+        {'id': 6, 'nombre': 'CONAPROLE Planta CIM C.Costo=6'},
+        {'id': 7, 'nombre': 'CONAPROLE Planta VIII C.Costo=7'},
+        {'id': 8, 'nombre': 'Cerealin San Jose C.Costo=8'},
+        {'id': 9, 'nombre': 'Jugos del Uruguay SA  GMB revisar'},
+        {'id': 10, 'nombre': 'FUERA DE CONTRATO'},
+        {'id': 11, 'nombre': 'N#A'},
+        {'id': 12, 'nombre': '9560218510'}
+]
+
     tipos_servicio = [
-        {'id': 1, 'nombre': 'Reparacion'},
+        {'id': 1, 'nombre': 'Preventivo'},
         {'id': 2, 'nombre': 'Correctivo'},
-        {'id': 3, 'nombre': 'Preventivo'}
+        {'id': 3, 'nombre': 'Asistencia'},
+        {'id': 4, 'nombre': 'Tec Referente'},
+        {'id': 5, 'nombre': 'Instalación'},
+        {'id': 6, 'nombre': 'Tarea Administrativa'},
+        {'id': 7, 'nombre': 'Capacitación Recibida'},
+        {'id': 8, 'nombre': 'Licencias / Vacaciones'},
+        {'id': 9, 'nombre': 'Claims'}
     ]
     lineas = [
-        {'id': 1, 'nombre': 'Línea z'},
-        {'id': 2, 'nombre': 'Línea T'},
-        {'id': 3, 'nombre': 'Línea X'}
+        {'id': 1, 'nombre': 'UYC-BARRACA MVD-LIN01'},
+        {'id': 2, 'nombre': 'UYC-BARRACA MVD-LIN02'},
+        {'id': 3, 'nombre': 'UYC-BARRACA MVD-LIN03'},
+        {'id': 4, 'nombre': 'UYC-BARRACA MVD-LIN04'},
+        {'id': 5, 'nombre': 'UYC-CEREALIN SJO-LIN01'},
+        {'id': 6, 'nombre': 'UYC-CEREALIN SJO-LIN04'},
+        {'id': 7, 'nombre': 'UYC-COAGRARIA CAR-LN 01'},
+        {'id': 8, 'nombre': 'UYC-COAGRARIA CAR-LN 02'},
+        {'id': 9, 'nombre': 'UYC-CONAPROLE CIM-LIN02'},
+        {'id': 10, 'nombre': 'UYC-CONAPROLE CIM-LIN03'},
+        {'id': 11, 'nombre': 'UYC-CONAPROLE P08-LIN01'},
+        {'id': 12, 'nombre': 'UYC-CONAPROLE P08-LIN02'},
+        {'id': 13, 'nombre': 'UYC-CONAPROLE P08-LIN03'},
+        {'id': 14, 'nombre': 'UYC-CONAPROLE P08-LIN04'},
+        {'id': 15, 'nombre': 'UYC-GIBUR MVD-LIN01'},
+        {'id': 16, 'nombre': 'UYC-NOLIR MVD-LIN01'},
+        {'id': 17, 'nombre': 'UYC-NOLIR MVD-LIN02'},
+        {'id': 18, 'nombre': 'UYC-RECALCO MVD-LIN01'},
+        {'id': 19, 'nombre': 'UYC-RECALCO MVD-LIN02'}
     ]
+
 
     if request.method == 'POST':
         fecha = request.form['fecha']
