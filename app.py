@@ -128,11 +128,12 @@ def dashboard():
         'Cerealin San Jose',
         'Jugos del Uruguay SA',
         'OTRO CLIENTE CLUSTER',
-        'Tetrapak San Fernando'
+        'Tetrapak San Fernando',
+        'N/A'
     ]
 
     contratos = ['Contrato legal 1', 'Contrato legal 2', 'Contrato legal 3']
-    service_orders = ['SM02', 'SM03']
+    service_orders = ['SM02', 'SM03','N/A']
     centros_costo = [
         {'id': 1, 'nombre': 'Barraca Deambrosi SA C.Costo=1 (40102623)'},
         {'id': 2, 'nombre': 'Cooperativa Agraria de (CALCAR) C.Costo=2 (40102624)'},
@@ -143,10 +144,10 @@ def dashboard():
         {'id': 7, 'nombre': 'CONAPROLE Planta VIII C.Costo=7 (40094917)'},
         {'id': 8, 'nombre': 'Cerealin San Jose C.Costo=8 (40094911)'},
         {'id': 9, 'nombre': 'Jugos del Uruguay SA  GMB revisar (99)'},
-        {'id': 10, 'nombre': 'FUERA DE CONTRATO'},
-        {'id': 11, 'nombre': 'N#A'},
-        {'id': 12, 'nombre': '9560218510'}
-]
+        {'id': 10, 'nombre': 'FUERA DE CONTRATO'},       
+        {'id': 11, 'nombre': '9560218510'},
+        {'id': 12, 'nombre': 'N/A'}
+    ]
 
     tipos_servicio = [
         {'id': 1, 'nombre': 'Preventivo'},
@@ -178,7 +179,8 @@ def dashboard():
         {'id': 16, 'nombre': 'UYC-CONAPROLE P08-LIN04   Máquina-TBA/8       N/S-13486/11332'},
         {'id': 17, 'nombre': 'UYC-GIBUR     MVD-LIN01   Máquina-TBA/8       N/S-17010/00018'},
         {'id': 18, 'nombre': 'UYC-RECALCO   MVD-LIN01   Máquina-TBA/3       N/S-20078/80780'},
-        {'id': 19, 'nombre': 'UYC-RECALCO   MVD-LIN02   Máquina-TBA/8       N/S-12967/10664'}
+        {'id': 19, 'nombre': 'UYC-RECALCO   MVD-LIN02   Máquina-TBA/8       N/S-12967/10664'},
+        {'id': 20, 'nombre': 'N/A'}
     ]
 
 
