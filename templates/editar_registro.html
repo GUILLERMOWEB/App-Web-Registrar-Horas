@@ -50,9 +50,10 @@
     <div class="col-md-4">
       <label for="cliente" class="form-label">Cliente</label>
       <select name="cliente" class="form-select">
-        <option value="">-- Seleccionar cliente --</option>
-        {% for c in clientes %}
-          <option value="{{ c.nombre }}" {% if c.nombre == registro.cliente %}selected{% endif %}>{{ c.nombre }}</option>
+        {% for cliente in lista_clientes %}
+          <option value="{{ cliente }}" {% if cliente == registro.cliente %}selected{% endif %}>
+            {{ cliente }}
+          </option>
         {% endfor %}
       </select>
     </div>
