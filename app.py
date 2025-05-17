@@ -383,8 +383,6 @@ def exportar_excel():
     )
 
 
-
-
 @app.route('/editar_registro/<int:id>', methods=['GET', 'POST'])
 def editar_registro(id):
     if 'user_id' not in session:
@@ -406,7 +404,6 @@ def editar_registro(id):
             registro.km_ida = int(request.form['km_ida'])
             registro.km_vuelta = int(request.form['km_vuelta'])
 
-            # Validación dentro del try
             if registro.viaje_ida < 0 or registro.viaje_vuelta < 0:
                 flash("Las horas de viaje no pueden ser negativas", "danger")
                 return redirect(url_for('editar_registro', id=id))
@@ -417,6 +414,11 @@ def editar_registro(id):
 
         tarea = request.form.get('tarea', '')
         cliente = request.form.get('cliente', '')
+        contrato = request.form.get('contrato', '')
+        service_order = request.form.get('service_order', '')
+        centro_costo = request.form.get('centro_costo', '')
+        tipo_servicio = request.form.get('tipo_servicio', '')
+        linea = request.form.get('linea', '')
         comentarios = request.form.get('comentarios', '')
 
         try:
@@ -433,21 +435,39 @@ def editar_registro(id):
         registro.salida = salida
         registro.almuerzo = round(almuerzo, 2)
         registro.horas = round(horas_trabajadas, 2)
-        registro.viaje_ida = registro.viaje_ida
-        registro.viaje_vuelta = registro.viaje_vuelta
-        registro.km_ida = registro.km_ida
-        registro.km_vuelta = registro.km_vuelta
         registro.tarea = tarea
         registro.cliente = cliente
+        registro.contrato = contrato
+        registro.service_order = service_order
+        registro.centro_costo = centro_costo
+        registro.tipo_servicio = tipo_servicio
+        registro.linea = linea
         registro.comentarios = comentarios
 
         db.session.commit()
         flash('Registro actualizado exitosamente', category='success')
 
-        # Redirigir según rol
         return redirect(url_for('admin') if session['role'] in ['admin', 'superadmin'] else url_for('dashboard'))
 
-    return render_template('editar_registro.html', registro=registro)
+    # 👇 Esta parte debe ir FUERA del bloque POST
+    clientes = Cliente.query.all()
+    contratos = Contrato.query.all()
+    service_orders = ServiceOrder.query.all()
+    centros_costo = CentroCosto.query.all()
+    tipos_servicio = TipoServicio.query.all()
+    lineas = Linea.query.all()
+
+    return render_template(
+        'editar_registro.html',
+        registro=registro,
+        clientes=clientes,
+        contratos=contratos,
+        service_orders=service_orders,
+        centros_costo=centros_costo,
+        tipos_servicio=tipos_servicio,
+        lineas=lineas
+    )
+
 
 
 

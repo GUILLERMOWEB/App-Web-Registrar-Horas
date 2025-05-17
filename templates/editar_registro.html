@@ -1,4 +1,3 @@
-
 {% extends 'base.html' %}
 
 {% block content %}
@@ -19,44 +18,100 @@
       <input type="time" name="salida" class="form-control" value="{{ registro.salida }}" required>
     </div>
     <div class="col-md-2">
-        <label for="almuerzo_horas" class="form-label">Horas de Almuerzo</label>
-        <input type="number" step="1" min="0" max="2" name="almuerzo_horas" class="form-control" value="{{ registro.almuerzo|int }}" required>
-
+      <label for="almuerzo_horas" class="form-label">Horas de Almuerzo</label>
+      <input type="number" step="1" min="0" max="2" name="almuerzo_horas" class="form-control" value="{{ registro.almuerzo|int }}" required>
     </div>
-      
+
     <div class="col-md-2">
-        <label for="viaje_ida" class="form-label">Duración Viaje Ida (h)</label>
-        <input type="number" step="1" min="0" name="viaje_ida" class="form-control" value="{{ registro.viaje_ida|int }}">
-      </div>
-      
-      <div class="col-md-2">
-        <label for="viaje_vuelta" class="form-label">Duración Viaje Vuelta (h)</label>
-        <input type="number" step="1" min="0" name="viaje_vuelta" class="form-control" value="{{ registro.viaje_vuelta|int }}">
-      </div>
-      
-      <div class="col-md-2">
-        <label for="km_ida" class="form-label">KM de Ida</label>
-        <input type="number" step="1" min="0" name="km_ida" class="form-control" value="{{ registro.km_ida|int }}">
-      </div>
-      
-      <div class="col-md-2">
-        <label for="km_vuelta" class="form-label">KM de Vuelta</label>
-        <input type="number" step="1" min="0" name="km_vuelta" class="form-control" value="{{ registro.km_vuelta|int }}">
-      </div>
-      
-      
+      <label for="viaje_ida" class="form-label">Duración Viaje Ida (h)</label>
+      <input type="number" step="1" min="0" name="viaje_ida" class="form-control" value="{{ registro.viaje_ida|int }}">
+    </div>
+
+    <div class="col-md-2">
+      <label for="viaje_vuelta" class="form-label">Duración Viaje Vuelta (h)</label>
+      <input type="number" step="1" min="0" name="viaje_vuelta" class="form-control" value="{{ registro.viaje_vuelta|int }}">
+    </div>
+
+    <div class="col-md-2">
+      <label for="km_ida" class="form-label">KM de Ida</label>
+      <input type="number" step="1" min="0" name="km_ida" class="form-control" value="{{ registro.km_ida|int }}">
+    </div>
+
+    <div class="col-md-2">
+      <label for="km_vuelta" class="form-label">KM de Vuelta</label>
+      <input type="number" step="1" min="0" name="km_vuelta" class="form-control" value="{{ registro.km_vuelta|int }}">
+    </div>
+
     <div class="col-md-4">
       <label for="tarea" class="form-label">Tarea</label>
       <input type="text" name="tarea" class="form-control" value="{{ registro.tarea }}">
     </div>
+
     <div class="col-md-4">
       <label for="cliente" class="form-label">Cliente</label>
-      <input type="text" name="cliente" class="form-control" value="{{ registro.cliente }}">
+      <select name="cliente" class="form-select">
+        <option value="">-- Seleccionar cliente --</option>
+        {% for c in clientes %}
+          <option value="{{ c.nombre }}" {% if c.nombre == registro.cliente %}selected{% endif %}>{{ c.nombre }}</option>
+        {% endfor %}
+      </select>
     </div>
+
+    <div class="col-md-4">
+      <label for="contrato" class="form-label">Contrato</label>
+      <select name="contrato" class="form-select">
+        <option value="">-- Seleccionar contrato --</option>
+        {% for contrato in contratos %}
+          <option value="{{ contrato.nombre }}" {% if contrato.nombre == registro.contrato %}selected{% endif %}>{{ contrato.nombre }}</option>
+        {% endfor %}
+      </select>
+    </div>
+
+    <div class="col-md-4">
+      <label for="service_order" class="form-label">Service Order</label>
+      <select name="service_order" class="form-select">
+        <option value="">-- Seleccionar service order --</option>
+        {% for s in service_orders %}
+          <option value="{{ s.nombre }}" {% if s.nombre == registro.service_order %}selected{% endif %}>{{ s.nombre }}</option>
+        {% endfor %}
+      </select>
+    </div>
+
+    <div class="col-md-4">
+      <label for="centro_costo" class="form-label">Centro de Costo</label>
+      <select name="centro_costo" class="form-select">
+        <option value="">-- Seleccionar centro de costo --</option>
+        {% for cc in centros_costo %}
+          <option value="{{ cc.nombre }}" {% if cc.nombre == registro.centro_costo %}selected{% endif %}>{{ cc.nombre }}</option>
+        {% endfor %}
+      </select>
+    </div>
+
+    <div class="col-md-4">
+      <label for="tipo_servicio" class="form-label">Tipo de Servicio</label>
+      <select name="tipo_servicio" class="form-select">
+        <option value="">-- Seleccionar tipo de servicio --</option>
+        {% for ts in tipos_servicio %}
+          <option value="{{ ts.nombre }}" {% if ts.nombre == registro.tipo_servicio %}selected{% endif %}>{{ ts.nombre }}</option>
+        {% endfor %}
+      </select>
+    </div>
+
+    <div class="col-md-4">
+      <label for="linea" class="form-label">Línea</label>
+      <select name="linea" class="form-select">
+        <option value="">-- Seleccionar línea --</option>
+        {% for l in lineas %}
+          <option value="{{ l.nombre }}" {% if l.nombre == registro.linea %}selected{% endif %}>{{ l.nombre }}</option>
+        {% endfor %}
+      </select>
+    </div>
+
     <div class="col-md-8">
       <label for="comentarios" class="form-label">Comentarios</label>
       <input type="text" name="comentarios" class="form-control" value="{{ registro.comentarios }}">
     </div>
+
     <div class="col-12">
       <button type="submit" class="btn btn-primary">Actualizar</button>
     </div>
