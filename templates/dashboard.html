@@ -87,23 +87,24 @@
     </div>
   
     <!-- Select para Tipo de Servicio -->
-    <div class="col-md-4">
+    <div class="col-md-4 mb-3">
       <label for="tipo_servicio" class="form-label">Tipo de Servicio</label>
       <select name="tipo_servicio" class="form-control" required>
         <option value="">-- Seleccione Tipo de Servicio --</option>
-        {% for ts in tipos_servicio %}
-          <option value="{{ ts }}">{{ ts }}</option>
+        {% for tipo in tipos_servicio %}
+          <option value="{{ tipo['nombre'] }}">{{ tipo['nombre'] }}</option>
         {% endfor %}
       </select>
     </div>
+    
   
     <!-- Select para Línea -->
-    <div class="col-md-4">
+    <div class="col-md-4 mb-3">
       <label for="linea" class="form-label">Línea</label>
       <select name="linea" class="form-control" required>
         <option value="">-- Seleccione Línea --</option>
         {% for linea in lineas %}
-          <option value="{{ linea }}">{{ linea }}</option>
+          <option value="{{ linea['nombre'] }}">{{ linea['nombre'] }}</option>
         {% endfor %}
       </select>
     </div>
