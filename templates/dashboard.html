@@ -76,12 +76,12 @@
     </div>
   
     <!-- Select para Centro de Costo -->
-    <div class="col-md-4">
+    <div class="col-md-4 mb-3">
       <label for="centro_costo" class="form-label">Centro de Costo</label>
       <select name="centro_costo" class="form-control" required>
         <option value="">-- Seleccione Centro de Costo --</option>
         {% for cc in centros_costo %}
-          <option value="{{ cc }}">{{ cc }}</option>
+          <option value="{{ cc['nombre'] }}">{{ cc['nombre'] }}</option>
         {% endfor %}
       </select>
     </div>

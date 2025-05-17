@@ -116,6 +116,7 @@ def dashboard():
         return redirect(url_for('login'))
 
     # Ejemplo de listas de opciones (reemplazar por consulta a DB luego)
+    
     clientes = ['Guillermo', 'Maira', 'Euge']
     contratos = ['Contrato legal 1', 'Contrato legal 2', 'Contrato legal 3']
     service_orders = ['SM02', 'SM03']
@@ -233,6 +234,7 @@ def dashboard():
         total_km=round(total_km, 2),
         clientes=clientes,
         contratos=contratos,
+        service_orders=service_orders,
         centros_costo=centros_costo,
         tipos_servicio=tipos_servicio,
         lineas=lineas
