@@ -67,10 +67,10 @@
     <!-- Select para Service Order (si querés, puede quedar input) -->
     <!-- Service Order -->
     <div class="form-group">
-      <label for="service_order">Service Order:</label>
+      <label for="service_order" class="form-label">Service Order:</label>
       <select name="service_order" class="form-control">
           {% for so in service_orders %}
-              <option value="{{ so }}">{{ so }}</option>
+          <option value="{{ cc['nombre'] }}">{{ cc['nombre'] }}</option>
           {% endfor %}
       </select>
     </div>
@@ -93,7 +93,7 @@
       <select name="tipo_servicio" class="form-control" required>
         <option value="">-- Seleccione Tipo de Servicio --</option>
         {% for ts in tipos_servicio %}
-          <option value="{{ ts }}">{{ ts }}</option>
+        <option value="{{ cc['nombre'] }}">{{ cc['nombre'] }}</option>
         {% endfor %}
       </select>
     </div>
@@ -104,7 +104,7 @@
       <select name="linea" class="form-control" required>
         <option value="">-- Seleccione Línea --</option>
         {% for linea in lineas %}
-          <option value="{{ linea }}">{{ linea }}</option>
+        <option value="{{ cc['nombre'] }}">{{ cc['nombre'] }}</option>
         {% endfor %}
       </select>
     </div>
