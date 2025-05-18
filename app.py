@@ -296,13 +296,20 @@ def exportar_excel():
         return redirect(url_for('login'))
 
     role = session.get('role')
+    user_id = session.get('user_id')
     fecha_desde = request.args.get('fecha_desde')
     fecha_hasta = request.args.get('fecha_hasta')
+    contexto = request.args.get('contexto')  # <-- nuevo campo para saber desde dónde se exporta
 
     query = Registro.query
-    if role not in ['admin', 'superadmin']:
-        query = query.filter_by(user_id=session['user_id'])
 
+    # Restricción por rol
+    if role == 'admin' and contexto != 'admin':
+        query = query.filter_by(user_id=user_id)
+    elif role not in ['admin', 'superadmin']:
+        query = query.filter_by(user_id=user_id)
+
+    # Filtro por fechas
     if fecha_desde and fecha_hasta:
         query = query.filter(Registro.fecha.between(fecha_desde, fecha_hasta))
 
@@ -329,7 +336,6 @@ def exportar_excel():
         'Centro de Costo': r.centro_costo or '',
         'Tipo de Servicio': r.tipo_servicio or '',
         'Línea': r.linea or ''
-
     } for r in registros if r.user is not None])
 
     archivo = BytesIO()
