@@ -597,8 +597,15 @@ def admin():
     query = db.session.query(Registro, User).join(User)
 
     # Filtro por usuario
+    # Filtro por usuario (convertimos a entero con manejo de errores)
+    filtro_usuario = request.args.get('filtro_usuario')
     if filtro_usuario:
-        query = query.filter(User.id == filtro_usuario)
+        try:
+            filtro_usuario = int(filtro_usuario)
+            query = query.filter(User.id == filtro_usuario)
+        except ValueError:
+            filtro_usuario = None  # Si el valor no es un número válido
+
 
     # Filtro por fechas
     if fecha_desde and fecha_hasta:

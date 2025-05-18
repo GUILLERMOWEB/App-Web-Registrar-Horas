@@ -30,14 +30,6 @@
 
       <div class="col-auto align-self-end">
         <button type="submit" class="btn btn-primary">Filtrar</button>
-        <a class="btn btn-success"
-           href="{{ url_for('exportar_excel',
-                            fecha_desde=fecha_desde,
-                            fecha_hasta=fecha_hasta,
-                            usuario_id=filtro_usuario,
-                            contexto='admin') }}">
-           Exportar a Excel
-        </a>
       </div>
 
       <div class="col-auto align-self-end">
@@ -47,7 +39,20 @@
         <a href="/logout" class="btn btn-secondary">Cerrar sesión</a>
       </div>
     </form>
+
+    <!-- FORMULARIO DE EXPORTACIÓN -->
+    <form method="GET" action="{{ url_for('exportar_excel') }}" class="d-flex flex-wrap gap-2">
+      <input type="hidden" name="fecha_desde" value="{{ fecha_desde }}">
+      <input type="hidden" name="fecha_hasta" value="{{ fecha_hasta }}">
+      <input type="hidden" name="usuario_id" value="{{ filtro_usuario }}">
+      <input type="hidden" name="contexto" value="admin">
+      <div class="col-auto">
+        <button type="submit" class="btn btn-success">Exportar a Excel</button>
+      </div>
+    </form>
   </div>
+</div>
+
 
   <!-- TABLA DE REGISTROS -->
   <div class="table-responsive">
