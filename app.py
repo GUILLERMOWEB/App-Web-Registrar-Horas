@@ -290,7 +290,6 @@ def dashboard():
     )
 
 
-
 @app.route('/exportar_excel')
 def exportar_excel():
     if 'user_id' not in session:
@@ -299,15 +298,10 @@ def exportar_excel():
     role = session.get('role')
     fecha_desde = request.args.get('fecha_desde')
     fecha_hasta = request.args.get('fecha_hasta')
-    filtro_usuario = request.args.get('filtro_usuario')
 
     query = Registro.query
-
     if role not in ['admin', 'superadmin']:
         query = query.filter_by(user_id=session['user_id'])
-
-    if filtro_usuario:
-        query = query.filter(Registro.user_id == int(filtro_usuario))
 
     if fecha_desde and fecha_hasta:
         query = query.filter(Registro.fecha.between(fecha_desde, fecha_hasta))
@@ -335,6 +329,7 @@ def exportar_excel():
         'Centro de Costo': r.centro_costo or '',
         'Tipo de Servicio': r.tipo_servicio or '',
         'Línea': r.linea or ''
+
     } for r in registros if r.user is not None])
 
     archivo = BytesIO()
@@ -579,32 +574,17 @@ def admin():
         return redirect(url_for('login'))
 
     filtro_usuario = request.form.get('filtro_usuario') if request.method == 'POST' else None
-    fecha_inicio = request.form.get('fecha_inicio') if request.method == 'POST' else None
-    fecha_fin = request.form.get('fecha_fin') if request.method == 'POST' else None
 
     usuarios = User.query.with_entities(User.id, User.username).all()
 
-    query = db.session.query(Registro, User).join(User)
-
     if filtro_usuario:
-        query = query.filter(User.id == filtro_usuario)
+        registros = db.session.query(Registro, User).join(User).filter(User.id == filtro_usuario).order_by(Registro.fecha.desc()).all()
+    else:
+        registros = db.session.query(Registro, User).join(User).order_by(Registro.fecha.desc()).all()
 
-    if fecha_inicio and fecha_fin:
-        query = query.filter(Registro.fecha >= fecha_inicio, Registro.fecha <= fecha_fin)
-
-    registros = query.order_by(Registro.fecha.desc()).all()
-
-    return render_template(
-        'admin.html',
-        registros=registros,
-        usuarios=usuarios,
-        filtro_usuario=filtro_usuario,
-        fecha_inicio=fecha_inicio,
-        fecha_fin=fecha_fin,
-        username=session['username'],
-        role=session['role']
-    )
-
+    return render_template('admin.html', registros=registros, usuarios=usuarios,
+                           filtro_usuario=filtro_usuario,
+                           username=session['username'], role=session['role'])
 
 @app.route('/cambiar_password', methods=['GET', 'POST'])
 def cambiar_password():
