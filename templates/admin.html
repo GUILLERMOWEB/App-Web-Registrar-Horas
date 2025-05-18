@@ -4,56 +4,6 @@
 <div class="container mt-5">
   <h2 class="mb-4">Bienvenido, {{ session['username'] }}!</h2>
 
-  <form method="POST" action="/dashboard" class="row g-3 mb-4">
-    <div class="col-md-2">
-      <label for="fecha" class="form-label">Fecha</label>
-      <input type="date" name="fecha" class="form-control" required>
-    </div>
-    <div class="col-md-2">
-      <label for="entrada" class="form-label">Hora de Entrada</label>
-      <input type="time" name="entrada" class="form-control" required>
-    </div>
-    <div class="col-md-2">
-      <label for="salida" class="form-label">Hora de Salida</label>
-      <input type="time" name="salida" class="form-control" required>
-    </div>
-    <div class="col-md-2">
-      <label for="almuerzo_horas" class="form-label">Duración de Almuerzo</label>
-      <input type="number" step="0.1" name="almuerzo_horas" class="form-control" value="0" min="0" required>
-    </div>
-    <div class="col-md-2">
-      <label for="viaje_ida" class="form-label">Duración Viaje Ida (h)</label>
-      <input type="number" step="0.01" name="viaje_ida" class="form-control">
-    </div>
-    <div class="col-md-2">
-      <label for="viaje_vuelta" class="form-label">Duración Viaje Vuelta (h)</label>
-      <input type="number" step="0.01" name="viaje_vuelta" class="form-control">
-    </div>
-    <div class="col-md-2">
-      <label for="km_ida" class="form-label">KM de Ida</label>
-      <input type="number" step="0.1" name="km_ida" class="form-control">
-    </div>
-    <div class="col-md-2">
-      <label for="km_vuelta" class="form-label">KM de Vuelta</label>
-      <input type="number" step="0.1" name="km_vuelta" class="form-control">
-    </div>
-    <div class="col-md-4">
-      <label for="tarea" class="form-label">Tarea</label>
-      <input type="text" name="tarea" class="form-control">
-    </div>
-    <div class="col-md-4">
-      <label for="cliente" class="form-label">Cliente</label>
-      <input type="text" name="cliente" class="form-control">
-    </div>
-    <div class="col-md-8">
-      <label for="comentarios" class="form-label">Comentarios</label>
-      <input type="text" name="comentarios" class="form-control">
-    </div>
-    <div class="col-12">
-      <button type="submit" class="btn btn-primary">Registrar</button>
-    </div>
-  </form>
-
   <div class="mb-4 d-flex flex-wrap gap-2">
     <div class="col-auto">
         <label for="fecha_desde" class="form-label">Desde</label>
