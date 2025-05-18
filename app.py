@@ -390,7 +390,7 @@ def editar_registro(id):
     registro = Registro.query.get_or_404(id)
 
     # Definí acá tus listas o importalas desde donde estén definidas
-   clientes = [
+    clientes = [
         'Barraca Deambrosi SA',
         'Cooperativa Agraria de (CALCAR)',
         'Gibur S.A.',
