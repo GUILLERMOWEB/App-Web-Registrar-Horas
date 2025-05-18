@@ -8,7 +8,7 @@
     <h2>Panel de Administración</h2>
     <p>Bienvenido, {{ username }} ({{ role }})</p>
 
-    <form method="GET" action="{{ url_for('administrator') }}">
+    <form method="GET" action="{{ url_for('admin') }}">
         <label for="filtro_usuario">Filtrar por usuario:</label>
         <select name="filtro_usuario" id="filtro_usuario">
             <option value="">Todos</option>
@@ -32,8 +32,8 @@
 
     <form action="{{ url_for('exportar_excel') }}" method="GET">
         <input type="hidden" name="filtro_usuario" value="{{ filtro_usuario }}">
-        <input type="hidden" name="fecha_desde" value="{{ fecha_inicio }}">
-        <input type="hidden" name="fecha_hasta" value="{{ fecha_fin }}">
+        <input type="hidden" name="fecha_inicio" value="{{ fecha_inicio }}">
+        <input type="hidden" name="fecha_fin" value="{{ fecha_fin }}">
         <button type="submit">Exportar a Excel</button>
     </form>
 
@@ -59,13 +59,13 @@
                 <th>KM Ida</th>
                 <th>KM Vuelta</th>
                 <th>Total Horas</th>
-                <th>Comentario</th>
+                <th>Comentarios</th>
             </tr>
         </thead>
         <tbody>
-            {% for registro, user in registros %}
+            {% for registro in registros %}
                 <tr>
-                    <td>{{ user.username }}</td>
+                    <td>{{ registro.user.username if registro.user else '' }}</td>
                     <td>{{ registro.fecha }}</td>
                     <td>{{ registro.cliente }}</td>
                     <td>{{ 'Sí' if registro.contrato else 'No' }}</td>
@@ -76,13 +76,13 @@
                     <td>{{ registro.entrada }}</td>
                     <td>{{ registro.salida }}</td>
                     <td>{{ registro.almuerzo }}</td>
-                    <td>{{ registro.horas_trabajadas }}</td>
-                    <td>{{ registro.horas_viaje_ida }}</td>
-                    <td>{{ registro.horas_viaje_vuelta }}</td>
+                    <td>{{ registro.horas }}</td>
+                    <td>{{ registro.viaje_ida }}</td>
+                    <td>{{ registro.viaje_vuelta }}</td>
                     <td>{{ registro.km_ida }}</td>
                     <td>{{ registro.km_vuelta }}</td>
-                    <td>{{ registro.total_horas }}</td>
-                    <td>{{ registro.comentario }}</td>
+                    <td>{{ (registro.horas or 0) + (registro.viaje_ida or 0) + (registro.viaje_vuelta or 0) }}</td>
+                    <td>{{ registro.comentarios }}</td>
                 </tr>
             {% endfor %}
         </tbody>
