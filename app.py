@@ -290,7 +290,7 @@ def dashboard():
     )
 
 
-@app.route('/exportar_excel')
+@app.route('/exportar_excel') 
 def exportar_excel():
     if 'user_id' not in session:
         return redirect(url_for('login'))
@@ -299,7 +299,8 @@ def exportar_excel():
     user_id = session.get('user_id')
     fecha_desde = request.args.get('fecha_desde')
     fecha_hasta = request.args.get('fecha_hasta')
-    contexto = request.args.get('contexto')  # <-- nuevo campo para saber desde dónde se exporta
+    contexto = request.args.get('contexto')  # Para saber desde dónde se exporta
+    usuario_id = request.args.get('usuario_id')  # Nuevo: permite filtrar por usuario
 
     query = Registro.query
 
@@ -308,6 +309,10 @@ def exportar_excel():
         query = query.filter_by(user_id=user_id)
     elif role not in ['admin', 'superadmin']:
         query = query.filter_by(user_id=user_id)
+
+    # Filtro por usuario (si es admin/superadmin y viene de admin panel)
+    if usuario_id and role in ['admin', 'superadmin']:
+        query = query.filter_by(user_id=usuario_id)
 
     # Filtro por fechas
     if fecha_desde and fecha_hasta:
@@ -385,6 +390,7 @@ def exportar_excel():
         as_attachment=True,
         download_name=f"registros_{session['username']}.xlsx"
     )
+
 
 
 
@@ -574,29 +580,43 @@ def crear_admin():
     return render_template('crear_admin.html')
 
 
-@app.route('/administrator', methods=['GET', 'POST'])
+@app.route('/administrator', methods=['GET'])
 def admin():
     if 'user_id' not in session or session['role'] not in ['admin', 'superadmin']:
         return redirect(url_for('login'))
 
+    # Obtener usuarios para el filtro
     usuarios = User.query.with_entities(User.id, User.username).all()
 
-    # Soportar filtro por usuario vía GET o POST
-    filtro_usuario = request.args.get('filtro_usuario') or request.form.get('filtro_usuario')
+    # Obtener filtros desde GET (formulario usa método GET)
+    filtro_usuario = request.args.get('filtro_usuario')
+    fecha_desde = request.args.get('fecha_desde')
+    fecha_hasta = request.args.get('fecha_hasta')
 
+    # Query base
+    query = db.session.query(Registro, User).join(User)
+
+    # Filtro por usuario
     if filtro_usuario:
-        registros = db.session.query(Registro, User).join(User).filter(User.id == filtro_usuario).order_by(Registro.fecha.desc()).all()
-    else:
-        registros = db.session.query(Registro, User).join(User).order_by(Registro.fecha.desc()).all()
+        query = query.filter(User.id == filtro_usuario)
+
+    # Filtro por fechas
+    if fecha_desde and fecha_hasta:
+        query = query.filter(Registro.fecha.between(fecha_desde, fecha_hasta))
+
+    registros = query.order_by(Registro.fecha.desc()).all()
 
     return render_template(
         'admin.html',
         registros=registros,
         usuarios=usuarios,
         filtro_usuario=filtro_usuario,
+        fecha_desde=fecha_desde,
+        fecha_hasta=fecha_hasta,
         username=session['username'],
         role=session['role']
     )
+
 
 
 @app.route('/cambiar_password', methods=['GET', 'POST'])

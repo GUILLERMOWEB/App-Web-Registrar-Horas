@@ -28,8 +28,17 @@
       {% endif %}
     
       <div class="col-auto align-self-end">
-        <button type="submit" class="btn btn-success">Exportar a Excel</button>
+        <a class="btn btn-success"
+           href="{{ url_for('exportar_excel',
+                            fecha_desde=request.args.get('fecha_desde'),
+                            fecha_hasta=request.args.get('fecha_hasta'),
+                            usuario_id=filtro_usuario,
+                            contexto='admin') }}">
+           Exportar a Excel
+        </a>
       </div>
+      
+      
     
       <div class="col-auto align-self-end">
         {% if role == 'superadmin' %}
