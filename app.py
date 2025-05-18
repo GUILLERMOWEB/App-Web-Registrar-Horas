@@ -579,18 +579,25 @@ def admin():
     if 'user_id' not in session or session['role'] not in ['admin', 'superadmin']:
         return redirect(url_for('login'))
 
-    filtro_usuario = request.form.get('filtro_usuario') if request.method == 'POST' else None
-
     usuarios = User.query.with_entities(User.id, User.username).all()
+
+    # Soportar filtro por usuario vía GET o POST
+    filtro_usuario = request.args.get('filtro_usuario') or request.form.get('filtro_usuario')
 
     if filtro_usuario:
         registros = db.session.query(Registro, User).join(User).filter(User.id == filtro_usuario).order_by(Registro.fecha.desc()).all()
     else:
         registros = db.session.query(Registro, User).join(User).order_by(Registro.fecha.desc()).all()
 
-    return render_template('admin.html', registros=registros, usuarios=usuarios,
-                           filtro_usuario=filtro_usuario,
-                           username=session['username'], role=session['role'])
+    return render_template(
+        'admin.html',
+        registros=registros,
+        usuarios=usuarios,
+        filtro_usuario=filtro_usuario,
+        username=session['username'],
+        role=session['role']
+    )
+
 
 @app.route('/cambiar_password', methods=['GET', 'POST'])
 def cambiar_password():

@@ -5,7 +5,7 @@
   <h2 class="mb-4">Bienvenido, {{ session['username'] }}!</h2>
 
   <div class="mb-4">
-    <form method="GET" action="{{ url_for('exportar_excel') }}" class="d-flex flex-wrap gap-2 align-items-end">
+    <form method="GET" action="{{ url_for('exportar_excel') }}" class="mb-4 d-flex flex-wrap gap-2">
       <div class="col-auto">
         <label for="fecha_desde" class="form-label">Desde</label>
         <input type="date" class="form-control" name="fecha_desde" required>
@@ -14,21 +14,31 @@
         <label for="fecha_hasta" class="form-label">Hasta</label>
         <input type="date" class="form-control" name="fecha_hasta" required>
       </div>
-      <input type="hidden" name="contexto" value="admin">
+    
+      {% if role in ['admin', 'superadmin'] %}
       <div class="col-auto">
+        <label for="usuario_id" class="form-label">Usuario</label>
+        <select class="form-control" name="usuario_id">
+          <option value="">Todos</option>
+          {% for u in usuarios %}
+            <option value="{{ u.id }}">{{ u.username }}</option>
+          {% endfor %}
+        </select>
+      </div>
+      {% endif %}
+    
+      <div class="col-auto align-self-end">
         <button type="submit" class="btn btn-success">Exportar a Excel</button>
       </div>
-  
-      {% if role in ['superadmin'] %}
-        <div class="col-auto">
+    
+      <div class="col-auto align-self-end">
+        {% if role == 'superadmin' %}
           <a href="{{ url_for('lista_usuarios') }}" class="btn btn-outline-info me-2">Ver usuarios</a>
-        </div>
-      {% endif %}
-  
-      <div class="col-auto">
+        {% endif %}
         <a href="/logout" class="btn btn-secondary">Cerrar sesión</a>
       </div>
     </form>
+    
   </div>
   
 
@@ -51,7 +61,7 @@
           <th>Comentarios</th>
           <th>Contrato</th>
           <th>Service Order</th>
-          <th>Centro de Costo</th>
+          <th>Centro de Costo Contrato</th>
           <th>Tipo de Servicio</th>
           <th>Línea</th>
           {% if session['role'] == 'superadmin' %}
