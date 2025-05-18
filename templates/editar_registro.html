@@ -61,12 +61,12 @@
     <div class="col-md-4">
       <label for="contrato" class="form-label">Contrato</label>
       <select name="contrato" class="form-select">
-        <option value="">-- Seleccionar contrato --</option>
-        {% for contrato in contratos %}
-          <option value="{{ contrato.nombre }}" {% if contrato.nombre == registro.contrato %}selected{% endif %}>{{ contrato.nombre }}</option>
-        {% endfor %}
+        <option value="">-- Seleccionar --</option>
+        <option value="true" {% if registro.contrato %}selected{% endif %}>Sí</option>
+        <option value="false" {% if registro.contrato is not none and not registro.contrato %}selected{% endif %}>No</option>
       </select>
     </div>
+    
 
     <div class="col-md-4">
       <label for="service_order" class="form-label">Service Order</label>
