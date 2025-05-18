@@ -574,32 +574,28 @@ def admin():
         return redirect(url_for('login'))
 
     filtro_usuario = request.form.get('filtro_usuario') if request.method == 'POST' else None
+    fecha_inicio = request.form.get('fecha_inicio') if request.method == 'POST' else None
+    fecha_fin = request.form.get('fecha_fin') if request.method == 'POST' else None
 
-    # Obtener la lista de usuarios para mostrar en el filtro
     usuarios = User.query.with_entities(User.id, User.username).all()
 
-    # Obtener los registros (de todos o filtrados por usuario)
+    query = db.session.query(Registro, User).join(User)
+
     if filtro_usuario:
-        registros = (
-            db.session.query(Registro, User)
-            .join(User)
-            .filter(User.id == filtro_usuario)
-            .order_by(Registro.fecha.desc())
-            .all()
-        )
-    else:
-        registros = (
-            db.session.query(Registro, User)
-            .join(User)
-            .order_by(Registro.fecha.desc())
-            .all()
-        )
+        query = query.filter(User.id == filtro_usuario)
+
+    if fecha_inicio and fecha_fin:
+        query = query.filter(Registro.fecha >= fecha_inicio, Registro.fecha <= fecha_fin)
+
+    registros = query.order_by(Registro.fecha.desc()).all()
 
     return render_template(
         'admin.html',
         registros=registros,
         usuarios=usuarios,
         filtro_usuario=filtro_usuario,
+        fecha_inicio=fecha_inicio,
+        fecha_fin=fecha_fin,
         username=session['username'],
         role=session['role']
     )
