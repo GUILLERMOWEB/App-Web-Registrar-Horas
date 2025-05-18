@@ -170,7 +170,6 @@
           <th>Centro de Costo</th>
           <th>Tipo de Servicio</th>
           <th>Línea</th>
-          <th>ID</th>
           <th>Editar</th>
           <th>Eliminar</th>
         </tr>
@@ -196,7 +195,6 @@
           <td>{{ registro.centro_costo or '' }}</td>
           <td>{{ registro.tipo_servicio or '' }}</td>
           <td>{{ registro.linea or '' }}</td>
-          <td>{{ registro.id }}</td>
           <td>
             <a href="{{ url_for('editar_registro', id=registro.id) }}" class="btn btn-warning btn-sm">Editar</a>
           </td>
