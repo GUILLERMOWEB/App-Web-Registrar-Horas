@@ -382,9 +382,6 @@ def exportar_excel():
         download_name=f"registros_{session['username']}.xlsx"
     )
 
-
-
-
 @app.route('/editar_registro/<int:id>', methods=['GET', 'POST'])
 def editar_registro(id):
     if 'user_id' not in session:
@@ -392,65 +389,145 @@ def editar_registro(id):
 
     registro = Registro.query.get_or_404(id)
 
+    # Definí acá tus listas o importalas desde donde estén definidas
+   clientes = [
+        'Barraca Deambrosi SA',
+        'Cooperativa Agraria de (CALCAR)',
+        'Gibur S.A.',
+        'Nolir S.A.',
+        'Recalco SA (ex Suadil)',
+        'CONAPROLE Planta CIM',
+        'CONAPROLE Planta VIII',
+        'Cerealin San Jose',
+        'Jugos del Uruguay SA',
+        'OTRO CLIENTE CLUSTER',
+        'Tetrapak San Fernando',
+        'N/A'
+    ]
+
+    contratos = ['Contrato legal 1', 'Contrato legal 2', 'Contrato legal 3']
+
+    service_orders = ['SM02', 'SM03', 'N/A']
+
+    centros_costo = [
+        {'id': 1, 'nombre': 'Barraca Deambrosi SA C.Costo=1 (40102623)'},
+        {'id': 2, 'nombre': 'Cooperativa Agraria de (CALCAR) C.Costo=2 (40102624)'},
+        {'id': 3, 'nombre': 'Gibur S.A. C.Costo=3 (40102626)'},
+        {'id': 4, 'nombre': 'Nolir S.A. C.Costo=4 (40102627)'},
+        {'id': 5, 'nombre': 'Recalco SA (ex Suadil) C.Costo=5 (40102628)'},
+        {'id': 6, 'nombre': 'CONAPROLE Planta CIM C.Costo=6 (40094915)'},
+        {'id': 7, 'nombre': 'CONAPROLE Planta VIII C.Costo=7 (40094917)'},
+        {'id': 8, 'nombre': 'Cerealin San Jose C.Costo=8 (40094911)'},
+        {'id': 9, 'nombre': 'Jugos del Uruguay SA  GMB revisar (99)'},
+        {'id': 10, 'nombre': 'FUERA DE CONTRATO'},       
+        {'id': 11, 'nombre': '9560218510'},
+        {'id': 12, 'nombre': 'N/A'}
+    ]
+
+    tipos_servicio = [
+        {'id': 1, 'nombre': 'Preventivo'},
+        {'id': 2, 'nombre': 'Correctivo'},
+        {'id': 3, 'nombre': 'Asistencia'},
+        {'id': 4, 'nombre': 'Tec Referente'},
+        {'id': 5, 'nombre': 'Instalación'},
+        {'id': 6, 'nombre': 'Tarea Administrativa'},
+        {'id': 7, 'nombre': 'Capacitación Recibida'},
+        {'id': 8, 'nombre': 'Licencias / Vacaciones'},
+        {'id': 9, 'nombre': 'Claims'}
+    ]
+
+    lineas = [
+        {'id': 1,  'nombre': 'UYC-BARRACA   MVD-LIN01   Máquina-TBA/3       N/S-11443/05537'},
+        {'id': 2,  'nombre': 'UYC-BARRACA   MVD-LIN02   Máquina-TBA/8       N/S-20201/82004'},
+        {'id': 3,  'nombre': 'UYC-BARRACA   MVD-LIN03   Máquina-SIMPLY8     N/S-21222/00018'},
+        {'id': 4,  'nombre': 'UYC-BARRACA   MVD-LIN04   Máquina-TBA/19      N/S-20562/83308'},
+        {'id': 5,  'nombre': 'UYC-COAGRARIA CAR-LN 01   Máquina-TBA/8       N/S-13037/10830'},
+        {'id': 6,  'nombre': 'UYC-COAGRARIA CAR-LN 02   Máquina-TP C3/F     N/S-15034/00004'},
+        {'id': 7,  'nombre': 'UYC-NOLIR     MVD-LIN01   Máquina-TBA/19      N/S-20591/83337'},
+        {'id': 8,  'nombre': 'UYC-NOLIR     MVD-LIN02   Máquina-TBA/8       N/S-15010/00889'},
+        {'id': 9,  'nombre': 'UYC-CEREALIN  SJO-LIN01   Máquina-TBA/8       N/S-13588/11417'},
+        {'id': 10, 'nombre': 'UYC-CEREALIN  SJO-LIN04   Máquina-TP A3/CF    N/S-21220/00466'},
+        {'id': 11, 'nombre': 'UYC-CONAPROLE CIM-LIN02   Máquina-TBA/19      N/S-20258/82571'},
+        {'id': 12, 'nombre': 'UYC-CONAPROLE CIM-LIN03   Máquina-TT/3        N/S-63202/20090'},
+        {'id': 13, 'nombre': 'UYC-CONAPROLE P08-LIN01   Máquina-TBA/8       N/S-20239/82382'},
+        {'id': 14, 'nombre': 'UYC-CONAPROLE P08-LIN02   Máquina-TBA/8       N/S-13879/11665'},
+        {'id': 15, 'nombre': 'UYC-CONAPROLE P08-LIN03   Máquina-TBA/8       N/S-13457/11304'},
+        {'id': 16, 'nombre': 'UYC-CONAPROLE P08-LIN04   Máquina-TBA/8       N/S-13486/11332'},
+        {'id': 17, 'nombre': 'UYC-GIBUR     MVD-LIN01   Máquina-TBA/8       N/S-17010/00018'},
+        {'id': 18, 'nombre': 'UYC-RECALCO   MVD-LIN01   Máquina-TBA/3       N/S-20078/80780'},
+        {'id': 19, 'nombre': 'UYC-RECALCO   MVD-LIN02   Máquina-TBA/8       N/S-12967/10664'},
+        {'id': 20, 'nombre': 'N/A'}
+    ]
+
     if request.method == 'POST':
-        fecha = request.form['fecha']
-        entrada = request.form['entrada']
-        salida = request.form['salida']
-
-        almuerzo_horas = int(request.form.get('almuerzo_horas', 0))       
-        almuerzo = almuerzo_horas
-
         try:
-            registro.viaje_ida = int(request.form['viaje_ida'])
-            registro.viaje_vuelta = int(request.form['viaje_vuelta'])
-            registro.km_ida = int(request.form['km_ida'])
-            registro.km_vuelta = int(request.form['km_vuelta'])
+            fecha = request.form['fecha']
+            entrada = request.form['entrada']
+            salida = request.form['salida']
 
-            # Validación dentro del try
-            if registro.viaje_ida < 0 or registro.viaje_vuelta < 0:
-                flash("Las horas de viaje no pueden ser negativas", "danger")
+            almuerzo_horas = int(request.form.get('almuerzo_horas', 0))
+            almuerzo = almuerzo_horas
+
+            viaje_ida = int(request.form.get('viaje_ida', 0))
+            viaje_vuelta = int(request.form.get('viaje_vuelta', 0))
+            km_ida = int(request.form.get('km_ida', 0))
+            km_vuelta = int(request.form.get('km_vuelta', 0))
+
+            if viaje_ida < 0 or viaje_vuelta < 0 or km_ida < 0 or km_vuelta < 0:
+                flash("Los valores numéricos no pueden ser negativos", "danger")
                 return redirect(url_for('editar_registro', id=id))
 
-        except ValueError:
-            flash("Por favor, ingresá valores válidos en los campos numéricos", "danger")
-            return redirect(url_for('editar_registro', id=id))
+            tarea = request.form.get('tarea', '')
+            cliente = request.form.get('cliente', '')
+            contrato = request.form.get('contrato', '')
+            service_order = request.form.get('service_order', '')
+            centro_costo = request.form.get('centro_costo', '')
+            tipo_servicio = request.form.get('tipo_servicio', '')
+            linea = request.form.get('linea', '')
+            comentarios = request.form.get('comentarios', '')
 
-        tarea = request.form.get('tarea', '')
-        cliente = request.form.get('cliente', '')
-        comentarios = request.form.get('comentarios', '')
-
-        try:
             t_entrada = datetime.strptime(entrada, "%H:%M")
             t_salida = datetime.strptime(salida, "%H:%M")
+
             horas_trabajadas = (t_salida - t_entrada - timedelta(hours=almuerzo)).total_seconds() / 3600
         except ValueError:
-            flash("Error en el formato de hora. Use HH:MM", "danger")
+            flash("Por favor, ingresá valores válidos y formatos correctos", "danger")
             return redirect(url_for('editar_registro', id=id))
 
-        # Guardar cambios
+        # Guardar en el registro
         registro.fecha = fecha
         registro.entrada = entrada
         registro.salida = salida
         registro.almuerzo = round(almuerzo, 2)
+        registro.viaje_ida = viaje_ida
+        registro.viaje_vuelta = viaje_vuelta
+        registro.km_ida = km_ida
+        registro.km_vuelta = km_vuelta
         registro.horas = round(horas_trabajadas, 2)
-        registro.viaje_ida = registro.viaje_ida
-        registro.viaje_vuelta = registro.viaje_vuelta
-        registro.km_ida = registro.km_ida
-        registro.km_vuelta = registro.km_vuelta
         registro.tarea = tarea
         registro.cliente = cliente
+        registro.contrato = contrato
+        registro.service_order = service_order
+        registro.centro_costo = centro_costo
+        registro.tipo_servicio = tipo_servicio
+        registro.linea = linea
         registro.comentarios = comentarios
 
         db.session.commit()
-        flash('Registro actualizado exitosamente', category='success')
+        flash('Registro actualizado exitosamente', 'success')
 
         # Redirigir según rol
-        return redirect(url_for('admin') if session['role'] in ['admin', 'superadmin'] else url_for('dashboard'))
+        return redirect(url_for('admin') if session.get('role') in ['admin', 'superadmin'] else url_for('dashboard'))
 
-    return render_template('editar_registro.html', registro=registro)
-
-
-
+    # GET: mostrar formulario con datos y listas para selects
+    return render_template('editar_registro.html',
+                           registro=registro,
+                           lista_clientes=clientes,
+                           contratos=[{'nombre': c} for c in contratos],
+                           service_orders=[{'nombre': s} for s in service_orders],
+                           centros_costo=centros_costo,
+                           tipos_servicio=tipos_servicio,
+                           lineas=lineas)
 
 
 @app.route('/borrar_registro/<int:id>', methods=['POST'])
