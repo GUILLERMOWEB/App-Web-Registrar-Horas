@@ -156,7 +156,7 @@
           <th>Fecha</th>
           <th>Hora de Entrada</th>
           <th>Hora de Salida</th>
-          <th>Tiempo de Almuerzo</th>
+          <th>Duración de Almuerzo</th>
           <th>Duración Viaje Ida</th>
           <th>Duración Viaje Vuelta</th>
           <th>KM Viaje de Ida</th>
@@ -195,6 +195,7 @@
           <td>{{ registro.centro_costo or '' }}</td>
           <td>{{ registro.tipo_servicio or '' }}</td>
           <td>{{ registro.linea or '' }}</td>
+          <td>{{ registro.id }}</td>
           <td>
             <a href="{{ url_for('editar_registro', id=registro.id) }}" class="btn btn-warning btn-sm">Editar</a>
           </td>

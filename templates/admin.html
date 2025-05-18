@@ -6,21 +6,22 @@
 
   <div class="mb-4 d-flex flex-wrap gap-2">
     <div class="col-auto">
-        <label for="fecha_desde" class="form-label">Desde</label>
-        <input type="date" class="form-control" name="fecha_desde" required>
-      </div>
-      <div class="col-auto">
-        <label for="fecha_hasta" class="form-label">Hasta</label>
-        <input type="date" class="form-control" name="fecha_hasta" required>
-      </div>
-      <div class="col-auto">
-    <a href="{{ url_for('exportar_excel') }}" class="btn btn-success">Exportar a Excel</a>
+      <label for="fecha_desde" class="form-label">Desde</label>
+      <input type="date" class="form-control" name="fecha_desde" required>
+    </div>
+    <div class="col-auto">
+      <label for="fecha_hasta" class="form-label">Hasta</label>
+      <input type="date" class="form-control" name="fecha_hasta" required>
+    </div>
+    <div class="col-auto">
+      <a href="{{ url_for('exportar_excel') }}" class="btn btn-success">Exportar a Excel</a>
 
-    {% if role in ['superadmin'] %}
+      {% if role in ['superadmin'] %}
         <a href="{{ url_for('lista_usuarios') }}" class="btn btn-outline-info me-2">Ver usuarios</a>
-    {% endif %}
+      {% endif %}
 
-    <a href="/logout" class="btn btn-secondary">Cerrar sesión</a>
+      <a href="/logout" class="btn btn-secondary">Cerrar sesión</a>
+    </div>
   </div>
 
   <div class="table-responsive">
@@ -45,8 +46,10 @@
           <th>Centro de Costo</th>
           <th>Tipo de Servicio</th>
           <th>Línea</th>
-          <th>Editar</th>
-          <th>Eliminar</th>
+          {% if session['role'] == 'superadmin' %}
+            <th>Editar</th>
+            <th>Eliminar</th>
+          {% endif %}
         </tr>
       </thead>
       <tbody>
@@ -70,6 +73,8 @@
           <td>{{ registro.centro_costo or '' }}</td>
           <td>{{ registro.tipo_servicio or '' }}</td>
           <td>{{ registro.linea or '' }}</td>
+
+          {% if session['role'] == 'superadmin' %}
           <td>
             <a href="{{ url_for('editar_registro', id=registro.id) }}" class="btn btn-warning btn-sm">Editar</a>
           </td>
@@ -78,8 +83,8 @@
                  onsubmit="return confirm('¿Estás seguro de que querés eliminar este registro?');">
                 <button type="submit" class="btn btn-danger btn-sm">Eliminar</button>
             </form>
-
           </td>
+          {% endif %}
         </tr>
         {% endfor %}
       </tbody>
