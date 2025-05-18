@@ -115,6 +115,12 @@
           <td>{{ registro.tarea }}</td>
           <td>{{ registro.cliente }}</td>
           <td>{{ registro.comentarios }}</td>
+          <td>{{ 'Sí' if registro.contrato else 'No' }}</td>
+          <td>{{ registro.service_order or '' }}</td>
+          <td>{{ registro.centro_costo or '' }}</td>
+          <td>{{ registro.tipo_servicio or '' }}</td>
+          <td>{{ registro.linea or '' }}</td>
+          <td>{{ registro.id }}</td>
           <td>
             <a href="{{ url_for('editar_registro', id=registro.id) }}" class="btn btn-warning btn-sm">Editar</a>
           </td>
