@@ -291,7 +291,6 @@ def dashboard():
 
 
 
-
 @app.route('/exportar_excel')
 def exportar_excel():
     if 'user_id' not in session:
@@ -300,10 +299,15 @@ def exportar_excel():
     role = session.get('role')
     fecha_desde = request.args.get('fecha_desde')
     fecha_hasta = request.args.get('fecha_hasta')
+    filtro_usuario = request.args.get('filtro_usuario')
 
     query = Registro.query
+
     if role not in ['admin', 'superadmin']:
         query = query.filter_by(user_id=session['user_id'])
+
+    if filtro_usuario:
+        query = query.filter(Registro.user_id == int(filtro_usuario))
 
     if fecha_desde and fecha_hasta:
         query = query.filter(Registro.fecha.between(fecha_desde, fecha_hasta))
@@ -331,7 +335,6 @@ def exportar_excel():
         'Centro de Costo': r.centro_costo or '',
         'Tipo de Servicio': r.tipo_servicio or '',
         'Línea': r.linea or ''
-
     } for r in registros if r.user is not None])
 
     archivo = BytesIO()
@@ -381,6 +384,8 @@ def exportar_excel():
         as_attachment=True,
         download_name=f"registros_{session['username']}.xlsx"
     )
+
+
 
 @app.route('/editar_registro/<int:id>', methods=['GET', 'POST'])
 def editar_registro(id):
