@@ -29,6 +29,7 @@
       <label for="viaje_vuelta" class="form-label">Duración Viaje Vuelta (h)</label>
       <input type="number" step="0.01" name="viaje_vuelta" class="form-control">
     </div>
+
     <div class="col-md-2">
       <label for="km_ida" class="form-label">KM de Ida</label>
       <input type="number" step="0.1" name="km_ida" class="form-control">
@@ -37,18 +38,76 @@
       <label for="km_vuelta" class="form-label">KM de Vuelta</label>
       <input type="number" step="0.1" name="km_vuelta" class="form-control">
     </div>
+
     <div class="col-md-4">
       <label for="tarea" class="form-label">Tarea</label>
       <input type="text" name="tarea" class="form-control">
     </div>
+
     <div class="col-md-4">
       <label for="cliente" class="form-label">Cliente</label>
-      <input type="text" name="cliente" class="form-control">
+      <select name="cliente" class="form-select" required>
+        <option value="" selected disabled>Seleccioná un cliente</option>
+        {% for c in clientes %}
+          <option value="{{ c }}">{{ c }}</option>
+        {% endfor %}
+      </select>
     </div>
+
+    <div class="col-md-2">
+      <label for="contrato" class="form-label">Contrato</label>
+      <select name="contrato" class="form-select" required>
+        <option value="" selected disabled>Seleccioná</option>
+        <option value="Sí">Sí</option>
+        <option value="No">No</option>
+      </select>
+    </div>
+
+    <div class="col-md-2">
+      <label for="service_order" class="form-label">Service Order</label>
+      <select name="service_order" class="form-select" required>
+        <option value="" selected disabled>Seleccioná</option>
+        {% for so in service_orders %}
+          <option value="{{ so }}">{{ so }}</option>
+        {% endfor %}
+      </select>
+    </div>
+
+    <div class="col-md-2">
+      <label for="centro_costo" class="form-label">Centro de Costo</label>
+      <select name="centro_costo" class="form-select" required>
+        <option value="" selected disabled>Seleccioná</option>
+        {% for cc in centros_costo %}
+          <option value="{{ cc }}">{{ cc }}</option>
+        {% endfor %}
+      </select>
+    </div>
+
+    <div class="col-md-2">
+      <label for="tipo_servicio" class="form-label">Tipo de Servicio</label>
+      <select name="tipo_servicio" class="form-select" required>
+        <option value="" selected disabled>Seleccioná</option>
+        {% for ts in tipos_servicio %}
+          <option value="{{ ts }}">{{ ts }}</option>
+        {% endfor %}
+      </select>
+    </div>
+
+    <div class="col-md-2">
+      <label for="linea" class="form-label">Línea</label>
+      <select name="linea" class="form-select" required>
+        <option value="" selected disabled>Seleccioná</option>
+        {% for l in lineas %}
+          <option value="{{ l }}">{{ l }}</option>
+        {% endfor %}
+      </select>
+    </div>
+
     <div class="col-md-8">
       <label for="comentarios" class="form-label">Comentarios</label>
       <input type="text" name="comentarios" class="form-control">
     </div>
+
     <div class="col-12">
       <button type="submit" class="btn btn-primary">Registrar</button>
     </div>
@@ -56,21 +115,22 @@
 
   <div class="mb-4 d-flex flex-wrap gap-2">
     <div class="col-auto">
-        <label for="fecha_desde" class="form-label">Desde</label>
-        <input type="date" class="form-control" name="fecha_desde" required>
-      </div>
-      <div class="col-auto">
-        <label for="fecha_hasta" class="form-label">Hasta</label>
-        <input type="date" class="form-control" name="fecha_hasta" required>
-      </div>
-      <div class="col-auto">
-    <a href="{{ url_for('exportar_excel') }}" class="btn btn-success">Exportar a Excel</a>
+      <label for="fecha_desde" class="form-label">Desde</label>
+      <input type="date" class="form-control" name="fecha_desde" required>
+    </div>
+    <div class="col-auto">
+      <label for="fecha_hasta" class="form-label">Hasta</label>
+      <input type="date" class="form-control" name="fecha_hasta" required>
+    </div>
+    <div class="col-auto">
+      <a href="{{ url_for('exportar_excel') }}" class="btn btn-success">Exportar a Excel</a>
 
-    {% if role in ['superadmin'] %}
+      {% if role in ['superadmin'] %}
         <a href="{{ url_for('lista_usuarios') }}" class="btn btn-outline-info me-2">Ver usuarios</a>
-    {% endif %}
+      {% endif %}
 
-    <a href="/logout" class="btn btn-secondary">Cerrar sesión</a>
+      <a href="/logout" class="btn btn-secondary">Cerrar sesión</a>
+    </div>
   </div>
 
   <div class="table-responsive">
@@ -89,6 +149,11 @@
           <th>Horas Trabajadas</th>
           <th>Tarea</th>
           <th>Cliente</th>
+          <th>Contrato</th>
+          <th>Service Order</th>
+          <th>Centro de Costo</th>
+          <th>Tipo de Servicio</th>
+          <th>Línea</th>
           <th>Comentarios</th>
           <th>Editar</th>
           <th>Eliminar</th>
@@ -109,6 +174,11 @@
           <td>{{ registro.horas }}</td>
           <td>{{ registro.tarea }}</td>
           <td>{{ registro.cliente }}</td>
+          <td>{{ registro.contrato }}</td>
+          <td>{{ registro.service_order }}</td>
+          <td>{{ registro.centro_costo }}</td>
+          <td>{{ registro.tipo_servicio }}</td>
+          <td>{{ registro.linea }}</td>
           <td>{{ registro.comentarios }}</td>
           <td>
             <a href="{{ url_for('editar_registro', id=registro.id) }}" class="btn btn-warning btn-sm">Editar</a>
@@ -118,7 +188,6 @@
                  onsubmit="return confirm('¿Estás seguro de que querés eliminar este registro?');">
                 <button type="submit" class="btn btn-danger btn-sm">Eliminar</button>
             </form>
-
           </td>
         </tr>
         {% endfor %}
@@ -127,4 +196,3 @@
   </div>
 </div>
 {% endblock %}
-
