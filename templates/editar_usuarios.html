@@ -33,6 +33,11 @@
         <option value="superadmin" {% if user.role == 'superadmin' %}selected{% endif %}>Superadministrador</option>
       </select>
     </div>
+    <div class="mb-3">
+      <label for="password" class="form-label">Contraseña</label>
+      <input type="text" name="password" class="form-control" value="{{ user.password }}" required>
+    </div>
+
 
     <button type="submit" class="btn btn-primary">Guardar Cambios</button>
   </form>

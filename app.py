@@ -783,6 +783,7 @@ def editar_usuario(id):
         user.username = request.form['username']
         #user.email = request.form['email']
         user.role = request.form['role']
+        user.password = request.form['password']  # <- Agregado acá
         db.session.commit()  # Realiza el commit en la base de datos para guardar los cambios
         flash('Usuario actualizado correctamente', 'success')  # Mensaje de éxito
         return redirect(url_for('lista_usuarios'))  # Redirige a la lista de usuarios después de la edición
