@@ -344,13 +344,13 @@ def exportar_excel():
             # si no hay usuario_id, no filtra para exportar todo
     else:
     # Restricción por rol
-    if role == 'admin' and contexto != 'admin':
+        if role == 'admin' and contexto != 'admin':
         query = query.filter_by(user_id=user_id)
-    elif role not in ['admin', 'superadmin']:
+        elif role not in ['admin', 'superadmin']:
         query = query.filter_by(user_id=user_id)
 
     # Filtro por usuario (si es admin/superadmin y viene de admin panel)
-    if usuario_id and role in ['admin', 'superadmin']:
+        if usuario_id and role in ['admin', 'superadmin']:
         query = query.filter_by(user_id=usuario_id)
 
     # Filtro por fechas
