@@ -273,6 +273,21 @@ def dashboard():
 
     total_horas = sum([(r.horas or 0) + (r.viaje_ida or 0) + (r.viaje_vuelta or 0) for r in registros])
     total_km = sum([(r.km_ida or 0) + (r.km_vuelta or 0) for r in registros])
+      
+      # ─── Construcción automática de cliente_cc_lineas ───
+    
+    cliente_cc_lineas = {}
+    for cliente in clientes:
+        centros = [ cc['nombre'] 
+                    for cc in centros_costo 
+                    if cliente in cc['nombre'] ]
+        lineas_filtradas = [ ln['nombre'] 
+                             for ln in lineas 
+                             if cliente in ln['nombre'] ]
+        cliente_cc_lineas[cliente] = {
+            'centros_costo': centros,
+            'lineas':        lineas_filtradas
+        }
 
     return render_template(
         'dashboard.html',
@@ -286,7 +301,8 @@ def dashboard():
         service_orders=service_orders,
         centros_costo=centros_costo,
         tipos_servicio=tipos_servicio,
-        lineas=lineas
+        lineas=lineas,
+        cliente_cc_lineas = cliente_cc_lineas
     )
 
 

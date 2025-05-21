@@ -209,6 +209,42 @@
       </tbody>
     </table>
   </div>
+  <!-- Script dinámico para filtrar centro de costo y línea -->
+<script type="text/javascript">
+  document.addEventListener("DOMContentLoaded", function () {
+    const clienteSelect = document.querySelector('select[name="cliente"]');
+    const ccSelect      = document.querySelector('select[name="centro_costo"]');
+    const lineaSelect   = document.querySelector('select[name="linea"]');
+
+    // Diccionario inyectado desde Flask, serializado correctamente
+    const clienteData = {{ cliente_cc_lineas | tojson }};
+
+    clienteSelect.addEventListener("change", function () {
+      const cliente = this.value;
+
+      // Reinicia los selects
+      ccSelect.innerHTML    = '<option value="">-- Seleccione Centro de Costo --</option>';
+      lineaSelect.innerHTML = '<option value="">-- Seleccione Línea --</option>';
+
+      if (clienteData[cliente]) {
+        clienteData[cliente].centros_costo.forEach(function(cc) {
+          const o = document.createElement("option");
+          o.value       = cc;
+          o.textContent = cc;
+          ccSelect.appendChild(o);
+        });
+
+        clienteData[cliente].lineas.forEach(function(li) {
+          const o = document.createElement("option");
+          o.value       = li;
+          o.textContent = li;
+          lineaSelect.appendChild(o);
+        });
+      }
+    });
+  });
+</script>
+
 </div>
 {% endblock %}
 
