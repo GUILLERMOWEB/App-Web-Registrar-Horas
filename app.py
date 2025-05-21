@@ -274,19 +274,34 @@ def dashboard():
     total_horas = sum([(r.horas or 0) + (r.viaje_ida or 0) + (r.viaje_vuelta or 0) for r in registros])
     total_km = sum([(r.km_ida or 0) + (r.km_vuelta or 0) for r in registros])
       
+      
+    cliente_prefijo = {
+        'Barraca Deambrosi SA'            : 'UYC-BARRACA',
+        'Cooperativa Agraria de (CALCAR)': 'UYC-COAGRARIA',
+        'Gibur S.A.'                      : 'UYC-GIBUR',
+        'Nolir S.A.'                      : 'UYC-NOLIR',
+        'Recalco SA (ex Suadil)'          : 'UYC-RECALCO',
+        'CONAPROLE Planta CIM'            : 'UYC-CONAPROLE CIM',
+        'CONAPROLE Planta VIII'           : 'UYC-CONAPROLE P08',
+        'Cerealin San Jose'               : 'UYC-CEREALIN',
+        'Jugos del Uruguay SA'            : '',  # definir si hay prefijo
+        'OTRO CLIENTE CLUSTER'            : '',
+        'Tetrapak San Fernando'           : '',
+        'N/A'                             : ''
+    }
       # ─── Construcción automática de cliente_cc_lineas ───
     
     cliente_cc_lineas = {}
-    for cliente in clientes:
-        centros = [ cc['nombre'] 
-                    for cc in centros_costo 
-                    if cliente in cc['nombre'] ]
-        lineas_filtradas = [ ln['nombre'] 
-                             for ln in lineas 
-                             if cliente in ln['nombre'] ]
-        cliente_cc_lineas[cliente] = {
+    for cli in clientes:
+        centros = [cc['nombre'] for cc in centros_costo if cli in cc['nombre']]
+        pref = cliente_prefijo.get(cli, '')
+        if pref:
+            lineas_f = [ln['nombre'] for ln in lineas if ln['nombre'].startswith(pref)]
+        else:
+            lineas_f = []
+        cliente_cc_lineas[cli] = {
             'centros_costo': centros,
-            'lineas':        lineas_filtradas
+            'lineas':        lineas_f
         }
 
     return render_template(
