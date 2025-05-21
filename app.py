@@ -334,7 +334,15 @@ def exportar_excel():
     usuario_id = request.args.get('usuario_id')  # Nuevo: permite filtrar por usuario
 
     query = Registro.query
-
+    if role == 'superadmin':
+        if contexto != 'admin':
+            # Aquí colocas la línea para filtrar solo sus registros cuando está en página inicio
+            query = query.filter_by(user_id=user_id)
+        else:
+            if usuario_id:
+                query = query.filter_by(user_id=usuario_id)
+            # si no hay usuario_id, no filtra para exportar todo
+    else:
     # Restricción por rol
     if role == 'admin' and contexto != 'admin':
         query = query.filter_by(user_id=user_id)
