@@ -68,10 +68,14 @@
       <select name="service_order" class="form-select">
         <option value="">-- Seleccionar Service Order --</option>
         {% for so in service_orders %}
-          <option value="{{ so }}" {% if so == registro.service_order %}selected{% endif %}>{{ so }}</option>
+          <option value="{{ so }}"
+            {% if so == registro.service_order %}selected{% endif %}>
+            {{ so }}
+          </option>
         {% endfor %}
       </select>
     </div>
+
 
     <div class="col-md-4">
       <label for="centro_costo" class="form-label">Centro de Costo</label>

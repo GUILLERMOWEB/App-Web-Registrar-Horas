@@ -79,7 +79,7 @@
   
     <!-- Select para Centro de Costo -->
     <div class="col-md-4 mb-3">
-      <label for="centro_costo" class="form-label">Centro de Costo</label>
+      <label for="centro_costo" class="form-label">Centro de Costo Contrato</label>
       <select name="centro_costo" class="form-control" required>
         <option value="">-- Seleccione Centro de Costo --</option>
         {% for cc in centros_costo %}
@@ -167,7 +167,7 @@
           <th>Comentarios</th>
           <th>Contrato</th>
           <th>Service Order</th>
-          <th>Centro de Costo</th>
+          <th>Centro de Costo Contrato</th>
           <th>Tipo de Servicio</th>
           <th>Línea</th>
           <th>Editar</th>
@@ -209,7 +209,8 @@
       </tbody>
     </table>
   </div>
-  <!-- Script dinámico para filtrar centro de costo y línea -->
+</div>
+<!-- Script dinámico para filtrar centro de costo y línea -->
 <script type="text/javascript">
   document.addEventListener("DOMContentLoaded", function () {
     const clienteSelect = document.querySelector('select[name="cliente"]');
@@ -245,6 +246,5 @@
   });
 </script>
 
-</div>
 {% endblock %}
 
