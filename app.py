@@ -781,7 +781,7 @@ def editar_usuario(id):
 
     if request.method == 'POST':  # Si se recibe una solicitud POST (cuando el formulario es enviado)
         user.username = request.form['username']
-        user.email = request.form['email']
+        #user.email = request.form['email']
         user.role = request.form['role']
         db.session.commit()  # Realiza el commit en la base de datos para guardar los cambios
         flash('Usuario actualizado correctamente', 'success')  # Mensaje de éxito
