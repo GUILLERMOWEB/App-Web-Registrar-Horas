@@ -326,26 +326,26 @@ def exportar_excel():
     if 'user_id' not in session:
         return redirect(url_for('login'))
 
+    import matplotlib.pyplot as plt
+    from io import BytesIO
+
     role = session.get('role')
     user_id = session.get('user_id')
     fecha_desde = request.args.get('fecha_desde')
     fecha_hasta = request.args.get('fecha_hasta')
-    contexto = request.args.get('contexto')  # Para saber desde dónde se exporta
-    usuario_id = request.args.get('usuario_id')  # Nuevo: permite filtrar por usuario
+    contexto = request.args.get('contexto')
+    usuario_id = request.args.get('usuario_id')
 
     query = Registro.query
 
-    # Restricción por rol
     if role == 'admin' and contexto != 'admin':
         query = query.filter_by(user_id=user_id)
     elif role not in ['admin', 'superadmin']:
         query = query.filter_by(user_id=user_id)
 
-    # Filtro por usuario (si es admin/superadmin y viene de admin panel)
     if usuario_id and role in ['admin', 'superadmin']:
         query = query.filter_by(user_id=usuario_id)
 
-    # Filtro por fechas
     if fecha_desde and fecha_hasta:
         query = query.filter(Registro.fecha.between(fecha_desde, fecha_hasta))
 
@@ -380,6 +380,10 @@ def exportar_excel():
         ws = writer.sheets['Registros']
 
         # Estilos
+        from openpyxl.styles import Font, PatternFill, Border, Side, Alignment
+        from openpyxl.utils import get_column_letter
+        from openpyxl.drawing.image import Image
+
         header_font = Font(bold=True, color="FFFFFF", name='Calibri')
         header_fill = PatternFill(start_color="305496", end_color="305496", fill_type="solid")
         zebra_fill = PatternFill(start_color="F9F9F9", end_color="F9F9F9", fill_type="solid")
@@ -389,14 +393,12 @@ def exportar_excel():
         )
         center_alignment = Alignment(horizontal="center", vertical="center", wrap_text=True)
 
-        # Encabezados
         for cell in ws[1]:
             cell.font = header_font
             cell.fill = header_fill
             cell.border = thin_border
             cell.alignment = center_alignment
 
-        # Celdas
         for row in ws.iter_rows(min_row=2, max_row=ws.max_row):
             for cell in row:
                 cell.font = Font(name='Calibri', size=11)
@@ -406,7 +408,6 @@ def exportar_excel():
                 for cell in row:
                     cell.fill = zebra_fill
 
-        # Ajuste de columnas
         for col_num, column_cells in enumerate(ws.columns, 1):
             max_length = max((len(str(cell.value)) for cell in column_cells if cell.value), default=0)
             adjusted_width = min((max_length + 4), 50)
@@ -415,12 +416,42 @@ def exportar_excel():
         ws.auto_filter.ref = ws.dimensions
         ws.freeze_panes = 'A2'
 
+        # ===== GRÁFICO DE HORAS SEMANALES =====
+        if not df.empty:
+            df['Fecha'] = pd.to_datetime(df['Fecha'])
+            df['Semana'] = df['Fecha'].dt.strftime('%Y-%U')
+            resumen_semanal = df.groupby('Semana')['Horas totales'].sum().reset_index()
+
+            fig, ax = plt.subplots(figsize=(8, 4))
+            ax.plot(resumen_semanal['Semana'], resumen_semanal['Horas totales'],
+                    marker='o', color='blue', label='Horas Totales')
+            ax.axhline(40, color='red', linestyle='--', label='Límite Legal (40 hs)')
+            ax.set_title('Comparativa de Horas Semanales')
+            ax.set_xlabel('Semana')
+            ax.set_ylabel('Horas')
+            ax.legend()
+            ax.grid(True)
+
+            img_buffer = BytesIO()
+            plt.tight_layout()
+            plt.savefig(img_buffer, format='png')
+            img_buffer.seek(0)
+            plt.close()
+
+            # Insertar imagen en hoja nueva
+            workbook = writer.book
+            ws_grafico = workbook.create_sheet(title='Gráfico Semanal')
+            img = Image(img_buffer)
+            img.anchor = 'A1'
+            ws_grafico.add_image(img)
+
     archivo.seek(0)
     return send_file(
         archivo,
         as_attachment=True,
         download_name=f"registros_{session['username']}.xlsx"
     )
+
 
 
 
