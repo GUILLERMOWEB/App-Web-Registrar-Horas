@@ -561,7 +561,37 @@ def editar_registro(id):
 
         # Redirigir según rol
         return redirect(url_for('admin') if session.get('role') in ['admin', 'superadmin'] else url_for('dashboard'))
-
+        
+    cliente_prefijo = {
+        'Barraca Deambrosi SA'            : 'UYC-BARRACA',
+        'Cooperativa Agraria de (CALCAR)': 'UYC-COAGRARIA',
+        'Gibur S.A.'                      : 'UYC-GIBUR',
+        'Nolir S.A.'                      : 'UYC-NOLIR',
+        'Recalco SA (ex Suadil)'          : 'UYC-RECALCO',
+        'CONAPROLE Planta CIM'            : 'UYC-CONAPROLE CIM',
+        'CONAPROLE Planta VIII'           : 'UYC-CONAPROLE P08',
+        'Cerealin San Jose'               : 'UYC-CEREALIN',
+        'Jugos del Uruguay SA'            : '',  # definir si hay prefijo
+        'OTRO CLIENTE CLUSTER'            : '',
+        'Tetrapak San Fernando'           : '',
+        'N/A'                             : ''
+    }
+      # ─── Construcción automática de cliente_cc_lineas ───
+    
+    cliente_cc_lineas = {}
+    for cli in clientes:
+        centros = [cc['nombre'] for cc in centros_costo if cli in cc['nombre']]
+        pref = cliente_prefijo.get(cli, '')
+        if pref:
+            lineas_f = [ln['nombre'] for ln in lineas if ln['nombre'].startswith(pref)]
+        else:
+            lineas_f = []
+        cliente_cc_lineas[cli] = {
+            'centros_costo': centros,
+            'lineas':        lineas_f
+        }    
+        
+    
     # GET: mostrar formulario con datos y listas para selects
     return render_template('editar_registro.html',
                            registro=registro,
@@ -570,7 +600,9 @@ def editar_registro(id):
                            service_orders=[{'nombre': s} for s in service_orders],
                            centros_costo=centros_costo,
                            tipos_servicio=tipos_servicio,
-                           lineas=lineas)
+                           lineas=lineas,
+                           cliente_cc_lineas = cliente_cc_lineas
+    )
 
 
 @app.route('/borrar_registro/<int:id>', methods=['POST'])

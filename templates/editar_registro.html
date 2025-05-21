@@ -21,27 +21,22 @@
       <label for="almuerzo_horas" class="form-label">Horas de Almuerzo</label>
       <input type="number" step="1" min="0" max="2" name="almuerzo_horas" class="form-control" value="{{ registro.almuerzo|int }}" required>
     </div>
-
     <div class="col-md-2">
       <label for="viaje_ida" class="form-label">Duración Viaje Ida (h)</label>
       <input type="number" step="1" min="0" name="viaje_ida" class="form-control" value="{{ registro.viaje_ida|int }}">
     </div>
-
     <div class="col-md-2">
       <label for="viaje_vuelta" class="form-label">Duración Viaje Vuelta (h)</label>
       <input type="number" step="1" min="0" name="viaje_vuelta" class="form-control" value="{{ registro.viaje_vuelta|int }}">
     </div>
-
     <div class="col-md-2">
       <label for="km_ida" class="form-label">KM de Ida</label>
       <input type="number" step="1" min="0" name="km_ida" class="form-control" value="{{ registro.km_ida|int }}">
     </div>
-
     <div class="col-md-2">
       <label for="km_vuelta" class="form-label">KM de Vuelta</label>
       <input type="number" step="1" min="0" name="km_vuelta" class="form-control" value="{{ registro.km_vuelta|int }}">
     </div>
-
     <div class="col-md-4">
       <label for="tarea" class="form-label">Tarea</label>
       <input type="text" name="tarea" class="form-control" value="{{ registro.tarea }}">
@@ -50,9 +45,10 @@
     <div class="col-md-4">
       <label for="cliente" class="form-label">Cliente</label>
       <select name="cliente" class="form-select">
-        {% for cliente in lista_clientes %}
-          <option value="{{ cliente }}" {% if cliente == registro.cliente %}selected{% endif %}>
-            {{ cliente }}
+        <option value="">-- Seleccionar Cliente --</option>
+        {% for cli in lista_clientes %}
+          <option value="{{ cli }}" {% if cli == registro.cliente %}selected{% endif %}>
+            {{ cli }}
           </option>
         {% endfor %}
       </select>
@@ -66,14 +62,13 @@
         <option value="false" {% if registro.contrato is not none and not registro.contrato %}selected{% endif %}>No</option>
       </select>
     </div>
-    
 
     <div class="col-md-4">
       <label for="service_order" class="form-label">Service Order</label>
       <select name="service_order" class="form-select">
-        <option value="">-- Seleccionar service order --</option>
-        {% for s in service_orders %}
-          <option value="{{ s.nombre }}" {% if s.nombre == registro.service_order %}selected{% endif %}>{{ s.nombre }}</option>
+        <option value="">-- Seleccionar Service Order --</option>
+        {% for so in service_orders %}
+          <option value="{{ so }}" {% if so == registro.service_order %}selected{% endif %}>{{ so }}</option>
         {% endfor %}
       </select>
     </div>
@@ -81,7 +76,7 @@
     <div class="col-md-4">
       <label for="centro_costo" class="form-label">Centro de Costo</label>
       <select name="centro_costo" class="form-select">
-        <option value="">-- Seleccionar centro de costo --</option>
+        <option value="">-- Seleccionar Centro de Costo --</option>
         {% for cc in centros_costo %}
           <option value="{{ cc.nombre }}" {% if cc.nombre == registro.centro_costo %}selected{% endif %}>{{ cc.nombre }}</option>
         {% endfor %}
@@ -91,7 +86,7 @@
     <div class="col-md-4">
       <label for="tipo_servicio" class="form-label">Tipo de Servicio</label>
       <select name="tipo_servicio" class="form-select">
-        <option value="">-- Seleccionar tipo de servicio --</option>
+        <option value="">-- Seleccionar Tipo de Servicio --</option>
         {% for ts in tipos_servicio %}
           <option value="{{ ts.nombre }}" {% if ts.nombre == registro.tipo_servicio %}selected{% endif %}>{{ ts.nombre }}</option>
         {% endfor %}
@@ -101,7 +96,7 @@
     <div class="col-md-4">
       <label for="linea" class="form-label">Línea</label>
       <select name="linea" class="form-select">
-        <option value="">-- Seleccionar línea --</option>
+        <option value="">-- Seleccionar Línea --</option>
         {% for l in lineas %}
           <option value="{{ l.nombre }}" {% if l.nombre == registro.linea %}selected{% endif %}>{{ l.nombre }}</option>
         {% endfor %}
@@ -118,4 +113,48 @@
     </div>
   </form>
 </div>
+
+<!-- Inyectar JSON puro -->
+<script id="cliente-data" type="application/json">
+  {{ cliente_cc_lineas | tojson | safe }}
+</script>
+
+<!-- Script para poblar y preseleccionar -->
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+  const clienteData = JSON.parse(document.getElementById("cliente-data").textContent);
+  const clienteSel  = document.querySelector('select[name="cliente"]');
+  const ccSel       = document.querySelector('select[name="centro_costo"]');
+  const lineaSel    = document.querySelector('select[name="linea"]');
+
+  function poblar(cli) {
+    ccSel.innerHTML    = '<option value="">-- Seleccionar Centro de Costo --</option>';
+    lineaSel.innerHTML = '<option value="">-- Seleccionar Línea --</option>';
+    if (!cli || !clienteData[cli]) return;
+    clienteData[cli].centros_costo.forEach(cc => {
+      const o = document.createElement("option"); o.value = o.textContent = cc;
+      ccSel.appendChild(o);
+    });
+    clienteData[cli].lineas.forEach(li => {
+      const o = document.createElement("option"); o.value = o.textContent = li;
+      lineaSel.appendChild(o);
+    });
+  }
+
+  // Al cambiar cliente, repoblar
+  clienteSel.addEventListener("change", () => poblar(clienteSel.value));
+
+  // Preselección inicial
+  const initCliente = "{{ registro.cliente }}";
+  const initCC      = "{{ registro.centro_costo }}";
+  const initLinea   = "{{ registro.linea }}";
+
+  if (initCliente) {
+    clienteSel.value = initCliente;
+    poblar(initCliente);
+    if (initCC)    ccSel.value    = initCC;
+    if (initLinea) lineaSel.value = initLinea;
+  }
+});
+</script>
 {% endblock %}
