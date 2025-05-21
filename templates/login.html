@@ -103,9 +103,13 @@
         <h2>Iniciar Sesión</h2>
 
         {% with messages = get_flashed_messages(with_categories=True) %}
-          {% if messages %}
-            <div class="flash">{{ messages[0] }}</div>
-          {% endif %}
+            {% if messages %}
+              {% for category, message in messages %}
+                <div class="alert alert-{{ category }} mt-3" role="alert">
+                    {{ message }}
+                </div>
+              {% endfor %}
+            {% endif %}
         {% endwith %}
 
         <p>¿No tenés una cuenta? <a href="{{ url_for('registro') }}">Registrate acá</a></p>
