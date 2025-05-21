@@ -597,7 +597,7 @@ def editar_registro(id):
                            registro=registro,
                            lista_clientes=clientes,
                            contratos=[{'nombre': c} for c in contratos],
-                           service_orders=[{'nombre': s} for s in service_orders],
+                           service_orders=service_orders,
                            centros_costo=centros_costo,
                            tipos_servicio=tipos_servicio,
                            lineas=lineas,
