@@ -19,17 +19,25 @@
       <label for="username" class="form-label">Nombre de Usuario</label>
       <input type="text" name="username" class="form-control" value="{{ user.username }}" required>
     </div>
+
+    <div class="mb-3">
+      <label for="email" class="form-label">Email</label>
+      <input type="email" name="email" class="form-control" value="{{ user.email }}" required>
+    </div>
+
     <div class="mb-3">
       <label for="role" class="form-label">Rol</label>
       <select name="role" class="form-control" required>
-        <option value="user" {% if user.role == 'user' %}selected{% endif %}>Usuario</option>
+        <option value="usuario" {% if user.role == 'usuario' %}selected{% endif %}>Usuario</option>
         <option value="admin" {% if user.role == 'admin' %}selected{% endif %}>Administrador</option>
         <option value="superadmin" {% if user.role == 'superadmin' %}selected{% endif %}>Superadministrador</option>
       </select>
     </div>
+
     <button type="submit" class="btn btn-primary">Guardar Cambios</button>
   </form>
 
   <a href="{{ url_for('lista_usuarios') }}" class="btn btn-secondary mt-3">Volver a la lista de usuarios</a>
 </div>
 {% endblock %}
+
