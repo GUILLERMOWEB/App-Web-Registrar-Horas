@@ -3,10 +3,13 @@
 {% block content %}
 <div class="container mt-5">
   <h2 class="mb-4">Bienvenido, {{ session['username'] }}!</h2>
-  
+
   {% if session['role'] == 'superadmin' %}
-  <a href="{{ url_for('cargar_cliente') }}" class="btn btn-success">➕ Cargar Cliente</a>
+    <a href="{{ url_for('agregar_valor', tipo='clientes') }}" class="btn btn-success">➕ Cargar Cliente</a>
+    <a href="{{ url_for('agregar_valor', tipo='centros_costo') }}" class="btn btn-primary">➕ Centro de Costo</a>
+    <a href="{{ url_for('agregar_valor', tipo='lineas') }}" class="btn btn-warning">➕ Línea</a>
   {% endif %}
+
 
   {% if session['rol'] == 'superadmin' %}
     <h3>Agregar nuevos datos</h3>
