@@ -347,7 +347,7 @@ def dashboard():
 
 @app.route('/admin/agregar_valor/<tipo>', methods=['GET', 'POST'])
 def agregar_valor(tipo):
-    if 'user_id' not in session or session.get('rol') != 'superadmin':
+    if 'user_id' not in session or session.get('role') != 'superadmin':
         return redirect(url_for('login'))
 
     archivo_map = {
