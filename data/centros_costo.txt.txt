@@ -1,0 +1,12 @@
+Barraca Deambrosi SA C.Costo=1 (40102623)
+Cooperativa Agraria de (CALCAR) C.Costo=2 (40102624)
+Gibur S.A. C.Costo=3 (40102626)
+Nolir S.A. C.Costo=4 (40102627)
+Recalco SA (ex Suadil) C.Costo=5 (40102628)
+CONAPROLE Planta CIM C.Costo=6 (40094915)
+CONAPROLE Planta VIII C.Costo=7 (40094917)
+Cerealin San Jose C.Costo=8 (40094911)
+Jugos del Uruguay SA  GMB revisar (99)
+FUERA DE CONTRATO
+9560218510
+N/A

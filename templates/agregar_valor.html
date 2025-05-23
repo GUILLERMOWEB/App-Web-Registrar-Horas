@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Agregar {{ tipo }}</title>
+</head>
+<body>
+    <h2>Agregar nuevo valor a {{ tipo|capitalize }}</h2>
+
+    {% if mensaje %}
+        <p style="color: green;">{{ mensaje }}</p>
+    {% endif %}
+
+    <form method="POST">
+        <label for="valor">Nuevo valor:</label><br>
+        {% if tipo == 'centros_costo' or tipo == 'lineas' %}
+            <input type="text" name="valor" placeholder="Ej: 13|Nuevo Centro de Costo" size="50" required>
+        {% else %}
+            <input type="text" name="valor" placeholder="Ej: Nuevo Cliente SA" size="40" required>
+        {% endif %}
+        <br><br>
+        <button type="submit">Agregar</button>
+    </form>
+
+    <br>
+    <a href="{{ url_for('dashboard') }}">Volver al Dashboard</a>
+</body>
+</html>

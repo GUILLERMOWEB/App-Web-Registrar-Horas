@@ -3,6 +3,15 @@
 {% block content %}
 <div class="container mt-5">
   <h2 class="mb-4">Bienvenido, {{ session['username'] }}!</h2>
+  {% if session['rol'] == 'superadmin' %}
+    <h3>Agregar nuevos datos</h3>
+    <ul>
+        <li><a href="{{ url_for('agregar_valor', tipo='clientes') }}">Agregar Cliente</a></li>
+        <li><a href="{{ url_for('agregar_valor', tipo='centros_costo') }}">Agregar Centro de Costo</a></li>
+        <li><a href="{{ url_for('agregar_valor', tipo='lineas') }}">Agregar Línea</a></li>
+    </ul>
+  {% endif %}
+
 
   <form method="POST" action="/dashboard" class="row g-3 mb-4">
     <div class="col-md-2">

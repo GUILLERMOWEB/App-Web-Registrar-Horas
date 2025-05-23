@@ -109,11 +109,36 @@ def login():
         else:
             flash('Usuario o contraseña incorrectos', category='danger')
     return render_template('login.html')
+    
+ def cargar_lista_simple(nombre_archivo):
+    ruta = os.path.join('data', nombre_archivo)
+    if not os.path.exists(ruta):
+        return []
+    with open(ruta, 'r', encoding='utf-8') as f:
+        return [line.strip() for line in f if line.strip()]
+
+def cargar_lista_con_id(nombre_archivo):
+    ruta = os.path.join('data', nombre_archivo)
+    if not os.path.exists(ruta):
+        return []
+    lista = []
+    with open(ruta, 'r', encoding='utf-8') as f:
+        for line in f:
+            partes = line.strip().split('|', 1)
+            if len(partes) == 2:
+                lista.append({'id': partes[0], 'nombre': partes[1]})
+    return lista
+
 
 @app.route('/dashboard', methods=['GET', 'POST'])
 def dashboard():
     if 'user_id' not in session:
         return redirect(url_for('login'))
+        
+       # Aquí cargas las listas desde tus archivos
+    clientes = cargar_lista_simple('clientes.txt')
+    centros_costo = cargar_lista_con_id('centros_costo.txt')
+    lineas = cargar_lista_con_id('lineas.txt')
 
     # Ejemplo de listas de opciones (reemplazar por consulta a DB luego)
     
@@ -319,6 +344,32 @@ def dashboard():
         lineas=lineas,
         cliente_cc_lineas = cliente_cc_lineas
     )
+
+@app.route('/admin/agregar_valor/<tipo>', methods=['GET', 'POST'])
+def agregar_valor(tipo):
+    if 'user_id' not in session or session.get('rol') != 'superadmin':
+        return redirect(url_for('login'))
+
+    archivo_map = {
+        'clientes': 'clientes.txt',
+        'centros_costo': 'centros_costo.txt',
+        'lineas': 'lineas.txt'
+    }
+
+    if tipo not in archivo_map:
+        return "Tipo no válido", 400
+
+    mensaje = ''
+    if request.method == 'POST':
+        valor = request.form.get('valor')
+        if valor:
+            ruta = os.path.join('data', archivo_map[tipo])
+            with open(ruta, 'a', encoding='utf-8') as f:
+                f.write(valor.strip() + '\n')
+            mensaje = f'Nuevo valor agregado a {tipo}.'
+
+    return render_template('agregar_valor.html', tipo=tipo, mensaje=mensaje)
+
 
 
 @app.route('/exportar_excel') 
