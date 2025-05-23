@@ -110,7 +110,7 @@ def login():
             flash('Usuario o contraseña incorrectos', category='danger')
     return render_template('login.html')
     
- def cargar_lista_simple(nombre_archivo):
+def cargar_lista_simple(nombre_archivo):
     ruta = os.path.join('data', nombre_archivo)
     if not os.path.exists(ruta):
         return []
