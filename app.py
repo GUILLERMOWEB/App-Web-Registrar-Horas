@@ -337,7 +337,7 @@ def exportar_excel():
     query = Registro.query
 
     # Restricción por rol
-    if role == 'admin' and contexto != 'admin':
+    if role in ['admin', 'superadmin'] and contexto != 'admin':
         query = query.filter_by(user_id=user_id)
     elif role not in ['admin', 'superadmin']:
         query = query.filter_by(user_id=user_id)
