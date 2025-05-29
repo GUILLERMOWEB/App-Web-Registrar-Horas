@@ -95,7 +95,6 @@ def login():
     if request.method == 'POST':
         username = request.form['username'].strip().lower()
         password = request.form['password']
-        pais = request.form.get('pais')
 
         user = User.query.filter(
             db.func.lower(User.username) == username,
@@ -106,66 +105,50 @@ def login():
             session['user_id'] = user.id
             session['username'] = user.username
             session['role'] = user.role
-            session['pais'] = pais  # 👈 Guardamos el país en la sesión
             return redirect(url_for('dashboard'))
         else:
             flash('Usuario o contraseña incorrectos', category='danger')
     return render_template('login.html')
+    
 
 @app.route('/dashboard', methods=['GET', 'POST'])
 def dashboard():
     if 'user_id' not in session:
         return redirect(url_for('login'))
 
-    pais = session.get('pais', 'Uruguay')  # Valor por defecto si no está definido
-
-    # Datos por país
-    clientes_por_pais = {
-        'Uruguay': [
-            'Barraca Deambrosi SA',
-            'Cooperativa Agraria de (CALCAR)',
-            'Gibur S.A.',
-            'Nolir S.A.',
-            'Recalco SA (ex Suadil)',
-            'CONAPROLE Planta CIM',
-            'CONAPROLE Planta VIII',
-            'Cerealin San Jose',
-            'Jugos del Uruguay SA',
-            'OTRO CLIENTE CLUSTER',
-            'Tetrapak San Fernando',
-            'N/A'
-        ],
-        'Paraguay': [
-            'Cliente PY 1',
-            'Cliente PY 2',
-            'Cliente PY 3',
-            'N/A'
-        ]
-    }
+    # Ejemplo de listas de opciones (reemplazar por consulta a DB luego)
+    
+    clientes = [
+        'Barraca Deambrosi SA',
+        'Cooperativa Agraria de (CALCAR)',
+        'Gibur S.A.',
+        'Nolir S.A.',
+        'Recalco SA (ex Suadil)',
+        'CONAPROLE Planta CIM',
+        'CONAPROLE Planta VIII',
+        'Cerealin San Jose',
+        'Jugos del Uruguay SA',
+        'OTRO CLIENTE CLUSTER',
+        'Tetrapak San Fernando',
+        'N/A'
+    ]
 
     contratos = ['Contrato legal 1', 'Contrato legal 2', 'Contrato legal 3']
-    service_orders = ['SM02', 'SM03', 'N/A']
-
-    centros_costo_por_pais = {
-        'Uruguay': [
-            {'id': 1, 'nombre': 'Barraca Deambrosi SA C.Costo=1 (40102623)'},
-            {'id': 2, 'nombre': 'Cooperativa Agraria de (CALCAR) C.Costo=2 (40102624)'},
-            {'id': 3, 'nombre': 'Gibur S.A. C.Costo=3 (40102626)'},
-            {'id': 4, 'nombre': 'Nolir S.A. C.Costo=4 (40102627)'},
-            {'id': 5, 'nombre': 'Recalco SA (ex Suadil) C.Costo=5 (40102628)'},
-            {'id': 6, 'nombre': 'CONAPROLE Planta CIM C.Costo=6 (40094915)'},
-            {'id': 7, 'nombre': 'CONAPROLE Planta VIII C.Costo=7 (40094917)'},
-            {'id': 8, 'nombre': 'Cerealin San Jose C.Costo=8 (40094911)'},
-            {'id': 9, 'nombre': 'Jugos del Uruguay SA  GMB revisar (99)'},
-            {'id': 10, 'nombre': 'FUERA DE CONTRATO'},
-            {'id': 11, 'nombre': '9560218510'},
-            {'id': 12, 'nombre': 'N/A'}
-        ],
-        'Paraguay': [
-            {'id': 1, 'nombre': 'Cliente PY 1 C.Costo=1 (12345678)'},
-            {'id': 2, 'nombre': 'Cliente PY 2 C.Costo=2 (23456789)'}
-        ]
-    }
+    service_orders = ['SM02', 'SM03','N/A']
+    centros_costo = [
+        {'id': 1, 'nombre': 'Barraca Deambrosi SA C.Costo=1 (40102623)'},
+        {'id': 2, 'nombre': 'Cooperativa Agraria de (CALCAR) C.Costo=2 (40102624)'},
+        {'id': 3, 'nombre': 'Gibur S.A. C.Costo=3 (40102626)'},
+        {'id': 4, 'nombre': 'Nolir S.A. C.Costo=4 (40102627)'},
+        {'id': 5, 'nombre': 'Recalco SA (ex Suadil) C.Costo=5 (40102628)'},
+        {'id': 6, 'nombre': 'CONAPROLE Planta CIM C.Costo=6 (40094915)'},
+        {'id': 7, 'nombre': 'CONAPROLE Planta VIII C.Costo=7 (40094917)'},
+        {'id': 8, 'nombre': 'Cerealin San Jose C.Costo=8 (40094911)'},
+        {'id': 9, 'nombre': 'Jugos del Uruguay SA  GMB revisar (99)'},
+        {'id': 10, 'nombre': 'FUERA DE CONTRATO'},       
+        {'id': 11, 'nombre': '9560218510'},
+        {'id': 12, 'nombre': 'N/A'}
+    ]
 
     tipos_servicio = [
         {'id': 1, 'nombre': 'Preventivo'},
@@ -178,40 +161,30 @@ def dashboard():
         {'id': 8, 'nombre': 'Licencias / Vacaciones'},
         {'id': 9, 'nombre': 'Claims'}
     ]
+    lineas = [
+        {'id': 1,  'nombre': 'UYC-BARRACA   MVD-LIN01   Máquina-TBA/3       N/S-11443/05537'},
+        {'id': 2,  'nombre': 'UYC-BARRACA   MVD-LIN02   Máquina-TBA/8       N/S-20201/82004'},
+        {'id': 3,  'nombre': 'UYC-BARRACA   MVD-LIN03   Máquina-SIMPLY8     N/S-21222/00018'},
+        {'id': 4,  'nombre': 'UYC-BARRACA   MVD-LIN04   Máquina-TBA/19      N/S-20562/83308'},
+        {'id': 5,  'nombre': 'UYC-COAGRARIA CAR-LN 01   Máquina-TBA/8       N/S-13037/10830'},
+        {'id': 6,  'nombre': 'UYC-COAGRARIA CAR-LN 02   Máquina-TP C3/F     N/S-15034/00004'},
+        {'id': 7,  'nombre': 'UYC-NOLIR     MVD-LIN01   Máquina-TBA/19      N/S-20591/83337'},
+        {'id': 8,  'nombre': 'UYC-NOLIR     MVD-LIN02   Máquina-TBA/8       N/S-15010/00889'},
+        {'id': 9,  'nombre': 'UYC-CEREALIN  SJO-LIN01   Máquina-TBA/8       N/S-13588/11417'},
+        {'id': 10, 'nombre': 'UYC-CEREALIN  SJO-LIN04   Máquina-TP A3/CF    N/S-21220/00466'},
+        {'id': 11, 'nombre': 'UYC-CONAPROLE CIM-LIN02   Máquina-TBA/19      N/S-20258/82571'},
+        {'id': 12, 'nombre': 'UYC-CONAPROLE CIM-LIN03   Máquina-TT/3        N/S-63202/20090'},
+        {'id': 13, 'nombre': 'UYC-CONAPROLE P08-LIN01   Máquina-TBA/8       N/S-20239/82382'},
+        {'id': 14, 'nombre': 'UYC-CONAPROLE P08-LIN02   Máquina-TBA/8       N/S-13879/11665'},
+        {'id': 15, 'nombre': 'UYC-CONAPROLE P08-LIN03   Máquina-TBA/8       N/S-13457/11304'},
+        {'id': 16, 'nombre': 'UYC-CONAPROLE P08-LIN04   Máquina-TBA/8       N/S-13486/11332'},
+        {'id': 17, 'nombre': 'UYC-GIBUR     MVD-LIN01   Máquina-TBA/8       N/S-17010/00018'},
+        {'id': 18, 'nombre': 'UYC-RECALCO   MVD-LIN01   Máquina-TBA/3       N/S-20078/80780'},
+        {'id': 19, 'nombre': 'UYC-RECALCO   MVD-LIN02   Máquina-TBA/8       N/S-12967/10664'},
+        {'id': 20, 'nombre': 'N/A'}
+    ]
 
-    lineas_por_pais = {
-        'Uruguay': [
-            {'id': 1, 'nombre': 'UYC-BARRACA   MVD-LIN01   Máquina-TBA/3       N/S-11443/05537'},
-            {'id': 2, 'nombre': 'UYC-BARRACA   MVD-LIN02   Máquina-TBA/8       N/S-20201/82004'},
-            {'id': 3, 'nombre': 'UYC-BARRACA   MVD-LIN03   Máquina-SIMPLY8     N/S-21222/00018'},
-            {'id': 4, 'nombre': 'UYC-BARRACA   MVD-LIN04   Máquina-TBA/19      N/S-20562/83308'},
-            {'id': 5, 'nombre': 'UYC-COAGRARIA CAR-LN 01   Máquina-TBA/8       N/S-13037/10830'},
-            {'id': 6, 'nombre': 'UYC-COAGRARIA CAR-LN 02   Máquina-TP C3/F     N/S-15034/00004'},
-            {'id': 7, 'nombre': 'UYC-NOLIR     MVD-LIN01   Máquina-TBA/19      N/S-20591/83337'},
-            {'id': 8, 'nombre': 'UYC-NOLIR     MVD-LIN02   Máquina-TBA/8       N/S-15010/00889'},
-            {'id': 9, 'nombre': 'UYC-CEREALIN  SJO-LIN01   Máquina-TBA/8       N/S-13588/11417'},
-            {'id': 10, 'nombre': 'UYC-CEREALIN  SJO-LIN04   Máquina-TP A3/CF    N/S-21220/00466'},
-            {'id': 11, 'nombre': 'UYC-CONAPROLE CIM-LIN02   Máquina-TBA/19      N/S-20258/82571'},
-            {'id': 12, 'nombre': 'UYC-CONAPROLE CIM-LIN03   Máquina-TT/3        N/S-63202/20090'},
-            {'id': 13, 'nombre': 'UYC-CONAPROLE P08-LIN01   Máquina-TBA/8       N/S-20239/82382'},
-            {'id': 14, 'nombre': 'UYC-CONAPROLE P08-LIN02   Máquina-TBA/8       N/S-13879/11665'},
-            {'id': 15, 'nombre': 'UYC-CONAPROLE P08-LIN03   Máquina-TBA/8       N/S-13457/11304'},
-            {'id': 16, 'nombre': 'UYC-CONAPROLE P08-LIN04   Máquina-TBA/8       N/S-13486/11332'},
-            {'id': 17, 'nombre': 'UYC-GIBUR     MVD-LIN01   Máquina-TBA/8       N/S-17010/00018'},
-            {'id': 18, 'nombre': 'UYC-RECALCO   MVD-LIN01   Máquina-TBA/3       N/S-20078/80780'},
-            {'id': 19, 'nombre': 'UYC-RECALCO   MVD-LIN02   Máquina-TBA/8       N/S-12967/10664'},
-            {'id': 20, 'nombre': 'N/A'}
-        ],
-        'Paraguay': [
-            {'id': 1, 'nombre': 'PRY-CLIENTE1   ASU-LIN01   Máquina-TBA/8       N/S-10001/20001'},
-            {'id': 2, 'nombre': 'PRY-CLIENTE2   ASU-LIN02   Máquina-TBA/19      N/S-10002/20002'}
-        ]
-    }
 
-    # Obtener los datos para el país
-    clientes = clientes_por_pais.get(pais, [])
-    centros_costo = centros_costo_por_pais.get(pais, [])
-    lineas = lineas_por_pais.get(pais, [])
 
     if request.method == 'POST':
         fecha = request.form['fecha']
@@ -237,14 +210,19 @@ def dashboard():
             return redirect(url_for('dashboard'))
 
         tarea = request.form.get('tarea', '').strip()
-        cliente = request.form.get('cliente', '').strip()
+        cliente = request.form.get('cliente', '').strip()  # Si cliente es texto, OK
         comentarios = request.form.get('comentarios', '').strip()
-        contrato = bool(int(request.form.get("contrato", 0)))
+        contrato = bool(int(request.form.get("contrato")))
         service_order = request.form.get('service_order', '').strip()
 
-        centro_costo = request.form.get('centro_costo', '').strip()
-        tipo_servicio = request.form.get('tipo_servicio', '').strip()
-        linea = request.form.get('linea', '').strip()
+        try:
+            centro_costo = request.form.get('centro_costo', '').strip()
+            tipo_servicio = request.form.get('tipo_servicio', '').strip()
+            linea = request.form.get('linea', '').strip()
+
+        except ValueError:
+            flash("Los campos de selección deben ser valores válidos.", "danger")
+            return redirect(url_for('dashboard'))
 
         try:
             formato_hora = "%H:%M"
@@ -257,6 +235,9 @@ def dashboard():
         except ValueError:
             flash("Formato de hora incorrecto. Use HH:MM.", "danger")
             return redirect(url_for('dashboard'))
+
+        
+            
 
         nuevo_registro = Registro(
             user_id=session['user_id'],
@@ -276,30 +257,69 @@ def dashboard():
             service_order=service_order,
             centro_costo=centro_costo,
             tipo_servicio=tipo_servicio,
-            linea=linea,
-            pais=pais
+            linea=linea
         )
+
         db.session.add(nuevo_registro)
         db.session.commit()
-
-        flash('Registro agregado exitosamente.', 'success')
+        flash('Registro guardado exitosamente', category='success')
         return redirect(url_for('dashboard'))
 
-    # Recuperar registros filtrando por usuario y país
-    registros = Registro.query.filter_by(user_id=session['user_id']).order_by(Registro.fecha.desc()).all()
+    # GET - mostrar registros y total de horas
+    filtros = request.args
+    registros_query = Registro.query.filter_by(user_id=session['user_id'])
+    if 'fecha' in filtros:
+        registros_query = registros_query.filter_by(fecha=filtros['fecha'])
+    registros = registros_query.order_by(Registro.fecha.desc()).all()
 
+    total_horas = sum([(r.horas or 0) + (r.viaje_ida or 0) + (r.viaje_vuelta or 0) for r in registros])
+    total_km = sum([(r.km_ida or 0) + (r.km_vuelta or 0) for r in registros])
+      
+      
+    cliente_prefijo = {
+        'Barraca Deambrosi SA'            : 'UYC-BARRACA',
+        'Cooperativa Agraria de (CALCAR)': 'UYC-COAGRARIA',
+        'Gibur S.A.'                      : 'UYC-GIBUR',
+        'Nolir S.A.'                      : 'UYC-NOLIR',
+        'Recalco SA (ex Suadil)'          : 'UYC-RECALCO',
+        'CONAPROLE Planta CIM'            : 'UYC-CONAPROLE CIM',
+        'CONAPROLE Planta VIII'           : 'UYC-CONAPROLE P08',
+        'Cerealin San Jose'               : 'UYC-CEREALIN',
+        'Jugos del Uruguay SA'            : '',  # definir si hay prefijo
+        'OTRO CLIENTE CLUSTER'            : '',
+        'Tetrapak San Fernando'           : '',
+        'N/A'                             : ''
+    }
+      # ─── Construcción automática de cliente_cc_lineas ───
+    
+    cliente_cc_lineas = {}
+    for cli in clientes:
+        centros = [cc['nombre'] for cc in centros_costo if cli in cc['nombre']]
+        pref = cliente_prefijo.get(cli, '')
+        if pref:
+            lineas_f = [ln['nombre'] for ln in lineas if ln['nombre'].startswith(pref)]
+        else:
+            lineas_f = []
+        cliente_cc_lineas[cli] = {
+            'centros_costo': centros,
+            'lineas':        lineas_f
+        }
 
-    return render_template('dashboard.html',
-                           registros=registros,
-                           clientes=clientes,
-                           contratos=contratos,
-                           service_orders=service_orders,
-                           centros_costo=centros_costo,
-                           tipos_servicio=tipos_servicio,
-                           lineas=lineas,
-                           pais=pais)
-
-
+    return render_template(
+        'dashboard.html',
+        username=session['username'],
+        role=session['role'],
+        registros=registros,
+        total_horas=round(total_horas, 2),
+        total_km=round(total_km, 2),
+        clientes=clientes,
+        contratos=contratos,
+        service_orders=service_orders,
+        centros_costo=centros_costo,
+        tipos_servicio=tipos_servicio,
+        lineas=lineas,
+        cliente_cc_lineas = cliente_cc_lineas
+    )
 
 
 @app.route('/exportar_excel') 
