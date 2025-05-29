@@ -267,6 +267,11 @@ def dashboard():
             comentarios=comentarios,
             contrato=contrato,
             service_order=service_order,
+            centros_costo=centros_costo,
+            tipos_servicio=tipos_servicio,
+            lineas=lineas,
+            cliente_cc_lineas = cliente_cc_lineas
+    )
 
 
 
