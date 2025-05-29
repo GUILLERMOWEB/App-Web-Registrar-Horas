@@ -115,45 +115,39 @@ def login():
 def dashboard():
     if 'user_id' not in session:
         return redirect(url_for('login'))
-    
-    pais = session.get('pais', 'Uruguay')  # Por defecto Uruguay si no hay país en sesión
 
     # Ejemplo de listas de opciones (reemplazar por consulta a DB luego)
     
-    clientes_all = [
-        {'nombre': 'Barraca Deambrosi SA', 'pais': 'Uruguay'},
-        {'nombre': 'Cooperativa Agraria de (CALCAR)', 'pais': 'Uruguay'},
-        {'nombre': 'Gibur S.A.', 'pais': 'Uruguay'},
-        {'nombre': 'Nolir S.A.', 'pais': 'Uruguay'},
-        {'nombre': 'Recalco SA (ex Suadil)', 'pais': 'Uruguay'},
-        {'nombre': 'CONAPROLE Planta CIM', 'pais': 'Uruguay'},
-        {'nombre': 'CONAPROLE Planta VIII', 'pais': 'Uruguay'},
-        {'nombre': 'Cerealin San Jose', 'pais': 'Uruguay'},
-        {'nombre': 'Jugos del Uruguay SA', 'pais': 'Uruguay'},
-        {'nombre': 'OTRO CLIENTE CLUSTER', 'pais': 'Uruguay'},
-        {'nombre': 'Tetrapak San Fernando', 'pais': 'Uruguay'},
-        {'nombre': 'N/A', 'pais': 'Uruguay'},
-        {'nombre': 'Cliente PY 1', 'pais': 'Paraguay'},
-        {'nombre': 'Cliente PY 2', 'pais': 'Paraguay'}
+    clientes = [
+        'Barraca Deambrosi SA',
+        'Cooperativa Agraria de (CALCAR)',
+        'Gibur S.A.',
+        'Nolir S.A.',
+        'Recalco SA (ex Suadil)',
+        'CONAPROLE Planta CIM',
+        'CONAPROLE Planta VIII',
+        'Cerealin San Jose',
+        'Jugos del Uruguay SA',
+        'OTRO CLIENTE CLUSTER',
+        'Tetrapak San Fernando',
+        'N/A'
     ]
 
     contratos = ['Contrato legal 1', 'Contrato legal 2', 'Contrato legal 3']
     service_orders = ['SM02', 'SM03','N/A']
-    centros_costo_all = [
-        {'id': 1, 'nombre': 'Barraca Deambrosi SA C.Costo=1 (40102623)', 'pais': 'Uruguay'},
-        {'id': 2, 'nombre': 'Cooperativa Agraria de (CALCAR) C.Costo=2 (40102624)', 'pais': 'Uruguay'},
-        {'id': 3, 'nombre': 'Gibur S.A. C.Costo=3 (40102626)', 'pais': 'Uruguay'},
-        {'id': 4, 'nombre': 'Nolir S.A. C.Costo=4 (40102627)', 'pais': 'Uruguay'},
-        {'id': 5, 'nombre': 'Recalco SA (ex Suadil) C.Costo=5 (40102628)', 'pais': 'Uruguay'},
-        {'id': 6, 'nombre': 'CONAPROLE Planta CIM C.Costo=6 (40094915)', 'pais': 'Uruguay'},
-        {'id': 7, 'nombre': 'CONAPROLE Planta VIII C.Costo=7 (40094917)', 'pais': 'Uruguay'},
-        {'id': 8, 'nombre': 'Cerealin San Jose C.Costo=8 (40094911)', 'pais': 'Uruguay'},
-        {'id': 9, 'nombre': 'Jugos del Uruguay SA  GMB revisar (99)', 'pais': 'Uruguay'},
-        {'id': 10, 'nombre': 'FUERA DE CONTRATO', 'pais': 'Uruguay'},
-        {'id': 11, 'nombre': '9560218510', 'pais': 'Uruguay'},
-        {'id': 12, 'nombre': 'N/A', 'pais': 'Uruguay'},
-        {'id': 13, 'nombre': 'Centro Costo PY 1', 'pais': 'Paraguay'},
-        {'id': 14, 'nombre': 'Centro Costo PY 2', 'pais': 'Paraguay'}
+    centros_costo = [
+        {'id': 1, 'nombre': 'Barraca Deambrosi SA C.Costo=1 (40102623)'},
+        {'id': 2, 'nombre': 'Cooperativa Agraria de (CALCAR) C.Costo=2 (40102624)'},
+        {'id': 3, 'nombre': 'Gibur S.A. C.Costo=3 (40102626)'},
+        {'id': 4, 'nombre': 'Nolir S.A. C.Costo=4 (40102627)'},
+        {'id': 5, 'nombre': 'Recalco SA (ex Suadil) C.Costo=5 (40102628)'},
+        {'id': 6, 'nombre': 'CONAPROLE Planta CIM C.Costo=6 (40094915)'},
+        {'id': 7, 'nombre': 'CONAPROLE Planta VIII C.Costo=7 (40094917)'},
+        {'id': 8, 'nombre': 'Cerealin San Jose C.Costo=8 (40094911)'},
+        {'id': 9, 'nombre': 'Jugos del Uruguay SA  GMB revisar (99)'},
+        {'id': 10, 'nombre': 'FUERA DE CONTRATO'},       
+        {'id': 11, 'nombre': '9560218510'},
+        {'id': 12, 'nombre': 'N/A'}
     ]
 
     tipos_servicio = [
@@ -167,34 +161,29 @@ def dashboard():
         {'id': 8, 'nombre': 'Licencias / Vacaciones'},
         {'id': 9, 'nombre': 'Claims'}
     ]
-    lineas_all = [
-        {'id': 1, 'nombre': 'UYC-BARRACA   MVD-LIN01   Máquina-TBA/3       N/S-11443/05537', 'pais': 'Uruguay'},
-        {'id': 2, 'nombre': 'UYC-BARRACA   MVD-LIN02   Máquina-TBA/8       N/S-20201/82004', 'pais': 'Uruguay'},
-        {'id': 3, 'nombre': 'UYC-BARRACA   MVD-LIN03   Máquina-SIMPLY8     N/S-21222/00018', 'pais': 'Uruguay'},
-        {'id': 4, 'nombre': 'UYC-BARRACA   MVD-LIN04   Máquina-TBA/19      N/S-20562/83308', 'pais': 'Uruguay'},
-        {'id': 5, 'nombre': 'UYC-COAGRARIA CAR-LN 01   Máquina-TBA/8       N/S-13037/10830', 'pais': 'Uruguay'},
-        {'id': 6, 'nombre': 'UYC-COAGRARIA CAR-LN 02   Máquina-TP C3/F     N/S-15034/00004', 'pais': 'Uruguay'},
-        {'id': 7, 'nombre': 'UYC-NOLIR     MVD-LIN01   Máquina-TBA/19      N/S-20591/83337', 'pais': 'Uruguay'},
-        {'id': 8, 'nombre': 'UYC-NOLIR     MVD-LIN02   Máquina-TBA/8       N/S-15010/00889', 'pais': 'Uruguay'},
-        {'id': 9, 'nombre': 'UYC-CEREALIN  SJO-LIN01   Máquina-TBA/8       N/S-13588/11417', 'pais': 'Uruguay'},
-        {'id': 10, 'nombre': 'UYC-CEREALIN  SJO-LIN04   Máquina-TP A3/CF    N/S-21220/00466', 'pais': 'Uruguay'},
-        {'id': 11, 'nombre': 'UYC-CONAPROLE CIM-LIN02   Máquina-TBA/19      N/S-20258/82571', 'pais': 'Uruguay'},
-        {'id': 12, 'nombre': 'UYC-CONAPROLE CIM-LIN03   Máquina-TT/3        N/S-63202/20090', 'pais': 'Uruguay'},
-        {'id': 13, 'nombre': 'UYC-CONAPROLE P08-LIN01   Máquina-TBA/8       N/S-20239/82382', 'pais': 'Uruguay'},
-        {'id': 14, 'nombre': 'UYC-CONAPROLE P08-LIN02   Máquina-TBA/8       N/S-13879/11665', 'pais': 'Uruguay'},
-        {'id': 15, 'nombre': 'UYC-CONAPROLE P08-LIN03   Máquina-TBA/8       N/S-13457/11304', 'pais': 'Uruguay'},
-        {'id': 16, 'nombre': 'UYC-CONAPROLE P08-LIN04   Máquina-TBA/8       N/S-13486/11332', 'pais': 'Uruguay'},
-        {'id': 17, 'nombre': 'UYC-GIBUR     MVD-LIN01   Máquina-TBA/8       N/S-17010/00018', 'pais': 'Uruguay'},
-        {'id': 18, 'nombre': 'UYC-RECALCO   MVD-LIN01   Máquina-TBA/3       N/S-20078/80780', 'pais': 'Uruguay'},
-        {'id': 19, 'nombre': 'UYC-RECALCO   MVD-LIN02   Máquina-TBA/8       N/S-12967/10664', 'pais': 'Uruguay'},
-        {'id': 20, 'nombre': 'N/A', 'pais': 'Uruguay'},
-        {'id': 21, 'nombre': 'Línea PY 1', 'pais': 'Paraguay'},
-        {'id': 22, 'nombre': 'Línea PY 2', 'pais': 'Paraguay'}
+    lineas = [
+        {'id': 1,  'nombre': 'UYC-BARRACA   MVD-LIN01   Máquina-TBA/3       N/S-11443/05537'},
+        {'id': 2,  'nombre': 'UYC-BARRACA   MVD-LIN02   Máquina-TBA/8       N/S-20201/82004'},
+        {'id': 3,  'nombre': 'UYC-BARRACA   MVD-LIN03   Máquina-SIMPLY8     N/S-21222/00018'},
+        {'id': 4,  'nombre': 'UYC-BARRACA   MVD-LIN04   Máquina-TBA/19      N/S-20562/83308'},
+        {'id': 5,  'nombre': 'UYC-COAGRARIA CAR-LN 01   Máquina-TBA/8       N/S-13037/10830'},
+        {'id': 6,  'nombre': 'UYC-COAGRARIA CAR-LN 02   Máquina-TP C3/F     N/S-15034/00004'},
+        {'id': 7,  'nombre': 'UYC-NOLIR     MVD-LIN01   Máquina-TBA/19      N/S-20591/83337'},
+        {'id': 8,  'nombre': 'UYC-NOLIR     MVD-LIN02   Máquina-TBA/8       N/S-15010/00889'},
+        {'id': 9,  'nombre': 'UYC-CEREALIN  SJO-LIN01   Máquina-TBA/8       N/S-13588/11417'},
+        {'id': 10, 'nombre': 'UYC-CEREALIN  SJO-LIN04   Máquina-TP A3/CF    N/S-21220/00466'},
+        {'id': 11, 'nombre': 'UYC-CONAPROLE CIM-LIN02   Máquina-TBA/19      N/S-20258/82571'},
+        {'id': 12, 'nombre': 'UYC-CONAPROLE CIM-LIN03   Máquina-TT/3        N/S-63202/20090'},
+        {'id': 13, 'nombre': 'UYC-CONAPROLE P08-LIN01   Máquina-TBA/8       N/S-20239/82382'},
+        {'id': 14, 'nombre': 'UYC-CONAPROLE P08-LIN02   Máquina-TBA/8       N/S-13879/11665'},
+        {'id': 15, 'nombre': 'UYC-CONAPROLE P08-LIN03   Máquina-TBA/8       N/S-13457/11304'},
+        {'id': 16, 'nombre': 'UYC-CONAPROLE P08-LIN04   Máquina-TBA/8       N/S-13486/11332'},
+        {'id': 17, 'nombre': 'UYC-GIBUR     MVD-LIN01   Máquina-TBA/8       N/S-17010/00018'},
+        {'id': 18, 'nombre': 'UYC-RECALCO   MVD-LIN01   Máquina-TBA/3       N/S-20078/80780'},
+        {'id': 19, 'nombre': 'UYC-RECALCO   MVD-LIN02   Máquina-TBA/8       N/S-12967/10664'},
+        {'id': 20, 'nombre': 'N/A'}
     ]
-# --- Filtrado por país ---
-    clientes = [c['nombre'] for c in clientes_all if c['pais'] == pais]
-    centros_costo = [cc for cc in centros_costo_all if cc['pais'] == pais]
-    lineas = [ln for ln in lineas_all if ln['pais'] == pais]
+
 
 
     if request.method == 'POST':
@@ -275,8 +264,6 @@ def dashboard():
         db.session.commit()
         flash('Registro guardado exitosamente', category='success')
         return redirect(url_for('dashboard'))
-        
-
 
     # GET - mostrar registros y total de horas
     filtros = request.args
