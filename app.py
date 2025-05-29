@@ -112,12 +112,6 @@ def login():
             flash('Usuario o contraseña incorrectos', category='danger')
     return render_template('login.html')
 
-    
-
-from flask import (
-    Flask, render_template, request, redirect, url_for, session, flash
-)
-
 @app.route('/dashboard', methods=['GET', 'POST'])
 def dashboard():
     if 'user_id' not in session:
@@ -292,71 +286,18 @@ def dashboard():
         return redirect(url_for('dashboard'))
 
     # Recuperar registros filtrando por usuario y país
-    registros = Registro.query.filter_by(user_id=session['user_id'], pais=pais).all()
+    registros = Registro.query.filter_by(user_id=session['user_id'], pais=pais).order_by(Registro.fecha.desc()).all()
 
-    # Cálculo totales
-    total_horas = 0
-    total_km = 0
-    for r in registros:
-        total_horas += r.horas + (r.viaje_ida or 0) + (r.viaje_vuelta or 0)
-        total_km += (r.km_ida or 0) + (r.km_vuelta or 0)
+    return render_template('dashboard.html',
+                           registros=registros,
+                           clientes=clientes,
+                           contratos=contratos,
+                           service_orders=service_orders,
+                           centros_costo=centros_costo,
+                           tipos_servicio=tipos_servicio,
+                           lineas=lineas,
+                           pais=pais)
 
-    # Diccionario para vincular clientes con centros de costo y líneas según prefijo país
-    cliente_prefijo_por_pais = {
-        'Uruguay': {
-            'Barraca Deambrosi SA'            : 'UYC-BARRACA',
-            'Cooperativa Agraria de (CALCAR)': 'UYC-COAGRARIA',
-            'Gibur S.A.'                     : 'UYC-GIBUR',
-            'Nolir S.A.'                     : 'UYC-NOLIR',
-            'Recalco SA (ex Suadil)'         : 'UYC-RECALCO',
-            'CONAPROLE Planta CIM'           : 'UYC-CONAPROLE CIM',
-            'CONAPROLE Planta VIII'          : 'UYC-CONAPROLE P08',
-            'Cerealin San Jose'              : 'UYC-CEREALIN',
-            'Jugos del Uruguay SA'           : 'UYC-JUGOS',
-            'OTRO CLIENTE CLUSTER'           : 'UYC-OTRO',
-            'Tetrapak San Fernando'          : 'UYC-TETRA',
-            'N/A'                           : ''
-        },
-        'Paraguay': {
-            'Cliente PY 1': 'PRY-CLIENTE1',
-            'Cliente PY 2': 'PRY-CLIENTE2',
-            'Cliente PY 3': 'PRY-CLIENTE3',
-            'N/A'        : ''
-        }
-    }
-
-    cliente_prefijos = cliente_prefijo_por_pais.get(pais, {})
-
-    cliente_cc_lineas = {}
-
-    for cli in clientes:
-        centros = [cc['nombre'] for cc in centros_costo if cli in cc['nombre']]
-        pref = cliente_prefijos.get(cli, '')
-        if pref:
-            lineas_f = [ln['nombre'] for ln in lineas if ln['nombre'].startswith(pref)]
-        else:
-            lineas_f = []
-        cliente_cc_lineas[cli] = {
-            'centros_costo': centros,
-            'lineas': lineas_f
-        }
-
-    return render_template(
-        'dashboard.html',
-        username=session['username'],
-        role=session['role'],
-        registros=registros,
-        total_horas=round(total_horas, 2),
-        total_km=round(total_km, 2),
-        clientes=clientes,
-        contratos=contratos,
-        service_orders=service_orders,
-        centros_costo=centros_costo,
-        tipos_servicio=tipos_servicio,
-        lineas=lineas,
-        cliente_cc_lineas=cliente_cc_lineas,
-        pais=pais
-    )
 
 
 
