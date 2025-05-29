@@ -117,9 +117,6 @@ def login():
 from flask import (
     Flask, render_template, request, redirect, url_for, session, flash
 )
-from datetime import datetime, timedelta
-from models import Registro  # Asumo que tenés un modelo Registro y db configurado
-from your_database import db  # Ajustá según cómo importes la DB
 
 @app.route('/dashboard', methods=['GET', 'POST'])
 def dashboard():
