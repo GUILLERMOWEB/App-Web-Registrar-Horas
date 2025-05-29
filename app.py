@@ -286,7 +286,8 @@ def dashboard():
         return redirect(url_for('dashboard'))
 
     # Recuperar registros filtrando por usuario y país
-    registros = Registro.query.filter_by(user_id=session['user_id'], pais=pais).order_by(Registro.fecha.desc()).all()
+    registros = Registro.query.filter_by(user_id=session['user_id']).order_by(Registro.fecha.desc()).all()
+
 
     return render_template('dashboard.html',
                            registros=registros,
