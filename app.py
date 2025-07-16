@@ -159,7 +159,8 @@ def dashboard():
         {'id': 6, 'nombre': 'Tarea Administrativa'},
         {'id': 7, 'nombre': 'Capacitación Recibida'},
         {'id': 8, 'nombre': 'Licencias / Vacaciones'},
-        {'id': 9, 'nombre': 'Claims'}
+        {'id': 9, 'nombre': 'Rebuilding Kit'},
+        {'id': 10, 'nombre': 'Claims'}
     ]
     lineas = [
         {'id': 1,  'nombre': 'UYC-BARRACA   MVD-LIN01   Máquina-TBA/3       N/S-11443/05537'},
@@ -278,7 +279,7 @@ def dashboard():
       
     cliente_prefijo = {
         'Barraca Deambrosi SA'            : 'UYC-BARRACA',
-        'Cooperativa Agraria de (CALCAR)': 'UYC-COAGRARIA',
+        'Cooperativa Agraria de (CALCAR)' : 'UYC-COAGRARIA',
         'Gibur S.A.'                      : 'UYC-GIBUR',
         'Nolir S.A.'                      : 'UYC-NOLIR',
         'Recalco SA (ex Suadil)'          : 'UYC-RECALCO',
@@ -477,7 +478,8 @@ def editar_registro(id):
         {'id': 6, 'nombre': 'Tarea Administrativa'},
         {'id': 7, 'nombre': 'Capacitación Recibida'},
         {'id': 8, 'nombre': 'Licencias / Vacaciones'},
-        {'id': 9, 'nombre': 'Claims'}
+        {'id': 9, 'nombre': 'Rebuilding Kit'},
+        {'id': 10, 'nombre': 'Claims'}
     ]
 
     lineas = [
