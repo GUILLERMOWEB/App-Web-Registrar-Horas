@@ -3,6 +3,11 @@
 {% block content %}
 <div class="container mt-5">
   <h2 class="mb-4">Bienvenido, {{ session['username'] }}!</h2>
+  
+  <div id="mensaje-alerta" class="alert alert-warning alert-dismissible fade show d-none" role="alert">
+    <span id="mensaje-texto"></span>
+    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Cerrar"></button>
+  </div>
 
   <div class="mb-4">
     <!-- FORMULARIO DE FILTROS -->
@@ -121,4 +126,29 @@
     </table>
   </div>
 </div>
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    const exportForm = document.querySelector('form[action="{{ url_for("exportar_excel") }}"]');
+    const fechaDesdeHidden = exportForm.querySelector('input[name="fecha_desde"]');
+    const fechaHastaHidden = exportForm.querySelector('input[name="fecha_hasta"]');
+    const alerta = document.getElementById("mensaje-alerta");
+    const mensajeTexto = document.getElementById("mensaje-texto");
+
+    exportForm.addEventListener("submit", function (e) {
+      if (!fechaDesdeHidden.value || !fechaHastaHidden.value) {
+        e.preventDefault();
+
+        // Mostrar mensaje elegante
+        mensajeTexto.textContent = "Por favor, seleccioná las fechas 'Desde' y 'Hasta' antes de exportar.";
+        alerta.classList.remove("d-none");
+        alerta.scrollIntoView({ behavior: "smooth", block: "center" });
+
+        // Enfocar en el campo visible
+        const fechaDesdeVisible = document.querySelector('input[name="fecha_desde"]:not([type="hidden"])');
+        if (fechaDesdeVisible) fechaDesdeVisible.focus();
+      }
+    });
+  });
+</script>
+
 {% endblock %}
