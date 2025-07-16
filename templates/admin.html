@@ -41,9 +41,9 @@
 
     <!-- FORMULARIO DE EXPORTACIÓN -->
     <form method="GET" action="{{ url_for('exportar_excel') }}" class="d-flex flex-wrap gap-2">
-      <input type="hidden" name="fecha_desde" value="{{ fecha_desde }}" required>
-      <input type="hidden" name="fecha_hasta" value="{{ fecha_hasta }}" required>
-      <input type="hidden" name="usuario_id" value="{{ filtro_usuario }}" required>
+      <input type="hidden" name="fecha_desde" required value="{{ fecha_desde }}">
+      <input type="hidden" name="fecha_hasta" required value="{{ fecha_hasta }}">
+      <input type="hidden" name="usuario_id" required value="{{ filtro_usuario }}">
       <input type="hidden" name="contexto" value="admin">
       <div class="col-auto">
         <button type="submit" class="btn btn-success">Exportar a Excel</button>
