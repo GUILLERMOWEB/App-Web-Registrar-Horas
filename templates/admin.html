@@ -3,11 +3,6 @@
 {% block content %}
 <div class="container mt-5">
   <h2 class="mb-4">Bienvenido, {{ session['username'] }}!</h2>
-  
-  <div id="mensaje-alerta" class="alert alert-warning alert-dismissible fade show d-none" role="alert">
-    <span id="mensaje-texto"></span>
-    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Cerrar"></button>
-  </div>
 
   <div class="mb-4">
     <!-- FORMULARIO DE FILTROS -->
@@ -45,15 +40,25 @@
     </form>
 
     <!-- FORMULARIO DE EXPORTACIÓN -->
-    <form method="GET" action="{{ url_for('exportar_excel') }}" class="d-flex flex-wrap gap-2">
-      <input type="hidden" name="fecha_desde" required value="{{ fecha_desde }}">
-      <input type="hidden" name="fecha_hasta" required value="{{ fecha_hasta }}">
-      <input type="hidden" name="usuario_id" required value="{{ filtro_usuario }}">
+    
+    <form method="GET" action="{{ url_for('exportar_excel') }}" id="form-exportar-admin" class="row g-2 align-items-end">
+      <div class="col-auto">
+        <label for="fecha_desde" class="form-label">Desde</label>
+        <input type="date" class="form-control" name="fecha_desde" id="fecha_desde" required>
+      </div>
+      <div class="col-auto">
+        <label for="fecha_hasta" class="form-label">Hasta</label>
+        <input type="date" class="form-control" name="fecha_hasta" id="fecha_hasta" required>
+      </div>
+
+      <input type="hidden" name="usuario_id" value="{{ filtro_usuario }}">
       <input type="hidden" name="contexto" value="admin">
+
       <div class="col-auto">
         <button type="submit" class="btn btn-success">Exportar a Excel</button>
       </div>
     </form>
+
   </div>
 </div>
 
@@ -126,29 +131,5 @@
     </table>
   </div>
 </div>
-<script>
-  document.addEventListener("DOMContentLoaded", function () {
-    const exportForm = document.querySelector('form[action="{{ url_for("exportar_excel") }}"]');
-    const fechaDesdeHidden = exportForm.querySelector('input[name="fecha_desde"]');
-    const fechaHastaHidden = exportForm.querySelector('input[name="fecha_hasta"]');
-    const alerta = document.getElementById("mensaje-alerta");
-    const mensajeTexto = document.getElementById("mensaje-texto");
-
-    exportForm.addEventListener("submit", function (e) {
-      if (!fechaDesdeHidden.value || !fechaHastaHidden.value) {
-        e.preventDefault();
-
-        // Mostrar mensaje elegante
-        mensajeTexto.textContent = "Por favor, seleccioná las fechas 'Desde' y 'Hasta' antes de exportar.";
-        alerta.classList.remove("d-none");
-        alerta.scrollIntoView({ behavior: "smooth", block: "center" });
-
-        // Enfocar en el campo visible
-        const fechaDesdeVisible = document.querySelector('input[name="fecha_desde"]:not([type="hidden"])');
-        if (fechaDesdeVisible) fechaDesdeVisible.focus();
-      }
-    });
-  });
-</script>
 
 {% endblock %}
