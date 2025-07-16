@@ -332,8 +332,6 @@ def exportar_excel():
     user_id = session.get('user_id')
     fecha_desde = request.args.get('fecha_desde')
     fecha_hasta = request.args.get('fecha_hasta')
-    if not fecha_desde or not fecha_hasta:
-        return "Debe seleccionar las fechas 'Desde' y 'Hasta' antes de exportar.", 400
     contexto = request.args.get('contexto')  # Para saber desde dónde se exporta
     usuario_id = request.args.get('usuario_id')  # Nuevo: permite filtrar por usuario
 
@@ -348,6 +346,9 @@ def exportar_excel():
     # Filtro por usuario (si es admin/superadmin y viene de admin panel)
     if usuario_id and role in ['admin', 'superadmin']:
         query = query.filter_by(user_id=usuario_id)
+        
+    if not fecha_desde or not fecha_hasta or fecha_desde == 'None' or fecha_hasta == 'None':
+        return "Debe seleccionar las fechas 'Desde' y 'Hasta' antes de exportar.", 400
 
     # Filtro por fechas
     if fecha_desde and fecha_hasta:
