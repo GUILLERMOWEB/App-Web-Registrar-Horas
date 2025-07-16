@@ -289,7 +289,7 @@ def dashboard():
         'Jugos del Uruguay SA'            : '',  # definir si hay prefijo
         'OTRO CLIENTE CLUSTER'            : '',
         'Tetrapak San Fernando'           : '',
-        'N/A'                             : ''
+        'N/A'                             : 'N/A'
     }
       # ─── Construcción automática de cliente_cc_lineas ───
     
@@ -577,7 +577,7 @@ def editar_registro(id):
         'Jugos del Uruguay SA'            : '',  # definir si hay prefijo
         'OTRO CLIENTE CLUSTER'            : '',
         'Tetrapak San Fernando'           : '',
-        'N/A'                             : ''
+        'N/A'                             : 'N/A'
     }
       # ─── Construcción automática de cliente_cc_lineas ───
     
