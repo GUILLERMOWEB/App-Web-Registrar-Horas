@@ -369,7 +369,7 @@ def exportar_excel():
         'Tarea': r.tarea,
         'Cliente': r.cliente,
         'Comentarios': r.comentarios,
-        'Contrato': 'Sí' if r.contrato else 'No',
+        'Contrato': 'Sí' if r.contrato else 'N/A',
         'Service Order': r.service_order or '',
         'Centro de Costo': r.centro_costo or '',
         'Tipo de Servicio': r.tipo_servicio or '',
