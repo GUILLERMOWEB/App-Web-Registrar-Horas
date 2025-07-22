@@ -512,8 +512,9 @@ def editar_registro(id):
     if request.method == 'POST':
         try:
             fecha = request.form['fecha']
-            entrada = request.form['entrada']
-            salida = request.form['salida']
+            entrada = f"{request.form['entrada_hora']}:{request.form['entrada_minuto']}"
+            salida = f"{request.form['salida_hora']}:{request.form['salida_minuto']}"
+
 
             almuerzo_horas = int(request.form.get('almuerzo_horas', 0))
             almuerzo = almuerzo_horas

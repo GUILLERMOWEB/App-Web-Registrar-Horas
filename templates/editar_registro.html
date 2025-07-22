@@ -9,14 +9,42 @@
       <label for="fecha" class="form-label">Fecha</label>
       <input type="date" name="fecha" class="form-control" value="{{ registro.fecha }}" required>
     </div>
-    <div class="col-md-2">
+   <div class="col-md-2">
       <label for="entrada" class="form-label">Hora de Entrada</label>
-      <input type="time" name="entrada" class="form-control" value="{{ registro.entrada }}" required>
+      <div class="d-flex">
+        <select name="entrada_hora" class="form-control me-1" required>
+          {% for h in range(0, 24) %}
+            {% set h_str = "%02d"|format(h) %}
+            <option value="{{ h_str }}" {% if registro.entrada[:2] == h_str %}selected{% endif %}>{{ h_str }}</option>
+          {% endfor %}
+        </select>
+        <select name="entrada_minuto" class="form-control" required>
+          {% for m in [0, 15, 30, 45] %}
+            {% set m_str = "%02d"|format(m) %}
+            <option value="{{ m_str }}" {% if registro.entrada[3:5] == m_str %}selected{% endif %}>{{ m_str }}</option>
+          {% endfor %}
+        </select>
+      </div>
     </div>
+
     <div class="col-md-2">
       <label for="salida" class="form-label">Hora de Salida</label>
-      <input type="time" name="salida" class="form-control" value="{{ registro.salida }}" required>
+      <div class="d-flex">
+        <select name="salida_hora" class="form-control me-1" required>
+          {% for h in range(0, 24) %}
+            {% set h_str = "%02d"|format(h) %}
+            <option value="{{ h_str }}" {% if registro.salida[:2] == h_str %}selected{% endif %}>{{ h_str }}</option>
+          {% endfor %}
+        </select>
+        <select name="salida_minuto" class="form-control" required>
+          {% for m in [0, 15, 30, 45] %}
+            {% set m_str = "%02d"|format(m) %}
+            <option value="{{ m_str }}" {% if registro.salida[3:5] == m_str %}selected{% endif %}>{{ m_str }}</option>
+          {% endfor %}
+        </select>
+      </div>
     </div>
+
     <div class="col-md-2">
       <label for="almuerzo_horas" class="form-label">Horas de Almuerzo</label>
       <input type="number" step="1" min="0" max="2" name="almuerzo_horas" class="form-control" value="{{ registro.almuerzo|int }}" required>
