@@ -136,6 +136,9 @@
       <label for="linea" class="form-label">Línea</label>
       <select name="linea" class="form-control" required>
         <option value="">-- Seleccione Línea --</option>
+        {% for linea in lineas %}
+          <option value="{{ linea['nombre'] }}">{{ linea['nombre'] }}</option>
+        {% endfor %}
       </select>
     </div>
   
@@ -244,44 +247,35 @@
     const clienteSelect = document.querySelector('select[name="cliente"]');
     const ccSelect      = document.querySelector('select[name="centro_costo"]');
     const lineaSelect   = document.querySelector('select[name="linea"]');
-    const clienteData   = {{ cliente_cc_lineas | tojson | safe }};
 
-    function poblar(cliente) {
-      if (ccSelect) {
-        ccSelect.innerHTML = '<option value="">-- Seleccione Centro de Costo --</option>';
-      }
+    // Diccionario inyectado desde Flask, serializado correctamente
+    const clienteData = {{ cliente_cc_lineas | tojson }};
+
+    clienteSelect.addEventListener("change", function () {
+      const cliente = this.value;
+
+      // Reinicia los selects
+      ccSelect.innerHTML    = '<option value="">-- Seleccione Centro de Costo --</option>';
       lineaSelect.innerHTML = '<option value="">-- Seleccione Línea --</option>';
 
       if (clienteData[cliente]) {
-        {% if role in ['admin', 'superadmin'] %}
         clienteData[cliente].centros_costo.forEach(function(cc) {
           const o = document.createElement("option");
-          o.value = o.textContent = cc;
-          if (cc === "{{ registro.centro_costo }}") o.selected = true;
+          o.value       = cc;
+          o.textContent = cc;
           ccSelect.appendChild(o);
         });
-        {% endif %}
 
         clienteData[cliente].lineas.forEach(function(li) {
           const o = document.createElement("option");
-          o.value = o.textContent = li;
-          if (li === "{{ registro.linea }}") o.selected = true;
+          o.value       = li;
+          o.textContent = li;
           lineaSelect.appendChild(o);
         });
       }
-    }
-
-    clienteSelect.addEventListener("change", function () {
-      poblar(this.value);
     });
-
-    // 🟡 Preselección al cargar la página
-    if (clienteSelect.value) {
-      poblar(clienteSelect.value);
-    }
   });
 </script>
-
 
 {% endblock %}
 
