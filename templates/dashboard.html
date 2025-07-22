@@ -112,6 +112,11 @@
           {% endfor %}
         </select>
       </div>
+      {% else %}
+      <!-- Campos ocultos para usuarios comunes -->
+      <input type="hidden" name="contrato" value="0">
+      <input type="hidden" name="service_order" value="N/A">
+      <input type="hidden" name="centro_costo" value="N/A">
     {% endif %}
   
     <!-- Select para Tipo de Servicio -->
