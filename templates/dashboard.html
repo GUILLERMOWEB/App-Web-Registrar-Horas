@@ -10,25 +10,35 @@
       <input type="date" name="fecha" class="form-control" required>
     </div>
     <div class="col-md-2">
-      <label for="entrada" class="form-label">Hora de Entrada</label>
-      <select name="entrada" class="form-control" required>
-        {% for h in range(0, 24) %}
-          {% for m in [0, 15, 30, 45] %}
-            <option value="{{ "%02d:%02d"|format(h, m) }}">{{ "%02d:%02d"|format(h, m) }}</option>
+      <label for="entrada_hora" class="form-label">Hora de Entrada</label>
+      <div class="d-flex">
+        <select name="entrada_hora" class="form-control me-1" required>
+          {% for h in range(0, 24) %}
+            <option value="{{ "%02d"|format(h) }}">{{ "%02d"|format(h) }}</option>
           {% endfor %}
-        {% endfor %}
-      </select>
+        </select>
+        <select name="entrada_minuto" class="form-control" required>
+          {% for m in [0, 15, 30, 45] %}
+            <option value="{{ "%02d"|format(m) }}">{{ "%02d"|format(m) }}</option>
+          {% endfor %}
+        </select>
+      </div>
     </div>
 
     <div class="col-md-2">
-      <label for="salida" class="form-label">Hora de Salida</label>
-      <select name="salida" class="form-control" required>
-        {% for h in range(0, 24) %}
-          {% for m in [0, 15, 30, 45] %}
-            <option value="{{ "%02d:%02d"|format(h, m) }}">{{ "%02d:%02d"|format(h, m) }}</option>
+      <label for="salida_hora" class="form-label">Hora de Salida</label>
+      <div class="d-flex">
+        <select name="salida_hora" class="form-control me-1" required>
+          {% for h in range(0, 24) %}
+            <option value="{{ "%02d"|format(h) }}">{{ "%02d"|format(h) }}</option>
           {% endfor %}
-        {% endfor %}
-      </select>
+        </select>
+        <select name="salida_minuto" class="form-control" required>
+          {% for m in [0, 15, 30, 45] %}
+            <option value="{{ "%02d"|format(m) }}">{{ "%02d"|format(m) }}</option>
+          {% endfor %}
+        </select>
+      </div>
     </div>
 
     <div class="col-md-2">
