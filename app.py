@@ -151,15 +151,15 @@ def dashboard():
     ]
 
     tipos_servicio = [
-        {'id': 1, 'nombre': 'Preventivo'},
+        {'id': 1, 'nombre': 'TPMS'},
         {'id': 2, 'nombre': 'Correctivo'},
-        {'id': 3, 'nombre': 'Asistencia'},
-        {'id': 4, 'nombre': 'Tec Referente'},
-        {'id': 5, 'nombre': 'Instalación'},
-        {'id': 6, 'nombre': 'Tarea Administrativa'},
-        {'id': 7, 'nombre': 'Capacitación Recibida'},
-        {'id': 8, 'nombre': 'Licencias / Vacaciones'},
-        {'id': 9, 'nombre': 'Rebuilding Kit'},
+        {'id': 3, 'nombre': 'Soporte a la producción'},
+        {'id': 4, 'nombre': 'Proyectos'},
+        {'id': 5, 'nombre': 'RK'},
+        {'id': 6, 'nombre': 'Vacaciones'},
+        {'id': 7, 'nombre': 'Tareas Administrativas'},
+        {'id': 8, 'nombre': 'Compensatorios'},
+        {'id': 9, 'nombre': 'Training'},
         {'id': 10, 'nombre': 'Claims'}
     ]
     lineas = [
@@ -474,15 +474,15 @@ def editar_registro(id):
     ]
 
     tipos_servicio = [
-        {'id': 1, 'nombre': 'Preventivo'},
+        {'id': 1, 'nombre': 'TPMS'},
         {'id': 2, 'nombre': 'Correctivo'},
-        {'id': 3, 'nombre': 'Asistencia'},
-        {'id': 4, 'nombre': 'Tec Referente'},
-        {'id': 5, 'nombre': 'Instalación'},
-        {'id': 6, 'nombre': 'Tarea Administrativa'},
-        {'id': 7, 'nombre': 'Capacitación Recibida'},
-        {'id': 8, 'nombre': 'Licencias / Vacaciones'},
-        {'id': 9, 'nombre': 'Rebuilding Kit'},
+        {'id': 3, 'nombre': 'Soporte a la producción'},
+        {'id': 4, 'nombre': 'Proyectos'},
+        {'id': 5, 'nombre': 'RK'},
+        {'id': 6, 'nombre': 'Vacaciones'},
+        {'id': 7, 'nombre': 'Tareas Administrativas'},
+        {'id': 8, 'nombre': 'Compensatorios'},
+        {'id': 9, 'nombre': 'Training'},
         {'id': 10, 'nombre': 'Claims'}
     ]
 
