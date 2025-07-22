@@ -81,39 +81,41 @@
         {% endfor %}
       </select>
     </div>
+    
+    {% if role in ['admin', 'superadmin'] %}
+      <div class="col-md-4">
+        <label for="contrato" class="form-label">Contrato</label>
+        <select name="contrato" class="form-select">
+          <option value="">-- Seleccionar --</option>
+          <option value="true" {% if registro.contrato %}selected{% endif %}>Sí</option>
+          <option value="false" {% if registro.contrato is not none and not registro.contrato %}selected{% endif %}>No</option>
+        </select>
+      </div>
 
-    <div class="col-md-4">
-      <label for="contrato" class="form-label">Contrato</label>
-      <select name="contrato" class="form-select">
-        <option value="">-- Seleccionar --</option>
-        <option value="true" {% if registro.contrato %}selected{% endif %}>Sí</option>
-        <option value="false" {% if registro.contrato is not none and not registro.contrato %}selected{% endif %}>No</option>
-      </select>
-    </div>
+      <div class="col-md-4">
+        <label for="service_order" class="form-label">Service Order</label>
+        <select name="service_order" class="form-select">
+          <option value="">-- Seleccionar Service Order --</option>
+          {% for so in service_orders %}
+            <option value="{{ so }}"
+              {% if so == registro.service_order %}selected{% endif %}>
+              {{ so }}
+            </option>
+          {% endfor %}
+        </select>
+      </div>
 
-    <div class="col-md-4">
-      <label for="service_order" class="form-label">Service Order</label>
-      <select name="service_order" class="form-select">
-        <option value="">-- Seleccionar Service Order --</option>
-        {% for so in service_orders %}
-          <option value="{{ so }}"
-            {% if so == registro.service_order %}selected{% endif %}>
-            {{ so }}
-          </option>
-        {% endfor %}
-      </select>
-    </div>
-
-
-    <div class="col-md-4">
-      <label for="centro_costo" class="form-label">Centro de Costo</label>
-      <select name="centro_costo" class="form-select">
-        <option value="">-- Seleccionar Centro de Costo --</option>
-        {% for cc in centros_costo %}
-          <option value="{{ cc.nombre }}" {% if cc.nombre == registro.centro_costo %}selected{% endif %}>{{ cc.nombre }}</option>
-        {% endfor %}
-      </select>
-    </div>
+    
+      <div class="col-md-4">
+        <label for="centro_costo" class="form-label">Centro de Costo</label>
+        <select name="centro_costo" class="form-select">
+          <option value="">-- Seleccionar Centro de Costo --</option>
+          {% for cc in centros_costo %}
+            <option value="{{ cc.nombre }}" {% if cc.nombre == registro.centro_costo %}selected{% endif %}>{{ cc.nombre }}</option>
+          {% endfor %}
+        </select>
+      </div>
+    {% endif %}
 
     <div class="col-md-4">
       <label for="tipo_servicio" class="form-label">Tipo de Servicio</label>

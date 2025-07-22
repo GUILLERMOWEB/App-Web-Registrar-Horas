@@ -76,41 +76,43 @@
         {% endfor %}
       </select>
     </div>
-  
-    <!-- Select para Contrato -->
-    <div class="col-md-2">
-      <label for="contrato" class="form-label">Contrato</label>
-      <select name="contrato" class="form-control" required>
-        <option value="">-- Seleccione Contrato --</option>
-        <option value="1">Sí</option>
-        <option value="0">N/A</option>
-      </select>
-    </div>
+
+    {% if role in ['admin', 'superadmin'] %}
+      <!-- Select para Contrato -->
+      <div class="col-md-2">
+        <label for="contrato" class="form-label">Contrato</label>
+        <select name="contrato" class="form-control" required>
+          <option value="">-- Seleccione Contrato --</option>
+          <option value="1">Sí</option>
+          <option value="0">N/A</option>
+        </select>
+      </div>
+      
     
-  
-    <!-- Select para Service Order (si querés, puede quedar input) -->
-    <!-- Service Order -->
-    <div class="col-md-4 mb-3">
-      <label for="service_order" class="form-label">Service Order</label>
-      <select name="service_order" class="form-control" required>
-        <option value="">-- Seleccione Service Order --</option>
-        {% for so in service_orders %}
-          <option value="{{ so }}">{{ so }}</option>
-        {% endfor %}
-      </select>
-    </div>
+      <!-- Select para Service Order (si querés, puede quedar input) -->
+      <!-- Service Order -->
+      <div class="col-md-4 mb-3">
+        <label for="service_order" class="form-label">Service Order</label>
+        <select name="service_order" class="form-control" required>
+          <option value="">-- Seleccione Service Order --</option>
+          {% for so in service_orders %}
+            <option value="{{ so }}">{{ so }}</option>
+          {% endfor %}
+        </select>
+      </div>
+      
     
-  
-    <!-- Select para Centro de Costo -->
-    <div class="col-md-4 mb-3">
-      <label for="centro_costo" class="form-label">Centro de Costo Contrato</label>
-      <select name="centro_costo" class="form-control" required>
-        <option value="">-- Seleccione Centro de Costo --</option>
-        {% for cc in centros_costo %}
-          <option value="{{ cc['nombre'] }}">{{ cc['nombre'] }}</option>
-        {% endfor %}
-      </select>
-    </div>
+      <!-- Select para Centro de Costo -->
+      <div class="col-md-4 mb-3">
+        <label for="centro_costo" class="form-label">Centro de Costo Contrato</label>
+        <select name="centro_costo" class="form-control" required>
+          <option value="">-- Seleccione Centro de Costo --</option>
+          {% for cc in centros_costo %}
+            <option value="{{ cc['nombre'] }}">{{ cc['nombre'] }}</option>
+          {% endfor %}
+        </select>
+      </div>
+    {% endif %}
   
     <!-- Select para Tipo de Servicio -->
     <div class="col-md-4 mb-3">
