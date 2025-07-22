@@ -599,7 +599,8 @@ def editar_registro(id):
             'lineas':        lineas_f
         }    
         
-    
+    role = session.get('role')  # 👈 esto es lo que falta
+
     # GET: mostrar formulario con datos y listas para selects
     return render_template('editar_registro.html',
                            registro=registro,
@@ -609,7 +610,8 @@ def editar_registro(id):
                            centros_costo=centros_costo,
                            tipos_servicio=tipos_servicio,
                            lineas=lineas,
-                           cliente_cc_lineas = cliente_cc_lineas
+                           cliente_cc_lineas = cliente_cc_lineas,
+                           role=role  # 👈 esto habilita los campos en el template
     )
 
 
