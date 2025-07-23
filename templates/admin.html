@@ -122,3 +122,34 @@
   </div>
 </div>
 {% endblock %}
+
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+    const btnExportar = document.getElementById("btn-exportar");
+    const fechaDesde = document.getElementById("fecha_desde");
+    const fechaHasta = document.getElementById("fecha_hasta");
+
+    function validarFechas() {
+        const desde = fechaDesde?.value;
+        const hasta = fechaHasta?.value;
+        if (!desde || !hasta) {
+            btnExportar.classList.add("disabled");
+            btnExportar.setAttribute("title", "Debe seleccionar fechas");
+            btnExportar.setAttribute("onclick", "return false;");
+        } else {
+            btnExportar.classList.remove("disabled");
+            btnExportar.removeAttribute("title");
+            btnExportar.removeAttribute("onclick");
+            const baseUrl = btnExportar.getAttribute("data-base-url");
+            btnExportar.href = `${baseUrl}?fecha_desde=${desde}&fecha_hasta=${hasta}`;
+        }
+    }
+
+    if (btnExportar && fechaDesde && fechaHasta) {
+        btnExportar.setAttribute("data-base-url", btnExportar.href);
+        fechaDesde.addEventListener("change", validarFechas);
+        fechaHasta.addEventListener("change", validarFechas);
+        validarFechas();
+    }
+});
+</script>
