@@ -9,11 +9,11 @@
     <form method="GET" action="{{ url_for('admin') }}" class="mb-4 d-flex flex-wrap gap-2">
       <div class="col-auto">
         <label for="fecha_desde" class="form-label">Desde</label>
-        <input type="date" class="form-control" name="fecha_desde" required value="{{ fecha_desde }}">
+        <input type="date" class="form-control" name="fecha_desde" id="fecha_desde" required value="{{ fecha_desde }}">
       </div>
       <div class="col-auto">
         <label for="fecha_hasta" class="form-label">Hasta</label>
-        <input type="date" class="form-control" name="fecha_hasta" required value="{{ fecha_hasta }}">
+        <input type="date" class="form-control" name="fecha_hasta" id="fecha_hasta" required value="{{ fecha_hasta }}">
       </div>
 
       {% if role in ['admin', 'superadmin'] %}
@@ -41,8 +41,8 @@
 
     <!-- FORMULARIO DE EXPORTACIÓN -->
     <form method="GET" action="{{ url_for('exportar_excel') }}" class="d-flex flex-wrap gap-2">
-      <input type="hidden" name="fecha_desde" value="{{ fecha_desde }}">
-      <input type="hidden" name="fecha_hasta" value="{{ fecha_hasta }}">
+      <input type="hidden" name="fecha_desde" id="fecha_desde" value="{{ fecha_desde }}">
+      <input type="hidden" name="fecha_hasta" id="fecha_hasta" value="{{ fecha_hasta }}">
       <input type="hidden" name="usuario_id" value="{{ filtro_usuario }}">
       <input type="hidden" name="contexto" value="admin">
       <div class="col-auto">
@@ -150,6 +150,40 @@ document.addEventListener("DOMContentLoaded", function () {
         validarFechas();
         fechaDesde.addEventListener("change", validarFechas);
         fechaHasta.addEventListener("change", validarFechas);
+    }
+});
+</script>
+
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+    const btnExportar = document.getElementById("btn-exportar");
+    const fechaDesde = document.getElementById("fecha_desde");
+    const fechaHasta = document.getElementById("fecha_hasta");
+
+    function validarFechas() {
+        const desde = fechaDesde?.value;
+        const hasta = fechaHasta?.value;
+        if (!desde || !hasta) {
+            btnExportar.classList.add("disabled");
+            btnExportar.setAttribute("title", "Debe seleccionar fechas");
+            btnExportar.setAttribute("onclick", "return false;");
+            btnExportar.setAttribute("href", "#");
+        } else {
+            btnExportar.classList.remove("disabled");
+            btnExportar.removeAttribute("title");
+            btnExportar.removeAttribute("onclick");
+            const baseUrl = btnExportar.getAttribute("data-base-url");
+            const params = new URLSearchParams(window.location.search);
+            const usuario_id = params.get("filtro_usuario") || "";
+            const contexto = "admin";
+            btnExportar.setAttribute("href", `${baseUrl}?fecha_desde=${desde}&fecha_hasta=${hasta}&usuario_id=${usuario_id}&contexto=${contexto}`);
+        }
+    }
+
+    if (btnExportar && fechaDesde && fechaHasta) {
+        fechaDesde.addEventListener("change", validarFechas);
+        fechaHasta.addEventListener("change", validarFechas);
+        validarFechas();
     }
 });
 </script>
