@@ -324,7 +324,7 @@ def dashboard():
     )
 
 
-@app.route('/exportar_excel') 
+@app.route('/exportar_excel')
 def exportar_excel():
     if 'user_id' not in session:
         return redirect(url_for('login'))
@@ -333,28 +333,23 @@ def exportar_excel():
     user_id = session.get('user_id')
     fecha_desde = request.args.get('fecha_desde')
     fecha_hasta = request.args.get('fecha_hasta')
-    contexto = request.args.get('contexto')  # Para saber desde dónde se exporta
-    usuario_id = request.args.get('usuario_id')  # Nuevo: permite filtrar por usuario
+    contexto = request.args.get('contexto')
+    usuario_id = request.args.get('usuario_id')
 
     query = Registro.query
 
-    # Restricción por rol
     if role in ['admin', 'superadmin'] and contexto != 'admin':
         query = query.filter_by(user_id=user_id)
     elif role not in ['admin', 'superadmin']:
         query = query.filter_by(user_id=user_id)
 
-    # Filtro por usuario (si es admin/superadmin y viene de admin panel)
     if usuario_id and role in ['admin', 'superadmin']:
         query = query.filter_by(user_id=usuario_id)
-        
+
     if not fecha_desde or not fecha_hasta or fecha_desde == 'None' or fecha_hasta == 'None':
         return "Debe seleccionar las fechas 'Desde' y 'Hasta' antes de exportar.", 400
 
-    # Filtro por fechas
-    if fecha_desde and fecha_hasta:
-        query = query.filter(Registro.fecha.between(fecha_desde, fecha_hasta))
-
+    query = query.filter(Registro.fecha.between(fecha_desde, fecha_hasta))
     registros = query.all()
 
     df = pd.DataFrame([{
@@ -388,11 +383,9 @@ def exportar_excel():
         # Estilos
         header_font = Font(bold=True, color="FFFFFF", name='Calibri')
         header_fill = PatternFill(start_color="305496", end_color="305496", fill_type="solid")
-        zebra_fill = PatternFill(start_color="F9F9F9", end_color="F9F9F9", fill_type="solid")
-        thin_border = Border(
-            left=Side(style='thin'), right=Side(style='thin'),
-            top=Side(style='thin'), bottom=Side(style='thin')
-        )
+        total_fill = PatternFill(start_color="D9E1F2", end_color="D9E1F2", fill_type="solid")
+        thin_border = Border(left=Side(style='thin'), right=Side(style='thin'),
+                             top=Side(style='thin'), bottom=Side(style='thin'))
         center_alignment = Alignment(horizontal="center", vertical="center", wrap_text=True)
 
         # Encabezados
@@ -410,13 +403,36 @@ def exportar_excel():
                 cell.alignment = center_alignment
             if row[0].row % 2 == 1:
                 for cell in row:
-                    cell.fill = zebra_fill
+                    cell.fill = PatternFill(start_color="F9F9F9", end_color="F9F9F9", fill_type="solid")
 
         # Ajuste de columnas
         for col_num, column_cells in enumerate(ws.columns, 1):
             max_length = max((len(str(cell.value)) for cell in column_cells if cell.value), default=0)
             adjusted_width = min((max_length + 4), 50)
             ws.column_dimensions[get_column_letter(col_num)].width = adjusted_width
+
+        # Agregar fila de totales
+        total_row = ws.max_row + 2
+        ws.cell(row=total_row, column=1, value="TOTALES").font = Font(bold=True)
+
+        for col in ws.iter_cols(min_row=1, max_row=1):
+            header = col[0].value
+            if header == "Horas laborales":
+                col_idx = col[0].column
+                total = df["Horas laborales"].sum()
+                cell = ws.cell(row=total_row, column=col_idx, value=round(total, 2))
+                cell.font = Font(bold=True)
+                cell.fill = total_fill
+                cell.border = thin_border
+                cell.alignment = center_alignment
+            elif header == "Km totales":
+                col_idx = col[0].column
+                total = df["Km totales"].sum()
+                cell = ws.cell(row=total_row, column=col_idx, value=round(total, 2))
+                cell.font = Font(bold=True)
+                cell.fill = total_fill
+                cell.border = thin_border
+                cell.alignment = center_alignment
 
         ws.auto_filter.ref = ws.dimensions
         ws.freeze_panes = 'A2'
@@ -427,6 +443,7 @@ def exportar_excel():
         as_attachment=True,
         download_name=f"registros_{session['username']}.xlsx"
     )
+
 
 
 
