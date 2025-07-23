@@ -134,22 +134,22 @@ document.addEventListener("DOMContentLoaded", function () {
         const hasta = fechaHasta?.value;
         if (!desde || !hasta) {
             btnExportar.classList.add("disabled");
+            btnExportar.removeAttribute("href");
             btnExportar.setAttribute("title", "Debe seleccionar fechas");
-            btnExportar.setAttribute("onclick", "return false;");
         } else {
             btnExportar.classList.remove("disabled");
             btnExportar.removeAttribute("title");
-            btnExportar.removeAttribute("onclick");
             const baseUrl = btnExportar.getAttribute("data-base-url");
-            btnExportar.href = `${baseUrl}?fecha_desde=${desde}&fecha_hasta=${hasta}`;
+            btnExportar.setAttribute("href", `${baseUrl}?fecha_desde=${desde}&fecha_hasta=${hasta}`);
         }
     }
 
     if (btnExportar && fechaDesde && fechaHasta) {
-        btnExportar.setAttribute("data-base-url", btnExportar.href);
+        btnExportar.setAttribute("data-base-url", btnExportar.getAttribute("href"));
+        btnExportar.removeAttribute("href"); // Eliminar href por defecto
+        validarFechas();
         fechaDesde.addEventListener("change", validarFechas);
         fechaHasta.addEventListener("change", validarFechas);
-        validarFechas();
     }
 });
 </script>
