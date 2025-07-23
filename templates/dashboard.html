@@ -136,11 +136,9 @@
       <label for="linea" class="form-label">Línea</label>
       <select name="linea" class="form-control" required>
         <option value="">-- Seleccione Línea --</option>
-        {% for linea in lineas %}
-          <option value="{{ linea['nombre'] }}">{{ linea['nombre'] }}</option>
-        {% endfor %}
       </select>
     </div>
+
   
     <div class="col-md-12">
       <label for="comentarios" class="form-label">Comentarios</label>
@@ -276,6 +274,46 @@
     });
   });
 </script>
+<script type="text/javascript">
+  document.addEventListener("DOMContentLoaded", function () {
+    const clienteSelect = document.querySelector('select[name="cliente"]');
+    const ccSelect      = document.querySelector('select[name="centro_costo"]');
+    const lineaSelect   = document.querySelector('select[name="linea"]');
+    const clienteData   = {{ cliente_cc_lineas | tojson | safe }};
+
+    function poblar(cliente) {
+      if (ccSelect) {
+        ccSelect.innerHTML = '<option value="">-- Seleccione Centro de Costo --</option>';
+      }
+      lineaSelect.innerHTML = '<option value="">-- Seleccione Línea --</option>';
+
+      if (clienteData[cliente]) {
+        {% if role in ['admin', 'superadmin'] %}
+        clienteData[cliente].centros_costo.forEach(function(cc) {
+          const o = document.createElement("option");
+          o.value = o.textContent = cc;
+          ccSelect.appendChild(o);
+        });
+        {% endif %}
+
+        clienteData[cliente].lineas.forEach(function(li) {
+          const o = document.createElement("option");
+          o.value = o.textContent = li;
+          lineaSelect.appendChild(o);
+        });
+      }
+    }
+
+    clienteSelect.addEventListener("change", function () {
+      poblar(this.value);
+    });
+
+    if (clienteSelect.value) {
+      poblar(clienteSelect.value);
+    }
+  });
+</script>
+
 
 {% endblock %}
 

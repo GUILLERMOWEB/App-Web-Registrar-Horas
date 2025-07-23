@@ -132,15 +132,13 @@
       </select>
     </div>
 
-    <div class="col-md-4">
+   <div class="col-md-4 mb-3">
       <label for="linea" class="form-label">Línea</label>
-      <select name="linea" class="form-select">
+      <select name="linea" class="form-control" required>
         <option value="">-- Seleccionar Línea --</option>
-        {% for l in lineas %}
-          <option value="{{ l.nombre }}" {% if l.nombre == registro.linea %}selected{% endif %}>{{ l.nombre }}</option>
-        {% endfor %}
       </select>
     </div>
+
 
     <div class="col-md-8">
       <label for="comentarios" class="form-label">Comentarios</label>
@@ -196,4 +194,46 @@ document.addEventListener("DOMContentLoaded", function () {
   }
 });
 </script>
+<script type="text/javascript">
+  document.addEventListener("DOMContentLoaded", function () {
+    const clienteSelect = document.querySelector('select[name="cliente"]');
+    const ccSelect      = document.querySelector('select[name="centro_costo"]');
+    const lineaSelect   = document.querySelector('select[name="linea"]');
+    const clienteData   = {{ cliente_cc_lineas | tojson | safe }};
+
+    function poblar(cliente) {
+      if (ccSelect) {
+        ccSelect.innerHTML = '<option value="">-- Seleccione Centro de Costo --</option>';
+      }
+      lineaSelect.innerHTML = '<option value="">-- Seleccionar Línea --</option>';
+
+      if (clienteData[cliente]) {
+        {% if role in ['admin', 'superadmin'] %}
+        clienteData[cliente].centros_costo.forEach(function(cc) {
+          const o = document.createElement("option");
+          o.value = o.textContent = cc;
+          if (cc === "{{ registro.centro_costo }}") o.selected = true;
+          ccSelect.appendChild(o);
+        });
+        {% endif %}
+
+        clienteData[cliente].lineas.forEach(function(li) {
+          const o = document.createElement("option");
+          o.value = o.textContent = li;
+          if (li === "{{ registro.linea }}") o.selected = true;
+          lineaSelect.appendChild(o);
+        });
+      }
+    }
+
+    clienteSelect.addEventListener("change", function () {
+      poblar(this.value);
+    });
+
+    if (clienteSelect.value) {
+      poblar(clienteSelect.value);
+    }
+  });
+</script>
+
 {% endblock %}
