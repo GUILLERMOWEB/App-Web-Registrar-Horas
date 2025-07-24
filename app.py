@@ -93,7 +93,7 @@ def inicio():
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     if request.method == 'POST':
-        username = request.form['username'].strip().lower().title()
+        username = request.form['username'].strip().lower()
         password = request.form['password']
 
         user = User.query.filter(
@@ -647,7 +647,7 @@ def crear_admin():
         return redirect(url_for('login'))
 
     if request.method == 'POST':
-        username = request.form.get('username', '').strip().lower().title()
+        username = request.form.get('username', '').strip().lower()
         password = request.form.get('password')
         confirmar = request.form.get('confirmar_password')
 
@@ -749,7 +749,7 @@ def crear_usuario():
         return redirect(url_for('login'))
 
     if request.method == 'POST':
-        username = request.form['username'].strip().lower().title()
+        username = request.form['username'].strip().lower()
         password = request.form['password']
         confirmar = request.form['confirmar_password']
 
@@ -771,7 +771,7 @@ def crear_usuario():
 @app.route('/registro', methods=['GET', 'POST'])
 def registro():
     if request.method == 'POST':
-        username = request.form['username'].strip().lower().title()
+        username = request.form['username'].strip().lower()
         password = request.form['password']
         confirmar = request.form['confirmar_password']
 
@@ -807,7 +807,7 @@ def editar_usuario(id):
     user = User.query.get_or_404(id)  # Busca el usuario por ID, si no lo encuentra, lanza error 404
 
     if request.method == 'POST':  # Si se recibe una solicitud POST (cuando el formulario es enviado)
-        user.username = request.form['username'].strip().title()
+        user.username = request.form['username'].strip().lower()
         #user.email = request.form['email']
         user.role = request.form['role']
         user.password = request.form['password']  # <- Agregado acá
