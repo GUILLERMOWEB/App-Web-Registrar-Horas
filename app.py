@@ -293,7 +293,7 @@ def dashboard():
     cliente_prefijo = {
         'Barraca Deambrosi SA'            : 'UYC-BARRACA',
         'Belficor SA'                     : 'UYP-BELFICOR',
-        'Compañía Salus SA',              : 'UYP-FTE Salus',
+        'Compañía Salus SA'               : 'UYP-FTE Salus',
         'Cooperativa Agraria de (CALCAR)' : 'UYC-COAGRARIA',
         'Gibur S.A.'                      : 'UYC-GIBUR',
         'Nolir S.A.'                      : 'UYC-NOLIR',
@@ -616,7 +616,7 @@ def editar_registro(id):
     cliente_prefijo = {
         'Barraca Deambrosi SA'            : 'UYC-BARRACA',
         'Belficor SA'                     : 'UYP-BELFICOR',
-        'Compañía Salus SA',              : 'UYP-FTE Salus',
+        'Compañía Salus SA'               : 'UYP-FTE Salus',
         'Cooperativa Agraria de (CALCAR)' : 'UYC-COAGRARIA',
         'Gibur S.A.'                      : 'UYC-GIBUR',
         'Nolir S.A.'                      : 'UYC-NOLIR',
