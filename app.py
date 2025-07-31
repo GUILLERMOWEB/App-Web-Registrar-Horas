@@ -123,8 +123,9 @@ def dashboard():
         'Belficor SA',
         'Cerealin San Jose',
         'Compañía Salus SA',
-        'CONAPROLE Planta CIM',
-        'CONAPROLE Planta VIII',
+        'Conaprole Planta CIM (Carton))',
+        'Conaprole Planta CIM (Proceso)',
+        'Conaprole Planta VIII',
         'Cooperativa Agraria de (CALCAR)',
         'Gibur S.A.',
         'Jugos del Uruguay SA',
@@ -138,20 +139,21 @@ def dashboard():
     contratos = ['Contrato legal 1', 'Contrato legal 2', 'Contrato legal 3']
     service_orders = ['SM02', 'SM03','N/A']
     centros_costo = [
-        {'id': 1, 'nombre': 'Barraca Deambrosi SA C.Costo=1 (40102623)'},
-        {'id': 2, 'nombre': 'Cooperativa Agraria de (CALCAR) C.Costo=2 (40102624)'},
-        {'id': 3, 'nombre': 'Gibur S.A. C.Costo=3 (40102626)'},
-        {'id': 4, 'nombre': 'Nolir S.A. C.Costo=4 (40102627)'},
-        {'id': 5, 'nombre': 'Recalco SA (ex Suadil) C.Costo=5 (40102628)'},
-        {'id': 6, 'nombre': 'CONAPROLE Planta CIM C.Costo=6 (40094915)'},
-        {'id': 7, 'nombre': 'CONAPROLE Planta VIII C.Costo=7 (40094917)'},
-        {'id': 8, 'nombre': 'Cerealin San Jose C.Costo=8 (40094911)'},
-        {'id': 9, 'nombre': 'Jugos del Uruguay SA  GMB revisar (99)'},
-        {'id': 10, 'nombre': 'FUERA DE CONTRATO'},       
-        {'id': 11, 'nombre': '9560218510'},
-        {'id': 12, 'nombre': 'Belficor SA C.Costo='},
-        {'id': 13, 'nombre': 'Compañía Salus SA C.Costo='},
-        {'id': 14, 'nombre': 'N/A'}
+        {'id': 1, 'nombre': 'Barraca Deambrosi SA C.Costo=1 ()'},
+        {'id': 2, 'nombre': 'Cooperativa Agraria de (CALCAR) C.Costo=2 ()'},
+        {'id': 3, 'nombre': 'Gibur S.A. C.Costo=3 ()'},
+        {'id': 4, 'nombre': 'Nolir S.A. C.Costo=4 ()'},
+        {'id': 5, 'nombre': 'Recalco SA (ex Suadil) C.Costo=5 ()'},
+        {'id': 6, 'nombre': 'CONAPROLE Planta CIM (Carton) C.Costo=6 ()'},
+        {'id': 7, 'nombre': 'CONAPROLE Planta CIM (Proceso) C.Costo= ()'},
+        {'id': 8, 'nombre': 'CONAPROLE Planta VIII C.Costo=7 ()'},
+        {'id': 9, 'nombre': 'Cerealin San Jose C.Costo=8 ()'},
+        {'id': 10, 'nombre': 'Jugos del Uruguay SA  GMB revisar ()'},
+        {'id': 11, 'nombre': 'FUERA DE CONTRATO'},       
+        {'id': 12, 'nombre': '9560218510'},
+        {'id': 13, 'nombre': 'Belficor SA C.Costo='},
+        {'id': 14, 'nombre': 'Compañía Salus SA C.Costo='},
+        {'id': 15, 'nombre': 'N/A'}
     ]
 
     tipos_servicio = [
@@ -194,7 +196,21 @@ def dashboard():
         {'id': 25, 'nombre': 'UYP-FTE SALUS MIN-TREAT   Máquina-Tetra Alcip Nacional                N/S-B6069919/02'},
         {'id': 26, 'nombre': 'UYP-FTE SALUS MIN-TREAT   Máquina-Tanque Ultra Clean Nacional         N/S-B6123596/01'},
         {'id': 27, 'nombre': 'UYP-FTE SALUS MIN-TREAT   Máquina-Modulo CIP                          N/S-B6249678/01 '},
-        {'id': 28, 'nombre': 'N/A'}
+        {'id': 28, 'nombre': 'UYP-CONAPROLE CIM-IC 01   Máquina-Tetra Pak® Ingredient Doser 4000 A2 N/S-Z2014162 '},
+        {'id': 29, 'nombre': 'UYP-CONAPROLE CIM-IC 01   Máquina-Choice Filler by Tetra Pak®         N/S-395-008-2019 '},
+        {'id': 30, 'nombre': 'UYP-CONAPROLE CIM-MP 01   Máquina-Tetra Pak Aseptic Tank VD           N/S-T5844611780 '},
+        {'id': 31, 'nombre': 'UYP-CONAPROLE CIM-TREAT   Máquina-TETRA ALEX 30                       N/S-T5845523408 '},
+        {'id': 32, 'nombre': 'UYP-CONAPROLE CIM-TREAT   Máquina-TETRA ALEX 30                       N/S-5845520129 '},
+        {'id': 33, 'nombre': 'UYP-CONAPROLE CIM-TREAT   Máquina-Tetra Centri MRPX318TGV             N/S-2969461 '},
+        {'id': 34, 'nombre': 'UYP-CONAPROLE CIM-TREAT   Máquina-Tetra Centri MRPX318TGV             N/S-2969463 '},
+        {'id': 35, 'nombre': 'UYP-CONAPROLE CIM-TREAT   Máquina-Tetra Centri MRPX318TGV             N/S-2969464 '},
+        {'id': 36, 'nombre': 'UYP-CONAPROLE CIM-TREAT   Máquina-Tetra Plex MS10 SBL                 N/S-30104-38510 '},
+        {'id': 37, 'nombre': 'UYP-CONAPROLE CIM-TREAT   Máquina-Tetra Plex MS10 SBL                 N/S-30104-38511 '},
+        {'id': 38, 'nombre': 'UYP-CONAPROLE CIM-TREAT   Máquina-Tetra Plex MS6 SBL                  N/S-30104-38509 '},      
+        {'id': 39, 'nombre': 'UYP-CONAPROLE CIM-TREAT   Máquina-Tetra Plex Plex C8                  N/S-30104-38508 '},
+        {'id': 40, 'nombre': 'UYP-CONAPROLE CIM-TREAT   Máquina-Tetra Plex, C8                      N/S-30107-34617 '},
+        {'id': 41, 'nombre': 'UYP-CONAPROLE CIM-UHT01   Máquina-Tetra Pak Aseptic Tank LV           N/S-T5845520044 '},
+        {'id': 42, 'nombre': 'N/A'}
     ]
 
 
@@ -298,8 +314,9 @@ def dashboard():
         'Gibur S.A.'                      : 'UYC-GIBUR',
         'Nolir S.A.'                      : 'UYC-NOLIR',
         'Recalco SA (ex Suadil)'          : 'UYC-RECALCO',
-        'CONAPROLE Planta CIM'            : 'UYC-CONAPROLE CIM',
-        'CONAPROLE Planta VIII'           : 'UYC-CONAPROLE P08',
+        'Conaprole Planta CIM (Carton)'   : 'UYC-CONAPROLE CIM',
+        'Conaprole Planta CIM (Proceso)'  : 'UYP-CONAPROLE CIM',
+        'Conaprole Planta VIII'           : 'UYC-CONAPROLE P08',
         'Cerealin San Jose'               : 'UYC-CEREALIN',
         'Jugos del Uruguay SA'            : '',  # definir si hay prefijo
         'OTRO CLIENTE CLUSTER'            : '',
@@ -476,8 +493,9 @@ def editar_registro(id):
         'Belficor SA',
         'Cerealin San Jose',
         'Compañía Salus SA',
-        'CONAPROLE Planta CIM',
-        'CONAPROLE Planta VIII',
+        'Conaprole Planta CIM (Carton))',
+        'Conaprole Planta CIM (Proceso)',
+        'Conaprole Planta VIII',
         'Cooperativa Agraria de (CALCAR)',
         'Gibur S.A.',
         'Jugos del Uruguay SA',
@@ -494,20 +512,21 @@ def editar_registro(id):
     service_orders = ['SM02', 'SM03', 'N/A']
 
     centros_costo = [
-        {'id': 1, 'nombre': 'Barraca Deambrosi SA C.Costo=1 (40102623)'},
-        {'id': 2, 'nombre': 'Cooperativa Agraria de (CALCAR) C.Costo=2 (40102624)'},
-        {'id': 3, 'nombre': 'Gibur S.A. C.Costo=3 (40102626)'},
-        {'id': 4, 'nombre': 'Nolir S.A. C.Costo=4 (40102627)'},
-        {'id': 5, 'nombre': 'Recalco SA (ex Suadil) C.Costo=5 (40102628)'},
-        {'id': 6, 'nombre': 'CONAPROLE Planta CIM C.Costo=6 (40094915)'},
-        {'id': 7, 'nombre': 'CONAPROLE Planta VIII C.Costo=7 (40094917)'},
-        {'id': 8, 'nombre': 'Cerealin San Jose C.Costo=8 (40094911)'},
-        {'id': 9, 'nombre': 'Jugos del Uruguay SA  GMB revisar (99)'},
-        {'id': 10, 'nombre': 'FUERA DE CONTRATO'},       
-        {'id': 11, 'nombre': '9560218510'},
-        {'id': 12, 'nombre': 'Belficor SA C.Costo='},
-        {'id': 13, 'nombre': 'Compañía Salus SA C.Costo='},
-        {'id': 14, 'nombre': 'N/A'}
+        {'id': 1, 'nombre': 'Barraca Deambrosi SA C.Costo=1 ()'},
+        {'id': 2, 'nombre': 'Cooperativa Agraria de (CALCAR) C.Costo=2 ()'},
+        {'id': 3, 'nombre': 'Gibur S.A. C.Costo=3 ()'},
+        {'id': 4, 'nombre': 'Nolir S.A. C.Costo=4 ()'},
+        {'id': 5, 'nombre': 'Recalco SA (ex Suadil) C.Costo=5 ()'},
+        {'id': 6, 'nombre': 'CONAPROLE Planta CIM (Carton) C.Costo=6 ()'},
+        {'id': 7, 'nombre': 'CONAPROLE Planta CIM (Proceso) C.Costo= ()'},
+        {'id': 8, 'nombre': 'CONAPROLE Planta VIII C.Costo=7 ()'},
+        {'id': 9, 'nombre': 'Cerealin San Jose C.Costo=8 ()'},
+        {'id': 10, 'nombre': 'Jugos del Uruguay SA  GMB revisar ()'},
+        {'id': 11, 'nombre': 'FUERA DE CONTRATO'},       
+        {'id': 12, 'nombre': '9560218510'},
+        {'id': 13, 'nombre': 'Belficor SA C.Costo='},
+        {'id': 14, 'nombre': 'Compañía Salus SA C.Costo='},
+        {'id': 15, 'nombre': 'N/A'}
     ]
 
     tipos_servicio = [
@@ -551,7 +570,21 @@ def editar_registro(id):
         {'id': 25, 'nombre': 'UYP-FTE SALUS MIN-TREAT   Máquina-Tetra Alcip Nacional                N/S-B6069919/02'},
         {'id': 26, 'nombre': 'UYP-FTE SALUS MIN-TREAT   Máquina-Tanque Ultra Clean Nacional         N/S-B6123596/01'},
         {'id': 27, 'nombre': 'UYP-FTE SALUS MIN-TREAT   Máquina-Modulo CIP                          N/S-B6249678/01 '},
-        {'id': 28, 'nombre': 'N/A'}
+        {'id': 28, 'nombre': 'UYP-CONAPROLE CIM-IC 01   Máquina-Tetra Pak® Ingredient Doser 4000 A2 N/S-Z2014162 '},
+        {'id': 29, 'nombre': 'UYP-CONAPROLE CIM-IC 01   Máquina-Choice Filler by Tetra Pak®         N/S-395-008-2019 '},
+        {'id': 30, 'nombre': 'UYP-CONAPROLE CIM-MP 01   Máquina-Tetra Pak Aseptic Tank VD           N/S-T5844611780 '},
+        {'id': 31, 'nombre': 'UYP-CONAPROLE CIM-TREAT   Máquina-TETRA ALEX 30                       N/S-T5845523408 '},
+        {'id': 32, 'nombre': 'UYP-CONAPROLE CIM-TREAT   Máquina-TETRA ALEX 30                       N/S-5845520129 '},
+        {'id': 33, 'nombre': 'UYP-CONAPROLE CIM-TREAT   Máquina-Tetra Centri MRPX318TGV             N/S-2969461 '},
+        {'id': 34, 'nombre': 'UYP-CONAPROLE CIM-TREAT   Máquina-Tetra Centri MRPX318TGV             N/S-2969463 '},
+        {'id': 35, 'nombre': 'UYP-CONAPROLE CIM-TREAT   Máquina-Tetra Centri MRPX318TGV             N/S-2969464 '},
+        {'id': 36, 'nombre': 'UYP-CONAPROLE CIM-TREAT   Máquina-Tetra Plex MS10 SBL                 N/S-30104-38510 '},
+        {'id': 37, 'nombre': 'UYP-CONAPROLE CIM-TREAT   Máquina-Tetra Plex MS10 SBL                 N/S-30104-38511 '},
+        {'id': 38, 'nombre': 'UYP-CONAPROLE CIM-TREAT   Máquina-Tetra Plex MS6 SBL                  N/S-30104-38509 '},      
+        {'id': 39, 'nombre': 'UYP-CONAPROLE CIM-TREAT   Máquina-Tetra Plex Plex C8                  N/S-30104-38508 '},
+        {'id': 40, 'nombre': 'UYP-CONAPROLE CIM-TREAT   Máquina-Tetra Plex, C8                      N/S-30107-34617 '},
+        {'id': 41, 'nombre': 'UYP-CONAPROLE CIM-UHT01   Máquina-Tetra Pak Aseptic Tank LV           N/S-T5845520044 '},
+        {'id': 42, 'nombre': 'N/A'}
     ]
 
     if request.method == 'POST':
@@ -623,8 +656,9 @@ def editar_registro(id):
         'Gibur S.A.'                      : 'UYC-GIBUR',
         'Nolir S.A.'                      : 'UYC-NOLIR',
         'Recalco SA (ex Suadil)'          : 'UYC-RECALCO',
-        'CONAPROLE Planta CIM'            : 'UYC-CONAPROLE CIM',
-        'CONAPROLE Planta VIII'           : 'UYC-CONAPROLE P08',
+        'Conaprole Planta CIM (Carton)'   : 'UYC-CONAPROLE CIM',
+        'Conaprole Planta CIM (Proceso)'  : 'UYP-CONAPROLE CIM',
+        'Conaprole Planta VIII'           : 'UYC-CONAPROLE P08',
         'Cerealin San Jose'               : 'UYC-CEREALIN',
         'Jugos del Uruguay SA'            : '',  # definir si hay prefijo
         'OTRO CLIENTE CLUSTER'            : '',
