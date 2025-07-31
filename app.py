@@ -121,16 +121,16 @@ def dashboard():
     clientes = [
         'Barraca Deambrosi SA',
         'Belficor SA',
+        'Cerealin San Jose',
         'Compañía Salus SA',
-        'Cooperativa Agraria de (CALCAR)',
-        'Gibur S.A.',
-        'Nolir S.A.',
-        'Recalco SA (ex Suadil)',
         'CONAPROLE Planta CIM',
         'CONAPROLE Planta VIII',
-        'Cerealin San Jose',
+        'Cooperativa Agraria de (CALCAR)',
+        'Gibur S.A.',
         'Jugos del Uruguay SA',
+        'Nolir S.A.',
         'OTRO CLIENTE CLUSTER',
+        'Recalco SA (ex Suadil)',
         'Tetrapak San Fernando',
         'N/A'
     ]
@@ -470,22 +470,24 @@ def editar_registro(id):
     registro = Registro.query.get_or_404(id)
 
     # Definí acá tus listas o importalas desde donde estén definidas
+    
     clientes = [
         'Barraca Deambrosi SA',
         'Belficor SA',
+        'Cerealin San Jose',
         'Compañía Salus SA',
-        'Cooperativa Agraria de (CALCAR)',
-        'Gibur S.A.',
-        'Nolir S.A.',
-        'Recalco SA (ex Suadil)',
         'CONAPROLE Planta CIM',
         'CONAPROLE Planta VIII',
-        'Cerealin San Jose',
+        'Cooperativa Agraria de (CALCAR)',
+        'Gibur S.A.',
         'Jugos del Uruguay SA',
+        'Nolir S.A.',
         'OTRO CLIENTE CLUSTER',
+        'Recalco SA (ex Suadil)',
         'Tetrapak San Fernando',
         'N/A'
     ]
+
 
     contratos = ['Contrato legal 1', 'Contrato legal 2', 'Contrato legal 3']
 
