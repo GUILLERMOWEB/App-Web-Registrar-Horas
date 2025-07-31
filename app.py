@@ -150,7 +150,7 @@ def dashboard():
         {'id': 10, 'nombre': 'FUERA DE CONTRATO'},       
         {'id': 11, 'nombre': '9560218510'},
         {'id': 12, 'nombre': 'Belficor SA C.Costo='},
-        {'id': 13, 'nombre': 'Compañia Salus SA C.Costo='},
+        {'id': 13, 'nombre': 'Compañía Salus SA C.Costo='},
         {'id': 14, 'nombre': 'N/A'}
     ]
 
@@ -504,7 +504,7 @@ def editar_registro(id):
         {'id': 10, 'nombre': 'FUERA DE CONTRATO'},       
         {'id': 11, 'nombre': '9560218510'},
         {'id': 12, 'nombre': 'Belficor SA C.Costo='},
-        {'id': 13, 'nombre': 'Compañia Salus SA C.Costo='},
+        {'id': 13, 'nombre': 'Compañía Salus SA C.Costo='},
         {'id': 14, 'nombre': 'N/A'}
     ]
 
