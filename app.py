@@ -357,7 +357,7 @@ def dashboard():
         centros_costo=centros_costo,
         tipos_servicio=tipos_servicio,
         lineas=lineas,
-        cliente_cc_lineas = cliente_cc_lineas
+        cliente_cc_lineas = cliente_cc_lineas,
         tipo_cliente=tipo_cliente
     )
 
