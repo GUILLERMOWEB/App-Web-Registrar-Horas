@@ -121,6 +121,7 @@ def dashboard():
     clientes = [
         'Barraca Deambrosi SA',
         'Belficor SA',
+        'Compañía Salus SA',
         'Cooperativa Agraria de (CALCAR)',
         'Gibur S.A.',
         'Nolir S.A.',
@@ -149,7 +150,8 @@ def dashboard():
         {'id': 10, 'nombre': 'FUERA DE CONTRATO'},       
         {'id': 11, 'nombre': '9560218510'},
         {'id': 12, 'nombre': 'Belficor SA C.Costo='},
-        {'id': 13, 'nombre': 'N/A'}
+        {'id': 13, 'nombre': 'Compañia Salus SA C.Costo='},
+        {'id': 14, 'nombre': 'N/A'}
     ]
 
     tipos_servicio = [
@@ -165,27 +167,34 @@ def dashboard():
         {'id': 10, 'nombre': 'Claims'}
     ]
     lineas = [
-        {'id': 1,  'nombre': 'UYC-BARRACA   MVD-LIN01   Máquina-TBA/3       N/S-11443/05537'},
-        {'id': 2,  'nombre': 'UYC-BARRACA   MVD-LIN02   Máquina-TBA/8       N/S-20201/82004'},
-        {'id': 3,  'nombre': 'UYC-BARRACA   MVD-LIN03   Máquina-SIMPLY8     N/S-21222/00018'},
-        {'id': 4,  'nombre': 'UYC-BARRACA   MVD-LIN04   Máquina-TBA/19      N/S-20562/83308'},
-        {'id': 5,  'nombre': 'UYC-COAGRARIA CAR-LN 01   Máquina-TBA/8       N/S-13037/10830'},
-        {'id': 6,  'nombre': 'UYC-COAGRARIA CAR-LN 02   Máquina-TP C3/F     N/S-15034/00004'},
-        {'id': 7,  'nombre': 'UYC-NOLIR     MVD-LIN01   Máquina-TBA/19      N/S-20591/83337'},
-        {'id': 8,  'nombre': 'UYC-NOLIR     MVD-LIN02   Máquina-TBA/8       N/S-15010/00889'},
-        {'id': 9,  'nombre': 'UYC-CEREALIN  SJO-LIN01   Máquina-TBA/8       N/S-13588/11417'},
-        {'id': 10, 'nombre': 'UYC-CEREALIN  SJO-LIN04   Máquina-TP A3/CF    N/S-21220/00466'},
-        {'id': 11, 'nombre': 'UYC-CONAPROLE CIM-LIN02   Máquina-TBA/19      N/S-20258/82571'},
-        {'id': 12, 'nombre': 'UYC-CONAPROLE CIM-LIN03   Máquina-TT/3        N/S-63202/20090'},
-        {'id': 13, 'nombre': 'UYC-CONAPROLE P08-LIN01   Máquina-TBA/8       N/S-20239/82382'},
-        {'id': 14, 'nombre': 'UYC-CONAPROLE P08-LIN02   Máquina-TBA/8       N/S-13879/11665'},
-        {'id': 15, 'nombre': 'UYC-CONAPROLE P08-LIN03   Máquina-TBA/8       N/S-13457/11304'},
-        {'id': 16, 'nombre': 'UYC-CONAPROLE P08-LIN04   Máquina-TBA/8       N/S-13486/11332'},
-        {'id': 17, 'nombre': 'UYC-GIBUR     MVD-LIN01   Máquina-TBA/8       N/S-17010/00018'},
-        {'id': 18, 'nombre': 'UYC-RECALCO   MVD-LIN01   Máquina-TBA/3       N/S-20078/80780'},
-        {'id': 19, 'nombre': 'UYC-RECALCO   MVD-LIN02   Máquina-TBA/8       N/S-12967/10664'},
-        {'id': 20, 'nombre': 'UYP-BELFICOR  MDV-CIP     Máquina-Tetra Alcip 2 N/S-C6075349/01'},
-        {'id': 21, 'nombre': 'N/A'}
+        {'id': 1,  'nombre': 'UYC-BARRACA   MVD-LIN01   Máquina-TBA/3                               N/S-11443/05537'},
+        {'id': 2,  'nombre': 'UYC-BARRACA   MVD-LIN02   Máquina-TBA/8                               N/S-20201/82004'},
+        {'id': 3,  'nombre': 'UYC-BARRACA   MVD-LIN03   Máquina-SIMPLY8                             N/S-21222/00018'},
+        {'id': 4,  'nombre': 'UYC-BARRACA   MVD-LIN04   Máquina-TBA/19                              N/S-20562/83308'},
+        {'id': 5,  'nombre': 'UYC-COAGRARIA CAR-LN 01   Máquina-TBA/8                               N/S-13037/10830'},
+        {'id': 6,  'nombre': 'UYC-COAGRARIA CAR-LN 02   Máquina-TP C3/F                             N/S-15034/00004'},
+        {'id': 7,  'nombre': 'UYC-NOLIR     MVD-LIN01   Máquina-TBA/19                              N/S-20591/83337'},
+        {'id': 8,  'nombre': 'UYC-NOLIR     MVD-LIN02   Máquina-TBA/8                               N/S-15010/00889'},
+        {'id': 9,  'nombre': 'UYC-CEREALIN  SJO-LIN01   Máquina-TBA/8                               N/S-13588/11417'},
+        {'id': 10, 'nombre': 'UYC-CEREALIN  SJO-LIN04   Máquina-TP A3/CF                            N/S-21220/00466'},
+        {'id': 11, 'nombre': 'UYC-CONAPROLE CIM-LIN02   Máquina-TBA/19                              N/S-20258/82571'},
+        {'id': 12, 'nombre': 'UYC-CONAPROLE CIM-LIN03   Máquina-TT/3                                N/S-63202/20090'},
+        {'id': 13, 'nombre': 'UYC-CONAPROLE P08-LIN01   Máquina-TBA/8                               N/S-20239/82382'},
+        {'id': 14, 'nombre': 'UYC-CONAPROLE P08-LIN02   Máquina-TBA/8                               N/S-13879/11665'},
+        {'id': 15, 'nombre': 'UYC-CONAPROLE P08-LIN03   Máquina-TBA/8                               N/S-13457/11304'},
+        {'id': 16, 'nombre': 'UYC-CONAPROLE P08-LIN04   Máquina-TBA/8                               N/S-13486/11332'},
+        {'id': 17, 'nombre': 'UYC-GIBUR     MVD-LIN01   Máquina-TBA/8                               N/S-17010/00018'},
+        {'id': 18, 'nombre': 'UYC-RECALCO   MVD-LIN01   Máquina-TBA/3                               N/S-20078/80780'},
+        {'id': 19, 'nombre': 'UYC-RECALCO   MVD-LIN02   Máquina-TBA/8                               N/S-12967/10664'},
+        {'id': 20, 'nombre': 'UYP-BELFICOR  MDV-CIP     Máquina-Tetra Alcip 2                       N/S-C6075349/01'},
+        {'id': 21, 'nombre': 'UYP-FTE SALUS MIN-TREAT   Máquina-Tetra Therm Nacional                N/S-B04013-02'},
+        {'id': 22, 'nombre': 'UYP-FTE SALUS MIN-TREAT   Máquina-Tetra Plex MS6 SR                   N/S-30105-08295'},
+        {'id': 23, 'nombre': 'UYP-FTE SALUS MIN-TREAT   Máquina-Tetra Plex C8 in B6069919/01        N/S-30106-34366'},
+        {'id': 24, 'nombre': 'UYP-FTE SALUS MIN-TREAT   Máquina-Tetra Therm Nacional                N/S-B6069919/01'},
+        {'id': 25, 'nombre': 'UYP-FTE SALUS MIN-TREAT   Máquina-Tetra Alcip Nacional                N/S-B6069919/02'},
+        {'id': 26, 'nombre': 'UYP-FTE SALUS MIN-TREAT   Máquina-Tanque Ultra Clean Nacional         N/S-B6123596/01'},
+        {'id': 27, 'nombre': 'UYP-FTE SALUS MIN-TREAT   Máquina-Modulo CIP                          N/S-B6249678/01 '},
+        {'id': 28, 'nombre': 'N/A'}
     ]
 
 
@@ -284,6 +293,7 @@ def dashboard():
     cliente_prefijo = {
         'Barraca Deambrosi SA'            : 'UYC-BARRACA',
         'Belficor SA'                     : 'UYP-BELFICOR',
+        'Compañía Salus SA',              : 'UYP-FTE Salus',
         'Cooperativa Agraria de (CALCAR)' : 'UYC-COAGRARIA',
         'Gibur S.A.'                      : 'UYC-GIBUR',
         'Nolir S.A.'                      : 'UYC-NOLIR',
@@ -463,6 +473,7 @@ def editar_registro(id):
     clientes = [
         'Barraca Deambrosi SA',
         'Belficor SA',
+        'Compañía Salus SA',
         'Cooperativa Agraria de (CALCAR)',
         'Gibur S.A.',
         'Nolir S.A.',
@@ -493,7 +504,8 @@ def editar_registro(id):
         {'id': 10, 'nombre': 'FUERA DE CONTRATO'},       
         {'id': 11, 'nombre': '9560218510'},
         {'id': 12, 'nombre': 'Belficor SA C.Costo='},
-        {'id': 13, 'nombre': 'N/A'}
+        {'id': 13, 'nombre': 'Compañia Salus SA C.Costo='},
+        {'id': 14, 'nombre': 'N/A'}
     ]
 
     tipos_servicio = [
@@ -510,27 +522,34 @@ def editar_registro(id):
     ]
 
     lineas = [
-        {'id': 1,  'nombre': 'UYC-BARRACA   MVD-LIN01   Máquina-TBA/3       N/S-11443/05537'},
-        {'id': 2,  'nombre': 'UYC-BARRACA   MVD-LIN02   Máquina-TBA/8       N/S-20201/82004'},
-        {'id': 3,  'nombre': 'UYC-BARRACA   MVD-LIN03   Máquina-SIMPLY8     N/S-21222/00018'},
-        {'id': 4,  'nombre': 'UYC-BARRACA   MVD-LIN04   Máquina-TBA/19      N/S-20562/83308'},
-        {'id': 5,  'nombre': 'UYC-COAGRARIA CAR-LN 01   Máquina-TBA/8       N/S-13037/10830'},
-        {'id': 6,  'nombre': 'UYC-COAGRARIA CAR-LN 02   Máquina-TP C3/F     N/S-15034/00004'},
-        {'id': 7,  'nombre': 'UYC-NOLIR     MVD-LIN01   Máquina-TBA/19      N/S-20591/83337'},
-        {'id': 8,  'nombre': 'UYC-NOLIR     MVD-LIN02   Máquina-TBA/8       N/S-15010/00889'},
-        {'id': 9,  'nombre': 'UYC-CEREALIN  SJO-LIN01   Máquina-TBA/8       N/S-13588/11417'},
-        {'id': 10, 'nombre': 'UYC-CEREALIN  SJO-LIN04   Máquina-TP A3/CF    N/S-21220/00466'},
-        {'id': 11, 'nombre': 'UYC-CONAPROLE CIM-LIN02   Máquina-TBA/19      N/S-20258/82571'},
-        {'id': 12, 'nombre': 'UYC-CONAPROLE CIM-LIN03   Máquina-TT/3        N/S-63202/20090'},
-        {'id': 13, 'nombre': 'UYC-CONAPROLE P08-LIN01   Máquina-TBA/8       N/S-20239/82382'},
-        {'id': 14, 'nombre': 'UYC-CONAPROLE P08-LIN02   Máquina-TBA/8       N/S-13879/11665'},
-        {'id': 15, 'nombre': 'UYC-CONAPROLE P08-LIN03   Máquina-TBA/8       N/S-13457/11304'},
-        {'id': 16, 'nombre': 'UYC-CONAPROLE P08-LIN04   Máquina-TBA/8       N/S-13486/11332'},
-        {'id': 17, 'nombre': 'UYC-GIBUR     MVD-LIN01   Máquina-TBA/8       N/S-17010/00018'},
-        {'id': 18, 'nombre': 'UYC-RECALCO   MVD-LIN01   Máquina-TBA/3       N/S-20078/80780'},
-        {'id': 19, 'nombre': 'UYC-RECALCO   MVD-LIN02   Máquina-TBA/8       N/S-12967/10664'},
-        {'id': 20, 'nombre': 'UYP-BELFICOR  MDV-CIP     Máquina-Tetra Alcip 2 N/S-C6075349/01'},
-        {'id': 21, 'nombre': 'N/A'}
+        {'id': 1,  'nombre': 'UYC-BARRACA   MVD-LIN01   Máquina-TBA/3                               N/S-11443/05537'},
+        {'id': 2,  'nombre': 'UYC-BARRACA   MVD-LIN02   Máquina-TBA/8                               N/S-20201/82004'},
+        {'id': 3,  'nombre': 'UYC-BARRACA   MVD-LIN03   Máquina-SIMPLY8                             N/S-21222/00018'},
+        {'id': 4,  'nombre': 'UYC-BARRACA   MVD-LIN04   Máquina-TBA/19                              N/S-20562/83308'},
+        {'id': 5,  'nombre': 'UYC-COAGRARIA CAR-LN 01   Máquina-TBA/8                               N/S-13037/10830'},
+        {'id': 6,  'nombre': 'UYC-COAGRARIA CAR-LN 02   Máquina-TP C3/F                             N/S-15034/00004'},
+        {'id': 7,  'nombre': 'UYC-NOLIR     MVD-LIN01   Máquina-TBA/19                              N/S-20591/83337'},
+        {'id': 8,  'nombre': 'UYC-NOLIR     MVD-LIN02   Máquina-TBA/8                               N/S-15010/00889'},
+        {'id': 9,  'nombre': 'UYC-CEREALIN  SJO-LIN01   Máquina-TBA/8                               N/S-13588/11417'},
+        {'id': 10, 'nombre': 'UYC-CEREALIN  SJO-LIN04   Máquina-TP A3/CF                            N/S-21220/00466'},
+        {'id': 11, 'nombre': 'UYC-CONAPROLE CIM-LIN02   Máquina-TBA/19                              N/S-20258/82571'},
+        {'id': 12, 'nombre': 'UYC-CONAPROLE CIM-LIN03   Máquina-TT/3                                N/S-63202/20090'},
+        {'id': 13, 'nombre': 'UYC-CONAPROLE P08-LIN01   Máquina-TBA/8                               N/S-20239/82382'},
+        {'id': 14, 'nombre': 'UYC-CONAPROLE P08-LIN02   Máquina-TBA/8                               N/S-13879/11665'},
+        {'id': 15, 'nombre': 'UYC-CONAPROLE P08-LIN03   Máquina-TBA/8                               N/S-13457/11304'},
+        {'id': 16, 'nombre': 'UYC-CONAPROLE P08-LIN04   Máquina-TBA/8                               N/S-13486/11332'},
+        {'id': 17, 'nombre': 'UYC-GIBUR     MVD-LIN01   Máquina-TBA/8                               N/S-17010/00018'},
+        {'id': 18, 'nombre': 'UYC-RECALCO   MVD-LIN01   Máquina-TBA/3                               N/S-20078/80780'},
+        {'id': 19, 'nombre': 'UYC-RECALCO   MVD-LIN02   Máquina-TBA/8                               N/S-12967/10664'},
+        {'id': 20, 'nombre': 'UYP-BELFICOR  MDV-CIP     Máquina-Tetra Alcip 2                       N/S-C6075349/01'},
+        {'id': 21, 'nombre': 'UYP-FTE SALUS MIN-TREAT   Máquina-Tetra Therm Nacional                N/S-B04013-02'},
+        {'id': 22, 'nombre': 'UYP-FTE SALUS MIN-TREAT   Máquina-Tetra Plex MS6 SR                   N/S-30105-08295'},
+        {'id': 23, 'nombre': 'UYP-FTE SALUS MIN-TREAT   Máquina-Tetra Plex C8 in B6069919/01        N/S-30106-34366'},
+        {'id': 24, 'nombre': 'UYP-FTE SALUS MIN-TREAT   Máquina-Tetra Therm Nacional                N/S-B6069919/01'},
+        {'id': 25, 'nombre': 'UYP-FTE SALUS MIN-TREAT   Máquina-Tetra Alcip Nacional                N/S-B6069919/02'},
+        {'id': 26, 'nombre': 'UYP-FTE SALUS MIN-TREAT   Máquina-Tanque Ultra Clean Nacional         N/S-B6123596/01'},
+        {'id': 27, 'nombre': 'UYP-FTE SALUS MIN-TREAT   Máquina-Modulo CIP                          N/S-B6249678/01 '},
+        {'id': 28, 'nombre': 'N/A'}
     ]
 
     if request.method == 'POST':
@@ -597,7 +616,8 @@ def editar_registro(id):
     cliente_prefijo = {
         'Barraca Deambrosi SA'            : 'UYC-BARRACA',
         'Belficor SA'                     : 'UYP-BELFICOR',
-        'Cooperativa Agraria de (CALCAR)': 'UYC-COAGRARIA',
+        'Compañía Salus SA',              : 'UYP-FTE Salus',
+        'Cooperativa Agraria de (CALCAR)' : 'UYC-COAGRARIA',
         'Gibur S.A.'                      : 'UYC-GIBUR',
         'Nolir S.A.'                      : 'UYC-NOLIR',
         'Recalco SA (ex Suadil)'          : 'UYC-RECALCO',
