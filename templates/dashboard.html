@@ -66,16 +66,6 @@
       <label for="tarea" class="form-label">Tarea</label>
       <input type="text" name="tarea" class="form-control">
     </div>
-    
-    <form method="get">
-      <label for="tipo_cliente">Tipo de Cliente:</label>
-        <select name="tipo_cliente" onchange="this.form.submit()">
-        <option value="Todos" {% if tipo_cliente == 'Todos' %}selected{% endif %}>Todos</option>
-        <option value="Cartón" {% if tipo_cliente == 'Cartón' %}selected{% endif %}>Cartón</option>
-        <option value="Proceso" {% if tipo_cliente == 'Proceso' %}selected{% endif %}>Proceso</option>
-      </select>
-    </form>
-
 
     <!-- Select para Cliente -->
     <div class="col-md-4">

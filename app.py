@@ -115,7 +115,6 @@ def login():
 def dashboard():
     if 'user_id' not in session:
         return redirect(url_for('login'))
-    tipo_cliente = request.args.get('tipo_cliente', 'Todos')
 
     # Ejemplo de listas de opciones (reemplazar por consulta a DB luego)
     
@@ -136,11 +135,6 @@ def dashboard():
         'Tetrapak San Fernando',
         'N/A'
     ]
-    
-    if tipo_cliente == 'Cartón':
-        clientes = [c for c in clientes if cliente_prefijo.get(c, '').startswith('UYC')]
-    elif tipo_cliente == 'Proceso':
-        clientes = [c for c in clientes if cliente_prefijo.get(c, '').startswith('UYP')]
 
     contratos = ['Contrato legal 1', 'Contrato legal 2', 'Contrato legal 3']
     service_orders = ['SM02', 'SM03','N/A']
@@ -357,8 +351,7 @@ def dashboard():
         centros_costo=centros_costo,
         tipos_servicio=tipos_servicio,
         lineas=lineas,
-        cliente_cc_lineas = cliente_cc_lineas,
-        tipo_cliente=tipo_cliente
+        cliente_cc_lineas = cliente_cc_lineas
     )
 
 
