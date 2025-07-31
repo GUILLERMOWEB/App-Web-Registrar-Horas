@@ -120,6 +120,7 @@ def dashboard():
     
     clientes = [
         'Barraca Deambrosi SA',
+        'Belficor SA',
         'Cooperativa Agraria de (CALCAR)',
         'Gibur S.A.',
         'Nolir S.A.',
@@ -147,7 +148,8 @@ def dashboard():
         {'id': 9, 'nombre': 'Jugos del Uruguay SA  GMB revisar (99)'},
         {'id': 10, 'nombre': 'FUERA DE CONTRATO'},       
         {'id': 11, 'nombre': '9560218510'},
-        {'id': 12, 'nombre': 'N/A'}
+        {'id': 12, 'nombre': 'Belficor SA C.Costo='},
+        {'id': 13, 'nombre': 'N/A'}
     ]
 
     tipos_servicio = [
@@ -182,7 +184,8 @@ def dashboard():
         {'id': 17, 'nombre': 'UYC-GIBUR     MVD-LIN01   Máquina-TBA/8       N/S-17010/00018'},
         {'id': 18, 'nombre': 'UYC-RECALCO   MVD-LIN01   Máquina-TBA/3       N/S-20078/80780'},
         {'id': 19, 'nombre': 'UYC-RECALCO   MVD-LIN02   Máquina-TBA/8       N/S-12967/10664'},
-        {'id': 20, 'nombre': 'N/A'}
+        {'id': 20, 'nombre': 'UYP-BELFICOR  MDV-CIP     Máquina-Tetra Alcip 2 N/S-C6075349/01'},
+        {'id': 21, 'nombre': 'N/A'}
     ]
 
 
@@ -280,6 +283,7 @@ def dashboard():
       
     cliente_prefijo = {
         'Barraca Deambrosi SA'            : 'UYC-BARRACA',
+        'Belficor SA'                     : 'UYP-BELFICOR',
         'Cooperativa Agraria de (CALCAR)' : 'UYC-COAGRARIA',
         'Gibur S.A.'                      : 'UYC-GIBUR',
         'Nolir S.A.'                      : 'UYC-NOLIR',
@@ -458,6 +462,7 @@ def editar_registro(id):
     # Definí acá tus listas o importalas desde donde estén definidas
     clientes = [
         'Barraca Deambrosi SA',
+        'Belficor SA',
         'Cooperativa Agraria de (CALCAR)',
         'Gibur S.A.',
         'Nolir S.A.',
@@ -487,7 +492,8 @@ def editar_registro(id):
         {'id': 9, 'nombre': 'Jugos del Uruguay SA  GMB revisar (99)'},
         {'id': 10, 'nombre': 'FUERA DE CONTRATO'},       
         {'id': 11, 'nombre': '9560218510'},
-        {'id': 12, 'nombre': 'N/A'}
+        {'id': 12, 'nombre': 'Belficor SA C.Costo='},
+        {'id': 13, 'nombre': 'N/A'}
     ]
 
     tipos_servicio = [
@@ -523,7 +529,8 @@ def editar_registro(id):
         {'id': 17, 'nombre': 'UYC-GIBUR     MVD-LIN01   Máquina-TBA/8       N/S-17010/00018'},
         {'id': 18, 'nombre': 'UYC-RECALCO   MVD-LIN01   Máquina-TBA/3       N/S-20078/80780'},
         {'id': 19, 'nombre': 'UYC-RECALCO   MVD-LIN02   Máquina-TBA/8       N/S-12967/10664'},
-        {'id': 20, 'nombre': 'N/A'}
+        {'id': 20, 'nombre': 'UYP-BELFICOR  MDV-CIP     Máquina-Tetra Alcip 2 N/S-C6075349/01'},
+        {'id': 21, 'nombre': 'N/A'}
     ]
 
     if request.method == 'POST':
@@ -589,6 +596,7 @@ def editar_registro(id):
         
     cliente_prefijo = {
         'Barraca Deambrosi SA'            : 'UYC-BARRACA',
+        'Belficor SA'                     : 'UYP-BELFICOR',
         'Cooperativa Agraria de (CALCAR)': 'UYC-COAGRARIA',
         'Gibur S.A.'                      : 'UYC-GIBUR',
         'Nolir S.A.'                      : 'UYC-NOLIR',
