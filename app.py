@@ -244,7 +244,7 @@ def dashboard():
         tarea = request.form.get('tarea', '').strip()
         cliente = request.form.get('cliente', '').strip()  # Si cliente es texto, OK
         comentarios = request.form.get('comentarios', '').strip()
-        contrato = bool(int(request.form.get("contrato")))
+        contrato = bool(int(request.form.get("contrato", 0)))
         service_order = request.form.get('service_order', '').strip()
 
         try:
