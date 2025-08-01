@@ -358,7 +358,8 @@ def dashboard():
         tipos_servicio=tipos_servicio,
         lineas=lineas,
         cliente_cc_lineas = cliente_cc_lineas,
-        tipo_cliente=tipo_cliente
+        tipo_cliente=tipo_cliente,
+        cliente_prefijo=cliente_prefijo  
     )
 
 
