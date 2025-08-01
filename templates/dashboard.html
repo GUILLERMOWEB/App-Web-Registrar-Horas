@@ -68,12 +68,11 @@
     </div>
 
     
-    <form method="get" action="/dashboard">
-      <label for="tipo_cliente">Tipo de equipo:</label>
-      <select name="tipo_cliente" id="tipo_cliente" onchange="this.form.submit()">
-        <option value="Todos" {% if tipo_cliente == 'Todos' %}selected{% endif %}>Todos</option>
-        <option value="Cartón" {% if tipo_cliente == 'Cartón' %}selected{% endif %}>Cartón</option>
-        <option value="Proceso" {% if tipo_cliente == 'Proceso' %}selected{% endif %}>Proceso</option>
+    <form action="/dashboard" method="get">
+      <select id="tipo_cliente" name="tipo_cliente" onchange="this.form.submit()">
+        <option %}="" %}selected{%="" endif="" if="" tipo_cliente="Todos" value="Todos" {%="">Todos</option>
+        <option %}="" %}selected{%="" endif="" if="" tipo_cliente="Cartón" value="Cartón" {%="">Cartón</option>
+        <option %}="" %}selected{%="" endif="" if="" tipo_cliente="Proceso" value="Proceso" {%="">Proceso</option>
       </select>
     </form>
 
