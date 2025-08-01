@@ -359,7 +359,7 @@ def dashboard():
         lineas=lineas,
         cliente_cc_lineas = cliente_cc_lineas,
         tipo_cliente=tipo_cliente,
-        cliente_prefijo=cliente_prefijo  
+        cliente_prefijo=cliente_prefijo
     )
 
 
