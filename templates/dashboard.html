@@ -66,34 +66,17 @@
       <label for="tarea" class="form-label">Tarea</label>
       <input type="text" name="tarea" class="form-control">
     </div>
-
-    
-    <form action="/dashboard" method="get">
-      <select id="tipo_cliente" name="tipo_cliente" onchange="this.form.submit()">
-        <option %}="" %}selected{%="" endif="" if="" tipo_cliente="Todos" value="Todos" {%="">Todos</option>
-        <option %}="" %}selected{%="" endif="" if="" tipo_cliente="Cartón" value="Cartón" {%="">Cartón</option>
-        <option %}="" %}selected{%="" endif="" if="" tipo_cliente="Proceso" value="Proceso" {%="">Proceso</option>
-      </select>
-    </form>
-
+  
     <!-- Select para Cliente -->
     <div class="col-md-4">
       <label for="cliente" class="form-label">Cliente</label>
-      <select name="cliente" id="cliente" class="form-control" required>
+      <select name="cliente" class="form-control" required>
         <option value="">-- Seleccione Cliente --</option>
-        {% for c in clientes %}
-          {% set prefijo = cliente_prefijo.get(c, '') %}
-          {% if prefijo.startswith('UYC') %}
-            <option value="{{ c }}" data-tipo="carton" {% if cliente == c %}selected{% endif %}>{{ c }}</option>
-          {% elif prefijo.startswith('UYP') %}
-            <option value="{{ c }}" data-tipo="proceso" {% if cliente == c %}selected{% endif %}>{{ c }}</option>
-          {% else %}
-            <option value="{{ c }}" data-tipo="otro" {% if cliente == c %}selected{% endif %}>{{ c }}</option>
-          {% endif %}
+        {% for cliente in clientes %}
+          <option value="{{ cliente }}">{{ cliente }}</option>
         {% endfor %}
       </select>
     </div>
-
 
     {% if role in ['admin', 'superadmin'] %}
       <!-- Select para Contrato -->
