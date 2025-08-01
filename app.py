@@ -115,6 +115,7 @@ def login():
 def dashboard():
     if 'user_id' not in session:
         return redirect(url_for('login'))
+    tipo_cliente = request.args.get('tipo_cliente', 'Todos')
     
     # Ejemplo de listas de opciones (reemplazar por consulta a DB luego)
     
@@ -135,6 +136,10 @@ def dashboard():
         'Tetrapak San Fernando',
         'N/A'
     ]
+    if tipo_cliente == 'Cartón':
+        clientes = [c for c in clientes if cliente_prefijo.get(c, '').startswith('UYC')]
+    elif tipo_cliente == 'Proceso':
+        clientes = [c for c in clientes if cliente_prefijo.get(c, '').startswith('UYP')]
 
 
     contratos = ['Contrato legal 1', 'Contrato legal 2', 'Contrato legal 3']
@@ -243,7 +248,7 @@ def dashboard():
         tarea = request.form.get('tarea', '').strip()
         cliente = request.form.get('cliente', '').strip()  # Si cliente es texto, OK
         comentarios = request.form.get('comentarios', '').strip()
-        contrato = bool(int(request.form.get("contrato", 0)))
+        contrato = bool(int(request.form.get("contrato")))
         service_order = request.form.get('service_order', '').strip()
 
         try:
@@ -324,7 +329,6 @@ def dashboard():
         'Tetrapak San Fernando'           : '',
         'N/A'                             : 'N/A'
     }
-  
       # ─── Construcción automática de cliente_cc_lineas ───
     
     cliente_cc_lineas = {}
