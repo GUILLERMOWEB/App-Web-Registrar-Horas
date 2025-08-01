@@ -81,18 +81,14 @@
 
     <!-- Select para Cliente -->
     <div class="col-md-4">
-      <label for="cliente" class="form-label">Cliente</label>
-      <select name="cliente" class="form-control" required>
+      <label for="cliente">Cliente:</label>
+      <select name="cliente" id="cliente">
         <option value="">-- Seleccione Cliente --</option>
-        {% set prefijo = cliente_prefijo.get(cliente, '') %}
-        {% if prefijo.startswith('UYC') %}
-          <option value="{{ cliente }}" data-tipo="carton">{{ cliente }}</option>
-        {% elif prefijo.startswith('UYP') %}
-          <option value="{{ cliente }}" data-tipo="proceso">{{ cliente }}</option>
-        {% else %}
-          <option value="{{ cliente }}" data-tipo="uyp">{{ cliente }}</option>
-        {% endif %}
+        {% for c in clientes %}
+          <option value="{{ c }}" {% if cliente == c %}selected{% endif %}>{{ c }}</option>
+        {% endfor %}
       </select>
+
     </div>
 
 
