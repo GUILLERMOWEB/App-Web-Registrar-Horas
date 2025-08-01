@@ -136,10 +136,6 @@ def dashboard():
         'Tetrapak San Fernando',
         'N/A'
     ]
-    if tipo_cliente == 'Cartón':
-        clientes = [c for c in clientes if cliente_prefijo.get(c, '').startswith('UYC')]
-    elif tipo_cliente == 'Proceso':
-        clientes = [c for c in clientes if cliente_prefijo.get(c, '').startswith('UYP')]
 
 
     contratos = ['Contrato legal 1', 'Contrato legal 2', 'Contrato legal 3']
@@ -329,6 +325,11 @@ def dashboard():
         'Tetrapak San Fernando'           : '',
         'N/A'                             : 'N/A'
     }
+    # Ahora sí podés filtrar por tipo
+    if tipo_cliente == 'Cartón':
+        clientes = [c for c in clientes if cliente_prefijo.get(c, '').startswith('UYC')]
+    elif tipo_cliente == 'Proceso':
+        clientes = [c for c in clientes if cliente_prefijo.get(c, '').startswith('UYP')]
       # ─── Construcción automática de cliente_cc_lineas ───
     
     cliente_cc_lineas = {}
