@@ -77,6 +77,15 @@
         {% endfor %}
       </select>
     </div>
+    </div>
+    <div class="form-group">
+      <label for="tipoEquipo">Tipo de equipo:</label>
+      <select class="form-control" id="tipoEquipo" name="tipoEquipo">
+        <option value="">Todos</option>
+        <option value="carton">Cartón</option>
+        <option value="proceso">Proceso</option>
+      </select>
+    </div>
 
     {% if role in ['admin', 'superadmin'] %}
       <!-- Select para Contrato -->
