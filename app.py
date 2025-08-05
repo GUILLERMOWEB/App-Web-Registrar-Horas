@@ -120,9 +120,11 @@ def dashboard():
     # Ejemplo de listas de opciones (reemplazar por consulta a DB luego)
     
     clientes = [
-        'Barraca Deambrosi SA',
+        'Barraca Deambrosi SA (Carton)',
+        'Barraca Deambrosi SA (Proceso)',
         'Belficor SA',
-        'Cerealin San Jose',
+        'Cerealin San Jose (Carton)',
+        'Cerealin San Jose (Proceso)'
         'Compañía Salus SA',
         'Conaprole Planta CIM (Carton)',
         'Conaprole Planta CIM (Proceso)',
@@ -131,7 +133,6 @@ def dashboard():
         'Gibur S.A.',
         'Jugos del Uruguay SA',
         'Nolir S.A.',
-        'OTRO CLIENTE CLUSTER',
         'Recalco SA (ex Suadil)',
         'Tetrapak San Fernando',
         'N/A'
@@ -145,7 +146,7 @@ def dashboard():
     contratos = ['Contrato legal 1', 'Contrato legal 2', 'Contrato legal 3']
     service_orders = ['SM02', 'SM03','N/A']
     centros_costo = [
-        {'id': 1, 'nombre': 'Barraca Deambrosi SA C.Costo=1 ()'},
+        {'id': 1, 'nombre': 'Barraca Deambrosi SA (Carton) C.Costo=1 ()'},
         {'id': 2, 'nombre': 'Cooperativa Agraria de (CALCAR) C.Costo=2 ()'},
         {'id': 3, 'nombre': 'Gibur S.A. C.Costo=3 ()'},
         {'id': 4, 'nombre': 'Nolir S.A. C.Costo=4 ()'},
@@ -153,13 +154,14 @@ def dashboard():
         {'id': 6, 'nombre': 'Conaprole Planta CIM (Carton) C.Costo=6 ()'},
         {'id': 7, 'nombre': 'Conaprole Planta CIM (Proceso) C.Costo= ()'},
         {'id': 8, 'nombre': 'Conaprole Planta VIII C.Costo=7 ()'},
-        {'id': 9, 'nombre': 'Cerealin San Jose C.Costo=8 ()'},
-        {'id': 10, 'nombre': 'Jugos del Uruguay SA  GMB revisar ()'},
-        {'id': 11, 'nombre': 'FUERA DE CONTRATO'},       
-        {'id': 12, 'nombre': '9560218510'},
+        {'id': 9, 'nombre': 'Cerealin San Jose (Carton)C.Costo=8 ()'},
+        {'id': 10, 'nombre': 'Cerealin San Jose (Proceso) C.Costo=8 ()'},
+        {'id': 11, 'nombre': 'Jugos del Uruguay SA  GMB revisar ()'},
+        {'id': 12, 'nombre': 'FUERA DE CONTRATO'},       
         {'id': 13, 'nombre': 'Belficor SA C.Costo='},
         {'id': 14, 'nombre': 'Compañía Salus SA C.Costo='},
-        {'id': 15, 'nombre': 'N/A'}
+        {'id': 15, 'nombre': 'Barraca Deambrosi SA (Proceso) C.Costo=1 ()'},
+        {'id': 16, 'nombre': 'N/A'}
     ]
 
     tipos_servicio = [
@@ -216,7 +218,11 @@ def dashboard():
         {'id': 39, 'nombre': 'UYP-CONAPROLE CIM-TREAT   Máquina-Tetra Plex Plex C8                  N/S-30104-38508 '},
         {'id': 40, 'nombre': 'UYP-CONAPROLE CIM-TREAT   Máquina-Tetra Plex, C8                      N/S-30107-34617 '},
         {'id': 41, 'nombre': 'UYP-CONAPROLE CIM-UHT01   Máquina-Tetra Pak Aseptic Tank LV           N/S-T5845520044 '},
-        {'id': 42, 'nombre': 'N/A'}
+        {'id': 42, 'nombre': 'UYP-CEREALIN  SJO-TREAT   Máquina-TETRA ALEX 20                       N/S-5845511263'},
+        {'id': 43, 'nombre': 'UYP-CEREALIN  SJO-TREAT   Máquina-Tetra Therm Aseptic Flex 1          N/S-T5844410001'},
+        {'id': 44,  'nombre': 'UYP-BARRACA  MVD-PF 01   Máquina-Tetra Alex 25                       N/S-T5856826141'},
+        {'id': 45,  'nombre': 'UYP-BARRACA  MVD-PF 01   Máquina-Tetra Pak Homogenizer               N/S-5856944267'},
+        {'id': 46, 'nombre': 'N/A'}
     ]
 
 
@@ -313,7 +319,8 @@ def dashboard():
       
       
     cliente_prefijo = {
-        'Barraca Deambrosi SA'            : 'UYC-BARRACA',
+        'Barraca Deambrosi SA (Carton)'   : 'UYC-BARRACA',
+        'Barraca Deambrosi SA (Proceso)'  : 'UYC-BARRACA',
         'Belficor SA'                     : 'UYP-BELFICOR',
         'Compañía Salus SA'               : 'UYP-FTE SALUS',
         'Cooperativa Agraria de (CALCAR)' : 'UYC-COAGRARIA',
@@ -323,9 +330,9 @@ def dashboard():
         'Conaprole Planta CIM (Carton)'   : 'UYC-CONAPROLE CIM',
         'Conaprole Planta CIM (Proceso)'  : 'UYP-CONAPROLE CIM',
         'Conaprole Planta VIII'           : 'UYC-CONAPROLE P08',
-        'Cerealin San Jose'               : 'UYC-CEREALIN',
+        'Cerealin San Jose (Carton)'      : 'UYC-CEREALIN',
+        'Cerealin San Jose (Proceso)'     : 'UYP-CEREALIN',
         'Jugos del Uruguay SA'            : '',  # definir si hay prefijo
-        'OTRO CLIENTE CLUSTER'            : '',
         'Tetrapak San Fernando'           : '',
         'N/A'                             : 'N/A'
     }
@@ -496,9 +503,11 @@ def editar_registro(id):
     # Definí acá tus listas o importalas desde donde estén definidas
     
     clientes = [
-        'Barraca Deambrosi SA',
+        'Barraca Deambrosi SA (Carton)',
+        'Barraca Deambrosi SA (Proceso)',
         'Belficor SA',
-        'Cerealin San Jose',
+        'Cerealin San Jose (Carton)',
+        'Cerealin San Jose (Proceso)'
         'Compañía Salus SA',
         'Conaprole Planta CIM (Carton)',
         'Conaprole Planta CIM (Proceso)',
@@ -507,7 +516,6 @@ def editar_registro(id):
         'Gibur S.A.',
         'Jugos del Uruguay SA',
         'Nolir S.A.',
-        'OTRO CLIENTE CLUSTER',
         'Recalco SA (ex Suadil)',
         'Tetrapak San Fernando',
         'N/A'
@@ -519,7 +527,7 @@ def editar_registro(id):
     service_orders = ['SM02', 'SM03', 'N/A']
 
     centros_costo = [
-        {'id': 1, 'nombre': 'Barraca Deambrosi SA C.Costo=1 ()'},
+        {'id': 1, 'nombre': 'Barraca Deambrosi SA (Carton) C.Costo=1 ()'},
         {'id': 2, 'nombre': 'Cooperativa Agraria de (CALCAR) C.Costo=2 ()'},
         {'id': 3, 'nombre': 'Gibur S.A. C.Costo=3 ()'},
         {'id': 4, 'nombre': 'Nolir S.A. C.Costo=4 ()'},
@@ -527,13 +535,14 @@ def editar_registro(id):
         {'id': 6, 'nombre': 'Conaprole Planta CIM (Carton) C.Costo=6 ()'},
         {'id': 7, 'nombre': 'Conaprole Planta CIM (Proceso) C.Costo= ()'},
         {'id': 8, 'nombre': 'Conaprole Planta VIII C.Costo=7 ()'},
-        {'id': 9, 'nombre': 'Cerealin San Jose C.Costo=8 ()'},
-        {'id': 10, 'nombre': 'Jugos del Uruguay SA  GMB revisar ()'},
-        {'id': 11, 'nombre': 'FUERA DE CONTRATO'},       
-        {'id': 12, 'nombre': '9560218510'},
+        {'id': 9, 'nombre': 'Cerealin San Jose (Carton)C.Costo=8 ()'},
+        {'id': 10, 'nombre': 'Cerealin San Jose (Proceso) C.Costo=8 ()'},
+        {'id': 11, 'nombre': 'Jugos del Uruguay SA  GMB revisar ()'},
+        {'id': 12, 'nombre': 'FUERA DE CONTRATO'},       
         {'id': 13, 'nombre': 'Belficor SA C.Costo='},
         {'id': 14, 'nombre': 'Compañía Salus SA C.Costo='},
-        {'id': 15, 'nombre': 'N/A'}
+        {'id': 15, 'nombre': 'Barraca Deambrosi SA (Proceso) C.Costo=1 ()'},
+        {'id': 16, 'nombre': 'N/A'}
     ]
 
     tipos_servicio = [
@@ -591,7 +600,11 @@ def editar_registro(id):
         {'id': 39, 'nombre': 'UYP-CONAPROLE CIM-TREAT   Máquina-Tetra Plex Plex C8                  N/S-30104-38508 '},
         {'id': 40, 'nombre': 'UYP-CONAPROLE CIM-TREAT   Máquina-Tetra Plex, C8                      N/S-30107-34617 '},
         {'id': 41, 'nombre': 'UYP-CONAPROLE CIM-UHT01   Máquina-Tetra Pak Aseptic Tank LV           N/S-T5845520044 '},
-        {'id': 42, 'nombre': 'N/A'}
+        {'id': 42, 'nombre': 'UYP-CEREALIN  SJO-TREAT   Máquina-TETRA ALEX 20                       N/S-5845511263'},
+        {'id': 43, 'nombre': 'UYP-CEREALIN  SJO-TREAT   Máquina-Tetra Therm Aseptic Flex 1          N/S-T5844410001'},
+        {'id': 44,  'nombre': 'UYP-BARRACA  MVD-PF 01   Máquina-Tetra Alex 25                       N/S-T5856826141'},
+        {'id': 45,  'nombre': 'UYP-BARRACA  MVD-PF 01   Máquina-Tetra Pak Homogenizer               N/S-5856944267'},
+        {'id': 46, 'nombre': 'N/A'}
     ]
 
     if request.method == 'POST':
@@ -656,7 +669,8 @@ def editar_registro(id):
         return redirect(url_for('admin') if session.get('role') in ['admin', 'superadmin'] else url_for('dashboard'))
         
     cliente_prefijo = {
-        'Barraca Deambrosi SA'            : 'UYC-BARRACA',
+        'Barraca Deambrosi SA (Carton)'   : 'UYC-BARRACA',
+        'Barraca Deambrosi SA (Proceso)'  : 'UYC-BARRACA',
         'Belficor SA'                     : 'UYP-BELFICOR',
         'Compañía Salus SA'               : 'UYP-FTE SALUS',
         'Cooperativa Agraria de (CALCAR)' : 'UYC-COAGRARIA',
@@ -666,9 +680,9 @@ def editar_registro(id):
         'Conaprole Planta CIM (Carton)'   : 'UYC-CONAPROLE CIM',
         'Conaprole Planta CIM (Proceso)'  : 'UYP-CONAPROLE CIM',
         'Conaprole Planta VIII'           : 'UYC-CONAPROLE P08',
-        'Cerealin San Jose'               : 'UYC-CEREALIN',
+        'Cerealin San Jose (Carton)'      : 'UYC-CEREALIN',
+        'Cerealin San Jose (Proceso)'     : 'UYP-CEREALIN',
         'Jugos del Uruguay SA'            : '',  # definir si hay prefijo
-        'OTRO CLIENTE CLUSTER'            : '',
         'Tetrapak San Fernando'           : '',
         'N/A'                             : 'N/A'
     }
