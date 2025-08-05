@@ -168,7 +168,7 @@ def dashboard():
         {'id': 16, 'nombre': 'Belficor SA C.Costo='},
         {'id': 17, 'nombre': 'Compañía Salus SA C.Costo='},
         {'id': 18, 'nombre': 'Barraca Deambrosi SA (Proceso) C.Costo=1 ()'},
-        {'id': 19, 'nombre': 'Montevideo Refrescos (Proceso) SA (Proceso) C.Costo= ()'},
+        {'id': 19, 'nombre': 'Montevideo Refrescos SA (Proceso) C.Costo= ()'},
         {'id': 20, 'nombre': 'N/A'}
     ]
 
@@ -698,7 +698,7 @@ def editar_registro(id):
         {'id': 16, 'nombre': 'Belficor SA C.Costo='},
         {'id': 17, 'nombre': 'Compañía Salus SA C.Costo='},
         {'id': 18, 'nombre': 'Barraca Deambrosi SA (Proceso) C.Costo=1 ()'},
-        {'id': 19, 'nombre': 'Montevideo Refrescos (Proceso) SA (Proceso) C.Costo= ()'},
+        {'id': 19, 'nombre': 'Montevideo Refrescos SA (Proceso) C.Costo= ()'},
         {'id': 20, 'nombre': 'N/A'}
     ]
 
