@@ -135,6 +135,7 @@ def dashboard():
         'Cooperativa Agraria de (CALCAR)',
         'Gibur S.A.',
         'Jugos del Uruguay SA',
+        'Montevideo Refrescos SA (Proceso)',
         'Nolir S.A.',
         'Recalco SA (ex Suadil)',
         'Tetrapak San Fernando',
@@ -167,7 +168,8 @@ def dashboard():
         {'id': 16, 'nombre': 'Belficor SA C.Costo='},
         {'id': 17, 'nombre': 'Compañía Salus SA C.Costo='},
         {'id': 18, 'nombre': 'Barraca Deambrosi SA (Proceso) C.Costo=1 ()'},
-        {'id': 19, 'nombre': 'N/A'}
+        {'id': 19, 'nombre': 'Montevideo Refrescos (Proceso) SA (Proceso) C.Costo= ()'},
+        {'id': 20, 'nombre': 'N/A'}
     ]
 
     tipos_servicio = [
@@ -348,7 +350,24 @@ def dashboard():
         {'id': 163, 'nombre': 'UYP-CONAPROLE P16-TREAT   Máquina-Tetra Plex Clip 10 RM                        N/S-30103-22145'},
         {'id': 164, 'nombre': 'UYP-CONAPROLE P16-TREAT   Máquina-Tetra Therm Lacta                            N/S-D00623-01/2'},
         {'id': 165, 'nombre': 'UYP-CONAPROLE P16-TREAT   Máquina-Tetra Plex M6 M                              N/S-30103-22148'},
-        {'id': 167, 'nombre': 'N/A'}
+        {'id': 166, 'nombre': 'UYP-MONRESA   MVD-MITEC   Máquina-Miteco Contisolv                         	  N/S-15735-01'},
+        {'id': 167, 'nombre': 'UYP-MONRESA   MVD-MITEC   Máquina-Miteco CIP unit                          	  N/S-15735-02'},
+        {'id': 168, 'nombre': 'UYP-MONRESA   MVD-MITEC   Máquina-Miteco CIP unit                          	  N/S-15735-03'},
+        {'id': 169, 'nombre': 'UYP-MONRESA   MVD-MITEC   Máquina-Miteco Thermizer                         	  N/S-15735-04'},
+        {'id': 170, 'nombre': 'UYP-MONRESA   MVD-MITEC   Máquina-Miteco CIP unit                          	  N/S-15735-05'},
+        {'id': 171, 'nombre': 'UYP-MONRESA   MVD-MITEC   Máquina-Miteco Ion Exchange System                   N/S-15735-06'},
+        {'id': 172, 'nombre': 'UYP-MONRESA   MVD-MITEC   Máquina-Miteco Horizontal Plate Filtration           N/S-16676-01'},
+        {'id': 173, 'nombre': 'UYP-MONRESA   MVD-MITEC   Máquina-Miteco RJ Mixer                              N/S-16958-02'},
+        {'id': 174, 'nombre': 'UYP-MONRESA   MVD-MITEC   Máquina-Miteco RJ Mixer                              N/S-16958-03'},
+        {'id': 175, 'nombre': 'UYP-MONRESA   MVD-MITEC   Máquina-Miteco RJ Mixer                              N/S-16958-04'},
+        {'id': 176, 'nombre': 'UYP-MONRESA   MVD-MITEC   Máquina-Miteco RJ Mixer                              N/S-16958-05'},
+        {'id': 177, 'nombre': 'UYP-MONRESA   MVD-MITEC   Máquina-Miteco Ingredients Dissolver                 N/S-15229-01'},
+        {'id': 178, 'nombre': 'UYP-MONRESA   MVD-MITEC   Máquina-Miteco Filtration                            N/S-15735-07'},
+        {'id': 179, 'nombre': 'UYP-MONRESA   MVD-MITEC   Máquina-Miteco Filtration                            N/S-15735-08'},
+        {'id': 180, 'nombre': 'UYP-MONRESA   MVD-MITEC   Máquina-Miteco Ingredients Dissolver                 N/S-16676-'},
+        {'id': 181, 'nombre': 'UYP-MONRESA   MVD-MITEC   Máquina-Miteco Ingredients Dissolver                 N/S-T5880160029'},
+        {'id': 182, 'nombre': 'UYP-MONRESA   MVD-MX01    Máquina-Tetra Pak Mixer RJCI                         N/S-T5845680002'},
+        {'id': 183, 'nombre': 'N/A'}
     ]
 
 
@@ -461,6 +480,7 @@ def dashboard():
         'Conaprole Planta VIII (Proceso)' : 'UYP-CONAPROLE P08',
         'Cerealin San Jose (Carton)'      : 'UYC-CEREALIN',
         'Cerealin San Jose (Proceso)'     : 'UYP-CEREALIN',
+        'Montevideo Refrescos SA (Proceso)': 'UYP-MONRESA',
         'Jugos del Uruguay SA'            : '',  # definir si hay prefijo
         'Tetrapak San Fernando'           : '',
         'N/A'                             : 'N/A'
@@ -647,6 +667,7 @@ def editar_registro(id):
         'Cooperativa Agraria de (CALCAR)',
         'Gibur S.A.',
         'Jugos del Uruguay SA',
+        'Montevideo Refrescos SA (Proceso)',
         'Nolir S.A.',
         'Recalco SA (ex Suadil)',
         'Tetrapak San Fernando',
@@ -677,7 +698,8 @@ def editar_registro(id):
         {'id': 16, 'nombre': 'Belficor SA C.Costo='},
         {'id': 17, 'nombre': 'Compañía Salus SA C.Costo='},
         {'id': 18, 'nombre': 'Barraca Deambrosi SA (Proceso) C.Costo=1 ()'},
-        {'id': 19, 'nombre': 'N/A'}
+        {'id': 19, 'nombre': 'Montevideo Refrescos (Proceso) SA (Proceso) C.Costo= ()'},
+        {'id': 20, 'nombre': 'N/A'}
     ]
 
     tipos_servicio = [
@@ -859,7 +881,24 @@ def editar_registro(id):
         {'id': 163, 'nombre': 'UYP-CONAPROLE P16-TREAT   Máquina-Tetra Plex Clip 10 RM                        N/S-30103-22145'},
         {'id': 164, 'nombre': 'UYP-CONAPROLE P16-TREAT   Máquina-Tetra Therm Lacta                            N/S-D00623-01/2'},
         {'id': 165, 'nombre': 'UYP-CONAPROLE P16-TREAT   Máquina-Tetra Plex M6 M                              N/S-30103-22148'},
-        {'id': 167, 'nombre': 'N/A'}
+        {'id': 166, 'nombre': 'UYP-MONRESA   MVD-MITEC   Máquina-Miteco Contisolv                         	  N/S-15735-01'},
+        {'id': 167, 'nombre': 'UYP-MONRESA   MVD-MITEC   Máquina-Miteco CIP unit                          	  N/S-15735-02'},
+        {'id': 168, 'nombre': 'UYP-MONRESA   MVD-MITEC   Máquina-Miteco CIP unit                          	  N/S-15735-03'},
+        {'id': 169, 'nombre': 'UYP-MONRESA   MVD-MITEC   Máquina-Miteco Thermizer                         	  N/S-15735-04'},
+        {'id': 170, 'nombre': 'UYP-MONRESA   MVD-MITEC   Máquina-Miteco CIP unit                          	  N/S-15735-05'},
+        {'id': 171, 'nombre': 'UYP-MONRESA   MVD-MITEC   Máquina-Miteco Ion Exchange System                   N/S-15735-06'},
+        {'id': 172, 'nombre': 'UYP-MONRESA   MVD-MITEC   Máquina-Miteco Horizontal Plate Filtration           N/S-16676-01'},
+        {'id': 173, 'nombre': 'UYP-MONRESA   MVD-MITEC   Máquina-Miteco RJ Mixer                              N/S-16958-02'},
+        {'id': 174, 'nombre': 'UYP-MONRESA   MVD-MITEC   Máquina-Miteco RJ Mixer                              N/S-16958-03'},
+        {'id': 175, 'nombre': 'UYP-MONRESA   MVD-MITEC   Máquina-Miteco RJ Mixer                              N/S-16958-04'},
+        {'id': 176, 'nombre': 'UYP-MONRESA   MVD-MITEC   Máquina-Miteco RJ Mixer                              N/S-16958-05'},
+        {'id': 177, 'nombre': 'UYP-MONRESA   MVD-MITEC   Máquina-Miteco Ingredients Dissolver                 N/S-15229-01'},
+        {'id': 178, 'nombre': 'UYP-MONRESA   MVD-MITEC   Máquina-Miteco Filtration                            N/S-15735-07'},
+        {'id': 179, 'nombre': 'UYP-MONRESA   MVD-MITEC   Máquina-Miteco Filtration                            N/S-15735-08'},
+        {'id': 180, 'nombre': 'UYP-MONRESA   MVD-MITEC   Máquina-Miteco Ingredients Dissolver                 N/S-16676-'},
+        {'id': 181, 'nombre': 'UYP-MONRESA   MVD-MITEC   Máquina-Miteco Ingredients Dissolver                 N/S-T5880160029'},
+        {'id': 182, 'nombre': 'UYP-MONRESA   MVD-MX01    Máquina-Tetra Pak Mixer RJCI                         N/S-T5845680002'},
+        {'id': 183, 'nombre': 'N/A'}
     ]
 
     if request.method == 'POST':
@@ -940,6 +979,7 @@ def editar_registro(id):
         'Conaprole Planta VIII (Proceso)' : 'UYP-CONAPROLE P08',
         'Cerealin San Jose (Carton)'      : 'UYC-CEREALIN',
         'Cerealin San Jose (Proceso)'     : 'UYP-CEREALIN',
+        'Montevideo Refrescos SA (Proceso)': 'UYP-MONRESA',
         'Jugos del Uruguay SA'            : '',  # definir si hay prefijo
         'Tetrapak San Fernando'           : '',
         'N/A'                             : 'N/A'
