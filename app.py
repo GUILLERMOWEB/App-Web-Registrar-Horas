@@ -124,7 +124,7 @@ def dashboard():
         'Barraca Deambrosi SA (Proceso)',
         'Belficor SA',
         'Cerealin San Jose (Carton)',
-        'Cerealin San Jose (Proceso)'
+        'Cerealin San Jose (Proceso)',
         'Compañía Salus SA',
         'Conaprole Planta CIM (Carton)',
         'Conaprole Planta CIM (Proceso)',
@@ -320,7 +320,7 @@ def dashboard():
       
     cliente_prefijo = {
         'Barraca Deambrosi SA (Carton)'   : 'UYC-BARRACA',
-        'Barraca Deambrosi SA (Proceso)'  : 'UYC-BARRACA',
+        'Barraca Deambrosi SA (Proceso)'  : 'UYP-BARRACA',
         'Belficor SA'                     : 'UYP-BELFICOR',
         'Compañía Salus SA'               : 'UYP-FTE SALUS',
         'Cooperativa Agraria de (CALCAR)' : 'UYC-COAGRARIA',
@@ -507,7 +507,7 @@ def editar_registro(id):
         'Barraca Deambrosi SA (Proceso)',
         'Belficor SA',
         'Cerealin San Jose (Carton)',
-        'Cerealin San Jose (Proceso)'
+        'Cerealin San Jose (Proceso)',
         'Compañía Salus SA',
         'Conaprole Planta CIM (Carton)',
         'Conaprole Planta CIM (Proceso)',
@@ -602,8 +602,8 @@ def editar_registro(id):
         {'id': 41, 'nombre': 'UYP-CONAPROLE CIM-UHT01   Máquina-Tetra Pak Aseptic Tank LV           N/S-T5845520044 '},
         {'id': 42, 'nombre': 'UYP-CEREALIN  SJO-TREAT   Máquina-TETRA ALEX 20                       N/S-5845511263'},
         {'id': 43, 'nombre': 'UYP-CEREALIN  SJO-TREAT   Máquina-Tetra Therm Aseptic Flex 1          N/S-T5844410001'},
-        {'id': 44,  'nombre': 'UYP-BARRACA  MVD-PF 01   Máquina-Tetra Alex 25                       N/S-T5856826141'},
-        {'id': 45,  'nombre': 'UYP-BARRACA  MVD-PF 01   Máquina-Tetra Pak Homogenizer               N/S-5856944267'},
+        {'id': 44, 'nombre': 'UYP-BARRACA   MVD-PF 01   Máquina-Tetra Alex 25                       N/S-T5856826141'},
+        {'id': 45, 'nombre': 'UYP-BARRACA   MVD-PF 01   Máquina-Tetra Pak Homogenizer               N/S-5856944267'},
         {'id': 46, 'nombre': 'N/A'}
     ]
 
@@ -670,7 +670,7 @@ def editar_registro(id):
         
     cliente_prefijo = {
         'Barraca Deambrosi SA (Carton)'   : 'UYC-BARRACA',
-        'Barraca Deambrosi SA (Proceso)'  : 'UYC-BARRACA',
+        'Barraca Deambrosi SA (Proceso)'  : 'UYP-BARRACA',
         'Belficor SA'                     : 'UYP-BELFICOR',
         'Compañía Salus SA'               : 'UYP-FTE SALUS',
         'Cooperativa Agraria de (CALCAR)' : 'UYC-COAGRARIA',
