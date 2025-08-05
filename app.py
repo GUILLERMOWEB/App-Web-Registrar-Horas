@@ -253,9 +253,9 @@ def dashboard():
         {'id': 70, 'nombre': 'UYP-CONAPROLE P07-TREAT   Máquina-Tetra Plex C6                        N/S-30104-21165'},
         {'id': 71, 'nombre': 'UYP-CONAPROLE P07-TREAT   Máquina-Tetra Plex C8                        N/S-30104-21168'},
         {'id': 72, 'nombre': 'UYP-CONAPROLE P07-TREAT   Máquina-Tetra Plex M10 M BASE                N/S-30103-17682'},
-        {'id': 73, 'nombre': 'UYP-CONAPROLE P07-TREAT   Máquina-Tetra Plex Clip 10 RM                N/S-30103-17681'}
+        {'id': 73, 'nombre': 'UYP-CONAPROLE P07-TREAT   Máquina-Tetra Plex Clip 10 RM                N/S-30103-17681'},
         {'id': 46, 'nombre': 'N/A'}
-        ]
+    ]
 
 
 
@@ -669,9 +669,9 @@ def editar_registro(id):
         {'id': 70, 'nombre': 'UYP-CONAPROLE P07-TREAT   Máquina-Tetra Plex C6                        N/S-30104-21165'},
         {'id': 71, 'nombre': 'UYP-CONAPROLE P07-TREAT   Máquina-Tetra Plex C8                        N/S-30104-21168'},
         {'id': 72, 'nombre': 'UYP-CONAPROLE P07-TREAT   Máquina-Tetra Plex M10 M BASE                N/S-30103-17682'},
-        {'id': 73, 'nombre': 'UYP-CONAPROLE P07-TREAT   Máquina-Tetra Plex Clip 10 RM                N/S-30103-17681'}
+        {'id': 73, 'nombre': 'UYP-CONAPROLE P07-TREAT   Máquina-Tetra Plex Clip 10 RM                N/S-30103-17681'},
         {'id': 46, 'nombre': 'N/A'}
-        ]
+    ]
 
     if request.method == 'POST':
         try:
