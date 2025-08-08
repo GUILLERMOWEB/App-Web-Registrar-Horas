@@ -76,8 +76,8 @@
           <th>Centro de Costo Contrato</th>
           <th>Tipo de Servicio</th>
           <th>Línea</th>
+          <th>Editar</th>
           {% if session['role'] == 'superadmin' %}
-            <th>Editar</th>
             <th>Eliminar</th>
           {% endif %}
         </tr>
@@ -104,7 +104,7 @@
           <td>{{ registro.tipo_servicio or '' }}</td>
           <td>{{ registro.linea or '' }}</td>
 
-          {% if session['role'] == 'superadmin' %}
+          {% if session['role'] in ['admin', 'superadmin'] %}
           <td>
             <a href="{{ url_for('editar_registro', id=registro.id) }}" class="btn btn-warning btn-sm">Editar</a>
           </td>
