@@ -541,7 +541,9 @@ def exportar_excel():
         query = query.filter_by(user_id=usuario_id)
 
     if not fecha_desde or not fecha_hasta or fecha_desde == 'None' or fecha_hasta == 'None':
-        return "Debe seleccionar las fechas 'Desde' y 'Hasta' antes de exportar.", 400
+        flash("Debés completar ambas fechas para exportar.", "warning")
+        return redirect(url_for('admin'))
+
 
     query = query.filter(Registro.fecha.between(fecha_desde, fecha_hasta))
     registros = query.all()
