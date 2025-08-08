@@ -399,10 +399,7 @@ def dashboard():
         tarea = request.form.get('tarea', '').strip()
         cliente = request.form.get('cliente', '').strip()  # Si cliente es texto, OK
         comentarios = request.form.get('comentarios', '').strip()
-        tiene_contrato = request.form.get("tiene_contrato")
-        contrato = bool(int(tiene_contrato)) if tiene_contrato is not None else False
-        tipo_contrato = request.form.get("tipo_contrato", "")
-
+        contrato = bool(int(request.form.get("contrato")))
         service_order = request.form.get('service_order', '').strip()
 
         try:
@@ -443,7 +440,7 @@ def dashboard():
             tarea=tarea,
             cliente=cliente,
             comentarios=comentarios,
-            contrato=tipo_contrato,
+            contrato=contrato,
             service_order=service_order,
             centro_costo=centro_costo,
             tipo_servicio=tipo_servicio,

@@ -80,49 +80,14 @@
 
     {% if role in ['admin', 'superadmin'] %}
       <!-- Select para Contrato -->
-      
-<!-- Select para indicar si hay contrato -->
-  <div class="col-md-2">
-    <label for="tiene_contrato" class="form-label">¿Tiene contrato?</label>
-    <select name="tiene_contrato" id="tiene_contrato" class="form-control" required onchange="mostrarTiposContrato()">
-      <option value="">-- Seleccione --</option>
-      <option value="1">Sí</option>
-      <option value="0">No</option>
-    </select>
-  </div>
-
-  <!-- Select para tipo de contrato (oculto por defecto) -->
-  <div class="col-md-4" id="tipo_contrato_div" style="display: none;">
-    <label for="tipo_contrato" class="form-label">Tipo de contrato</label>
-    <select name="tipo_contrato" class="form-control">
-      <option value="">-- Seleccione Tipo --</option>
-      <option value="73450003">Contrato</option>
-      <option value="79010000">Administrativo</option>
-      <option value="79200030">Issue Resolution - Service</option>
-      <option value="79200020">Issue Resolution - Capital CARTON</option>
-      <option value="79200050">Issue Resolution - Capital PROCESSING</option>
-      <option value="580000">Capital Equipment carton</option>
-      <option value="70350000">Capital Equipment processing</option>
-      <option value="73450000">Fuera de contrato</option>
-      <option value="560000">Upgrade projects</option>
-      <option value="70158000">Mandatory kit</option>
-      <option value="480000">Rebilling</option>
-      <option value="73453000">Training Facturable</option>
-      <option value="79010000">Training Interno</option>
-      <option value="70400010">MDR</option>
-      <option value="79010000">No disponible</option>
-    </select>
-  </div>
-
-  <!-- Script para mostrar/ocultar el tipo de contrato -->
-  <script>
-    function mostrarTiposContrato() {
-      const tieneContrato = document.getElementById('tiene_contrato').value;
-      const tipoContratoDiv = document.getElementById('tipo_contrato_div');
-      tipoContratoDiv.style.display = tieneContrato === '1' ? 'block' : 'none';
-    }
-  </script>
-
+      <div class="col-md-2">
+        <label for="contrato" class="form-label">Contrato</label>
+        <select name="contrato" class="form-control" required>
+          <option value="">-- Seleccione Contrato --</option>
+          <option value="1">Sí</option>
+          <option value="0">N/A</option>
+        </select>
+      </div>
       
     
       <!-- Select para Service Order (si querés, puede quedar input) -->
