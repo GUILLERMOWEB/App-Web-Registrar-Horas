@@ -646,6 +646,13 @@ def exportar_excel():
 def editar_registro(id):
     if 'user_id' not in session:
         return redirect(url_for('login'))
+    
+    # Capturar filtros desde la URL
+
+    filtro_usuario = request.args.get('filtro_usuario')
+    fecha_desde = request.args.get('fecha_desde')
+    fecha_hasta = request.args.get('fecha_hasta')
+    
 
     registro = Registro.query.get_or_404(id)
 
@@ -959,8 +966,11 @@ def editar_registro(id):
         db.session.commit()
         flash('Registro actualizado exitosamente', 'success')
 
-        # Redirigir según rol
-        return redirect(url_for('admin') if session.get('role') in ['admin', 'superadmin'] else url_for('dashboard'))
+        if session.get('role') in ['admin', 'superadmin']:
+            return redirect(url_for('admin', filtro_usuario=filtro_usuario, fecha_desde=fecha_desde, fecha_hasta=fecha_hasta))
+        else:
+            return redirect(url_for('dashboard'))
+
         
     cliente_prefijo = {
         'Barraca Deambrosi SA (Carton)'   : 'UYC-BARRACA',
