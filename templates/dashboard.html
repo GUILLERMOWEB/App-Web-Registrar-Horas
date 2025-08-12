@@ -235,7 +235,7 @@
           <td>{{ registro.tarea }}</td>
           <td>{{ registro.cliente }}</td>
           <td>{{ registro.comentarios }}</td>
-          <td>{{ 'Sí' if registro.contrato else 'N/A' }}</td>
+          <td>{{ registro.contrato or 'N/A' }}</td>
           <td>{{ registro.service_order or '' }}</td>
           <td>{{ registro.centro_costo or '' }}</td>
           <td>{{ registro.tipo_servicio or '' }}</td>
