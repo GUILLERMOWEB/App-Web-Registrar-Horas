@@ -83,29 +83,29 @@
     </div>
     
     {% if role in ['admin', 'superadmin'] %}
-      <div class="col-md-2">
-        <label for="contrato" class="form-label">Contable</label>
-        <select name="contrato" class="form-control" required>
-          <option value="">-- Seleccione Cuenta Contable --</option>
-          <!--<option value="1">Sí</option> -->     
-          <option value="73450003">Contrato - 73450003</option>
-          <option value="79010000">Administrativo - 79010000</option>
-          <option value="79200030">Issue Resolution - Service - 79200030</option>
-          <option value="79200020">Issue Resolution - Capital CARTON - 79200020</option>
-          <option value="79200050">Issue Resolution - Capital PROCESSING - 79200050</option>
-          <option value="580000">Capital Equipment carton - 580000</option>
-          <option value="70350000">Capital Equipment processing - 70350000</option>
-          <option value="73450000">Fuera de contrato - 73450000</option>
-          <option value="560000">Upgrade projects - 560000</option>
-          <option value="70158000">Mandatory kit - 70158000</option>
-          <option value="480000">Rebilling - 480000</option>
-          <option value="73453000">Training Facturable - 73453000</option>
-          <option value="79010000">Training Interno - 79010000</option>
-          <option value="70400010">MDR - 70400010</option>
-          <option value="79010000">No disponible - 79010000</option>
-           <!--<option value="0">N/A</option>-->
-        </select>
-      </div>
+      
+        <div class="col-md-2">
+          <label for="contrato" class="form-label">Contable</label>
+          <select name="contrato" class="form-control" required>
+            <option value="">-- Seleccione Cuenta Contable --</option>
+            <option value="73450003" {% if registro.contrato == '73450003' %}selected{% endif %}>Contrato - 73450003</option>
+            <option value="79010000" {% if registro.contrato == '79010000' %}selected{% endif %}>Administrativo - 79010000</option>
+            <option value="79200030" {% if registro.contrato == '79200030' %}selected{% endif %}>Issue Resolution - Service - 79200030</option>
+            <option value="79200020" {% if registro.contrato == '79200020' %}selected{% endif %}>Issue Resolution - Capital CARTON - 79200020</option>
+            <option value="79200050" {% if registro.contrato == '79200050' %}selected{% endif %}>Issue Resolution - Capital PROCESSING - 79200050</option>
+            <option value="580000" {% if registro.contrato == '580000' %}selected{% endif %}>Capital Equipment carton - 580000</option>
+            <option value="70350000" {% if registro.contrato == '70350000' %}selected{% endif %}>Capital Equipment processing - 70350000</option>
+            <option value="73450000" {% if registro.contrato == '73450000' %}selected{% endif %}>Fuera de contrato - 73450000</option>
+            <option value="560000" {% if registro.contrato == '560000' %}selected{% endif %}>Upgrade projects - 560000</option>
+            <option value="70158000" {% if registro.contrato == '70158000' %}selected{% endif %}>Mandatory kit - 70158000</option>
+            <option value="480000" {% if registro.contrato == '480000' %}selected{% endif %}>Rebilling - 480000</option>
+            <option value="73453000" {% if registro.contrato == '73453000' %}selected{% endif %}>Training Facturable - 73453000</option>
+            <option value="79010000" {% if registro.contrato == '79010000' %}selected{% endif %}>Training Interno - 79010000</option>
+            <option value="70400010" {% if registro.contrato == '70400010' %}selected{% endif %}>MDR - 70400010</option>
+            <option value="79010000" {% if registro.contrato == '79010000' %}selected{% endif %}>No disponible - 79010000</option>
+          </select>
+        </div>
+
 
       <div class="col-md-4">
         <label for="service_order" class="form-label">Service Order</label>
