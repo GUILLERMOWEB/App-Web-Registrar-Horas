@@ -934,7 +934,8 @@ def editar_registro(id):
 
             tarea = request.form.get('tarea', '')
             cliente = request.form.get('cliente', '')
-            contrato = request.form.get('contrato', '')
+            #contrato = request.form.get('contrato', '')
+            contrato = request.form.get("contrato", "").strip() #Para Usar stribg en contrato
             service_order = request.form.get('service_order', '')
             centro_costo = request.form.get('centro_costo', '')
             tipo_servicio = request.form.get('tipo_servicio', '')
@@ -961,7 +962,8 @@ def editar_registro(id):
         registro.horas = round(horas_trabajadas, 2)
         registro.tarea = tarea
         registro.cliente = cliente
-        registro.contrato = contrato.lower() == 'true'
+        #registro.contrato = contrato.lower() == 'true'
+        registro.contrato = contrato.strip()
         registro.service_order = service_order
         registro.centro_costo = centro_costo
         registro.tipo_servicio = tipo_servicio
