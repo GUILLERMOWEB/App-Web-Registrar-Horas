@@ -399,8 +399,8 @@ def dashboard():
         tarea = request.form.get('tarea', '').strip()
         cliente = request.form.get('cliente', '').strip()  # Si cliente es texto, OK
         comentarios = request.form.get('comentarios', '').strip()
-        #contrato = bool(int(request.form.get("contrato")))
-        contrato = request.form.get("contrato", "").strip() #Para Usar stribg en contrato
+        contrato = bool(int(request.form.get("contrato")))
+        #contrato = request.form.get("contrato", "").strip() Para Usar stribg en contrato
 
         service_order = request.form.get('service_order', '').strip()
 
@@ -566,8 +566,7 @@ def exportar_excel():
         'Tarea': r.tarea,
         'Cliente': r.cliente,
         'Comentarios': r.comentarios,
-        #'Contrato': 'Sí' if r.contrato else 'N/A',
-        'Contrato': r.contrato or 'N/A',
+        'Contrato': 'Sí' if r.contrato else 'N/A',
         'Service Order': r.service_order or '',
         'Centro de Costo': r.centro_costo or '',
         'Tipo de Servicio': r.tipo_servicio or '',
@@ -934,8 +933,7 @@ def editar_registro(id):
 
             tarea = request.form.get('tarea', '')
             cliente = request.form.get('cliente', '')
-            #contrato = request.form.get('contrato', '')
-            contrato = request.form.get("contrato", "").strip() #Para Usar stribg en contrato
+            contrato = request.form.get('contrato', '')
             service_order = request.form.get('service_order', '')
             centro_costo = request.form.get('centro_costo', '')
             tipo_servicio = request.form.get('tipo_servicio', '')
@@ -962,8 +960,7 @@ def editar_registro(id):
         registro.horas = round(horas_trabajadas, 2)
         registro.tarea = tarea
         registro.cliente = cliente
-        #registro.contrato = contrato.lower() == 'true'
-        registro.contrato = contrato.strip()
+        registro.contrato = contrato.lower() == 'true'
         registro.service_order = service_order
         registro.centro_costo = centro_costo
         registro.tipo_servicio = tipo_servicio
