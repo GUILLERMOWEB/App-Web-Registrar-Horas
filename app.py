@@ -399,7 +399,9 @@ def dashboard():
         tarea = request.form.get('tarea', '').strip()
         cliente = request.form.get('cliente', '').strip()  # Si cliente es texto, OK
         comentarios = request.form.get('comentarios', '').strip()
-        contrato = request.form.get("contrato", "").strip()
+        contrato = bool(int(request.form.get("contrato")))
+        #contrato = request.form.get("contrato", "").strip() Para Usar stribg en contrato
+
         service_order = request.form.get('service_order', '').strip()
 
         try:
