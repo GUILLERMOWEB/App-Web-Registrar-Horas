@@ -147,7 +147,6 @@ def dashboard():
         clientes = [c for c in clientes if cliente_prefijo.get(c, '').startswith('UYP')]
 
 
-    contratos = ['Contrato legal 1', 'Contrato legal 2', 'Contrato legal 3']
     service_orders = ['SM02', 'SM03','N/A']
     centros_costo = [
         {'id': 1, 'nombre': 'Barraca Deambrosi SA (Carton) C.Costo=1 ()'},
@@ -399,8 +398,8 @@ def dashboard():
         tarea = request.form.get('tarea', '').strip()
         cliente = request.form.get('cliente', '').strip()  # Si cliente es texto, OK
         comentarios = request.form.get('comentarios', '').strip()
-        contrato = bool(int(request.form.get("contrato")))
-        #contrato = request.form.get("contrato", "").strip() Para Usar stribg en contrato
+        #contrato = bool(int(request.form.get("contrato")))
+        contrato = request.form.get("contrato", "").strip() #Para Usar stribg en contrato
 
         service_order = request.form.get('service_order', '').strip()
 
@@ -510,7 +509,7 @@ def dashboard():
         total_horas=round(total_horas, 2),
         total_km=round(total_km, 2),
         clientes=clientes,
-        contratos=contratos,
+        #contratos=contratos,
         service_orders=service_orders,
         centros_costo=centros_costo,
         tipos_servicio=tipos_servicio,
@@ -686,7 +685,7 @@ def editar_registro(id):
     ]
 
 
-    contratos = ['Contrato legal 1', 'Contrato legal 2', 'Contrato legal 3']
+    #contratos = ['Contrato legal 1', 'Contrato legal 2', 'Contrato legal 3']
 
     service_orders = ['SM02', 'SM03', 'N/A']
 
@@ -960,7 +959,8 @@ def editar_registro(id):
         registro.horas = round(horas_trabajadas, 2)
         registro.tarea = tarea
         registro.cliente = cliente
-        registro.contrato = contrato.lower() == 'true'
+        contrato = request.form.get('contrato')
+        #registro.contrato = contrato.lower() == 'true'
         registro.service_order = service_order
         registro.centro_costo = centro_costo
         registro.tipo_servicio = tipo_servicio
@@ -1019,7 +1019,7 @@ def editar_registro(id):
     return render_template('editar_registro.html',
                            registro=registro,
                            lista_clientes=clientes,
-                           contratos=[{'nombre': c} for c in contratos],
+                           #contratos=[{'nombre': c} for c in contratos], // Original
                            service_orders=service_orders,
                            centros_costo=centros_costo,
                            tipos_servicio=tipos_servicio,
