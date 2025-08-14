@@ -565,8 +565,8 @@ def exportar_excel():
         'Tarea': r.tarea,
         'Cliente': r.cliente,
         'Comentarios': r.comentarios,
-        'Contrato': r.contrato if r.contrato else 'N/A'
         #'Contrato': 'Sí' if r.contrato else 'N/A',
+        'Contrato': r.contrato if r.contrato else 'N/A',
         'Service Order': r.service_order or '',
         'Centro de Costo': r.centro_costo or '',
         'Tipo de Servicio': r.tipo_servicio or '',
@@ -960,8 +960,8 @@ def editar_registro(id):
         registro.horas = round(horas_trabajadas, 2)
         registro.tarea = tarea
         registro.cliente = cliente
-        contrato = request.form.get('contrato')
         #registro.contrato = contrato.lower() == 'true'
+        registro.contrato = contrato  # guarda el valor seleccionado, como '73450003'
         registro.service_order = service_order
         registro.centro_costo = centro_costo
         registro.tipo_servicio = tipo_servicio
