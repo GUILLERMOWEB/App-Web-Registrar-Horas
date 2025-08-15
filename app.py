@@ -518,6 +518,7 @@ def dashboard():
             'centros_costo': centros,
             'lineas':        lineas_f
         }
+    contrato_labels = {item['value']: item['label'] for item in contratos}
 
     return render_template(
         'dashboard.html',
@@ -528,6 +529,7 @@ def dashboard():
         total_km=round(total_km, 2),
         clientes=clientes,
         contratos=contratos,
+        contrato_labels=contrato_labels,
         service_orders=service_orders,
         centros_costo=centros_costo,
         tipos_servicio=tipos_servicio,
@@ -1053,10 +1055,13 @@ def editar_registro(id):
     role = session.get('role')  # 👈 esto es lo que falta
 
     # GET: mostrar formulario con datos y listas para selects
+    contrato_labels = {item['value']: item['label'] for item in contratos}
+
     return render_template('editar_registro.html',
                            registro=registro,
                            lista_clientes=clientes,
                            contratos=contratos,
+                           contrato_labels=contrato_labels,
                            #contratos=[{'nombre': c} for c in contratos], // Original
                            service_orders=service_orders,
                            centros_costo=centros_costo,
