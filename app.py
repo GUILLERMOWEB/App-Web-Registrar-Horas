@@ -593,6 +593,24 @@ def exportar_excel():
         'Línea': r.linea or ''
     } for r in registros if r.user is not None])
 
+    df['Contrato'] = df['Contrato'].map({
+        '73450003': 'Contrato',
+        '79010000': 'Administrativo - 79010000',
+        '79200030': 'Issue Resolution - Service - 79200030',
+        '79200020': 'Issue Resolution - Capital CARTON - 79200020',
+        '79200050': 'Issue Resolution - Capital PROCESSING - 79200050',
+        '580000': 'Capital Equipment carton - 580000',
+        '70350000': 'Capital Equipment processing - 70350000',
+        '73450000': 'Fuera de contrato - 73450000',
+        '560000': 'Upgrade projects - 560000',
+        '70158000': 'Mandatory kit - 70158000',
+        '480000': 'Rebilling - 480000',
+        '73453000': 'Training Facturable - 73453000',
+        '70400010': 'MDR - 70400010',
+        '0': 'N/A'
+    }).fillna(df['Contrato'])
+
+
     archivo = BytesIO()
     with pd.ExcelWriter(archivo, engine='openpyxl') as writer:
         df.to_excel(writer, index=False, sheet_name='Registros', startrow=0)
