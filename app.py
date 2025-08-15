@@ -417,7 +417,7 @@ def dashboard():
         cliente = request.form.get('cliente', '').strip()  # Si cliente es texto, OK
         comentarios = request.form.get('comentarios', '').strip()
         #contrato = bool(int(request.form.get("contrato")))
-        contrato = request.form.get("contrato", "").strip() #Para Usar stribg en contrato
+        contrato = request.form.get("contrato", "").strip()
 
         service_order = request.form.get('service_order', '').strip()
 
@@ -459,7 +459,7 @@ def dashboard():
             tarea=tarea,
             cliente=cliente,
             comentarios=comentarios,
-            contratos=contratos,
+            contrato=contrato,
             service_order=service_order,
             centro_costo=centro_costo,
             tipo_servicio=tipo_servicio,
@@ -527,7 +527,7 @@ def dashboard():
         total_horas=round(total_horas, 2),
         total_km=round(total_km, 2),
         clientes=clientes,
-        contrato=contrato,
+        contratos=contratos,
         service_orders=service_orders,
         centros_costo=centros_costo,
         tipos_servicio=tipos_servicio,
@@ -729,6 +729,24 @@ def editar_registro(id):
         {'id': 18, 'nombre': 'Barraca Deambrosi SA (Proceso) C.Costo=1 ()'},
         {'id': 19, 'nombre': 'Montevideo Refrescos SA (Proceso) C.Costo= ()'},
         {'id': 20, 'nombre': 'N/A'}
+    ]
+    contratos = [
+            {'value': '73450003', 'label': 'Contrato'},
+            {'value': '79010000', 'label': 'Administrativo - 79010000'},
+            {'value': '79200030', 'label': 'Issue Resolution - Service - 79200030'},
+            {'value': '79200020', 'label': 'Issue Resolution - Capital CARTON - 79200020'},
+            {'value': '79200050', 'label': 'Issue Resolution - Capital PROCESSING - 79200050'},
+            {'value': '580000', 'label': 'Capital Equipment carton - 580000'},
+            {'value': '70350000', 'label': 'Capital Equipment processing - 70350000'},
+            {'value': '73450000', 'label': 'Fuera de contrato - 73450000'},
+            {'value': '560000', 'label': 'Upgrade projects - 560000'},
+            {'value': '70158000', 'label': 'Mandatory kit - 70158000'},
+            {'value': '480000', 'label': 'Rebilling - 480000'},
+            {'value': '73453000', 'label': 'Training Facturable - 73453000'},
+            {'value': '79010000', 'label': 'Training Interno - 79010000'},
+            {'value': '70400010', 'label': 'MDR - 70400010'},
+            {'value': '79010000', 'label': 'No disponible - 79010000'},
+            {'value': '0', 'label': 'N/A'}
     ]
 
     tipos_servicio = [
@@ -951,7 +969,7 @@ def editar_registro(id):
 
             tarea = request.form.get('tarea', '')
             cliente = request.form.get('cliente', '')
-            contrato = request.form.get('contrato', '')
+            contrato = request.form.get('contrato')
             service_order = request.form.get('service_order', '')
             centro_costo = request.form.get('centro_costo', '')
             tipo_servicio = request.form.get('tipo_servicio', '')
@@ -979,7 +997,7 @@ def editar_registro(id):
         registro.tarea = tarea
         registro.cliente = cliente
         #registro.contrato = contrato.lower() == 'true'
-        registro.contrato = contrato  # guarda el valor seleccionado, como '73450003'
+        registro.contratos = contrato  # guarda el valor seleccionado, como '73450003'
         registro.service_order = service_order
         registro.centro_costo = centro_costo
         registro.tipo_servicio = tipo_servicio
@@ -1038,6 +1056,7 @@ def editar_registro(id):
     return render_template('editar_registro.html',
                            registro=registro,
                            lista_clientes=clientes,
+                           contratos=contratos,
                            #contratos=[{'nombre': c} for c in contratos], // Original
                            service_orders=service_orders,
                            centros_costo=centros_costo,
