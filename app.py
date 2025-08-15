@@ -999,7 +999,7 @@ def editar_registro(id):
         registro.tarea = tarea
         registro.cliente = cliente
         #registro.contrato = contrato.lower() == 'true'
-        registro.contratos = contrato  # guarda el valor seleccionado, como '73450003'
+        registro.contrato = contrato  # ✅ correcto  # guarda el valor seleccionado, como '73450003'
         registro.service_order = service_order
         registro.centro_costo = centro_costo
         registro.tipo_servicio = tipo_servicio
