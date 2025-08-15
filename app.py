@@ -1159,7 +1159,26 @@ def admin():
         query = query.filter(Registro.fecha.between(fecha_desde, fecha_hasta))
 
     registros = query.order_by(Registro.fecha.desc()).all()
-    
+    # Definir contratos
+    contratos = [
+        {'value': '73450003', 'label': 'Contrato'},
+        {'value': '79010000', 'label': 'Administrativo - 79010000'},
+        {'value': '79200030', 'label': 'Issue Resolution - Service - 79200030'},
+        {'value': '79200020', 'label': 'Issue Resolution - Capital CARTON - 79200020'},
+        {'value': '79200050', 'label': 'Issue Resolution - Capital PROCESSING - 79200050'},
+        {'value': '580000', 'label': 'Capital Equipment carton - 580000'},
+        {'value': '70350000', 'label': 'Capital Equipment processing - 70350000'},
+        {'value': '73450000', 'label': 'Fuera de contrato - 73450000'},
+        {'value': '560000', 'label': 'Upgrade projects - 560000'},
+        {'value': '70158000', 'label': 'Mandatory kit - 70158000'},
+        {'value': '480000', 'label': 'Rebilling - 480000'},
+        {'value': '73453000', 'label': 'Training Facturable - 73453000'},
+        {'value': '79010000', 'label': 'Training Interno - 79010000'},
+        {'value': '70400010', 'label': 'MDR - 70400010'},
+        {'value': '79010000', 'label': 'No disponible - 79010000'},
+        {'value': '0', 'label': 'N/A'}
+    ]
+
     contrato_labels = {item['value']: item['label'] for item in contratos}
 
     return render_template(
