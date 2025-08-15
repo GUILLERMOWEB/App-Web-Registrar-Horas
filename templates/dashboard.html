@@ -80,17 +80,15 @@
 
     {% if role in ['admin', 'superadmin'] %}
       <!-- Select para Contrato -->
-      <div class="col-md-4">
+     <div class="col-md-4">
         <label for="contrato" class="form-label">Contrato</label>
         <select name="contrato" id="contrato" class="form-control" required>
           <option value="">-- Seleccione Contrato --</option>
-          {% for item in contrato %}
+          {% for item in contratos %}
             <option value="{{ item.value }}">{{ item.label }}</option>
           {% endfor %}
         </select>
       </div>
-
-      
     
       <!-- Select para Service Order (si querés, puede quedar input) -->
       <!-- Service Order -->

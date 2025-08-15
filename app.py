@@ -459,7 +459,7 @@ def dashboard():
             tarea=tarea,
             cliente=cliente,
             comentarios=comentarios,
-            contrato=contrato,
+            contratos=contratos,
             service_order=service_order,
             centro_costo=centro_costo,
             tipo_servicio=tipo_servicio,
