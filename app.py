@@ -998,7 +998,6 @@ def editar_registro(id):
         registro.horas = round(horas_trabajadas, 2)
         registro.tarea = tarea
         registro.cliente = cliente
-        #registro.contrato = contrato.lower() == 'true'
         registro.contrato = contrato  # ✅ correcto  # guarda el valor seleccionado, como '73450003'
         registro.service_order = service_order
         registro.centro_costo = centro_costo
