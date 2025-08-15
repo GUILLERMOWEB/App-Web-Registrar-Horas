@@ -84,9 +84,9 @@
     
     {% if role in ['admin', 'superadmin'] %}
       <div class="col-md-4">
-        <label for="contrato">Contrato</label>
-        <select name="contrato" id="contrato">
-          <option value="">-- Seleccione Contrato --</option>
+        <label for="contrato">Contable</label>
+        <select name="contrato" id="contrato" class="form-control">
+          <option value="">-- Seleccione Cuenta Contable --</option>
           {% for item in contratos %}
             <option value="{{ item.value }}" {% if registro.contrato == item.value %}selected{% endif %}>
               {{ item.label }}
