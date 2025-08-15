@@ -1159,12 +1159,13 @@ def admin():
         query = query.filter(Registro.fecha.between(fecha_desde, fecha_hasta))
 
     registros = query.order_by(Registro.fecha.desc()).all()
-
+    contrato_labels = {item['value']: item['label'] for item in contratos}
     return render_template(
         'admin.html',
         registros=registros,
         usuarios=usuarios,
         filtro_usuario=filtro_usuario,
+        contrato_labels=contrato_labels,
         fecha_desde=fecha_desde,
         fecha_hasta=fecha_hasta,
         username=session['username'],
