@@ -608,7 +608,7 @@ def exportar_excel():
         '73453000': 'Training Facturable - 73453000',
         '70400010': 'MDR - 70400010',
         '0': 'N/A'
-    }).fillna(df['Contrato'])
+    }).fillna(df['Contable'])
 
 
     archivo = BytesIO()
