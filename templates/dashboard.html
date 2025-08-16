@@ -195,7 +195,7 @@
           <th>Tarea</th>
           <th>Cliente</th>
           <th>Comentarios</th>
-          <th>Contrato</th>
+          <th>Contable</th>
           <th>Service Order</th>
           <th>Centro de Costo Contrato</th>
           <th>Tipo de Servicio</th>
@@ -220,6 +220,7 @@
           <td>{{ registro.tarea }}</td>
           <td>{{ registro.cliente }}</td>
           <td>{{ registro.comentarios }}</td>
+          <!-- Mostrar nombre contable -->
           <td>{{ contrato_labels[registro.contrato] if registro.contrato in contrato_labels else 'N/A' }}</td>
           <td>{{ registro.service_order or '' }}</td>
           <td>{{ registro.centro_costo or '' }}</td>

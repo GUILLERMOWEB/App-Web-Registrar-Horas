@@ -586,14 +586,14 @@ def exportar_excel():
         'Cliente': r.cliente,
         'Comentarios': r.comentarios,
         #'Contrato': 'Sí' if r.contrato else 'N/A',
-        'Contrato': r.contrato if r.contrato else 'N/A',
+        'Contable': r.contrato if r.contrato else 'N/A',
         'Service Order': r.service_order or '',
         'Centro de Costo': r.centro_costo or '',
         'Tipo de Servicio': r.tipo_servicio or '',
         'Línea': r.linea or ''
     } for r in registros if r.user is not None])
 
-    df['Contrato'] = df['Contrato'].map({
+    df['Contable'] = df['Contable'].map({
         '73450003': 'Contrato',
         '79010000': 'Administrativo - 79010000',
         '79200030': 'Issue Resolution - Service - 79200030',
