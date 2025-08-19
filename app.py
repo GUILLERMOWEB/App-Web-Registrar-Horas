@@ -1028,6 +1028,8 @@ def editar_registro(id):
 
         contexto = request.args.get('contexto', 'admin')  # valor por defecto
 
+    contexto = request.args.get('contexto', 'admin')  # valor por defecto: admin# ...
+
     if session.get('role') in ['admin', 'superadmin']:
         if contexto == 'dashboard':
             return redirect(url_for('dashboard'))
@@ -1035,6 +1037,7 @@ def editar_registro(id):
             return redirect(url_for('admin', filtro_usuario=filtro_usuario, fecha_desde=fecha_desde, fecha_hasta=fecha_hasta))
     else:
         return redirect(url_for('dashboard'))
+
 
 
         
