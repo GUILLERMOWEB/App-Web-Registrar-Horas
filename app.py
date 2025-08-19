@@ -1028,15 +1028,14 @@ def editar_registro(id):
 
         contexto = request.args.get('contexto', 'admin')  # valor por defecto
 
-    contexto = request.args.get('contexto', 'admin')  # valor por defecto
-
-    if session.get('role') in ['admin', 'superadmin']:
-        if contexto == 'dashboard':
-            return redirect(url_for('dashboard'))
+        if session.get('role') in ['admin', 'superadmin']:
+            if contexto == 'dashboard':
+                return redirect(url_for('dashboard'))
+            else:
+                return redirect(url_for('admin', filtro_usuario=filtro_usuario, fecha_desde=fecha_desde, fecha_hasta=fecha_hasta))
         else:
-            return redirect(url_for('admin', filtro_usuario=filtro_usuario, fecha_desde=fecha_desde, fecha_hasta=fecha_hasta))
-    else:
-        return redirect(url_for('dashboard'))
+            return redirect(url_for('dashboard'))
+
 
         
     cliente_prefijo = {
@@ -1092,7 +1091,8 @@ def editar_registro(id):
                            tipos_servicio=tipos_servicio,
                            lineas=lineas,
                            cliente_cc_lineas = cliente_cc_lineas,
-                           role=role  # 👈 esto habilita los campos en el template
+                           role=role,
+                           contexto=contexto  # 👈 esto habilita los campos en el template
     )
 
 
