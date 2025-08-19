@@ -565,7 +565,6 @@ def exportar_excel():
         flash("Debés completar ambas fechas para exportar.", "warning")
         return redirect(url_for('admin'))
 
-
     query = query.filter(Registro.fecha.between(fecha_desde, fecha_hasta))
     registros = query.all()
 
@@ -585,7 +584,6 @@ def exportar_excel():
         'Tarea': r.tarea,
         'Cliente': r.cliente,
         'Comentarios': r.comentarios,
-        #'Contrato': 'Sí' if r.contrato else 'N/A',
         'Contable': r.contrato if r.contrato else 'N/A',
         'Service Order': r.service_order or '',
         'Centro de Costo': r.centro_costo or '',
@@ -610,11 +608,24 @@ def exportar_excel():
         '0': 'N/A'
     }).fillna(df['Contable'])
 
-
     archivo = BytesIO()
     with pd.ExcelWriter(archivo, engine='openpyxl') as writer:
-        df.to_excel(writer, index=False, sheet_name='Registros', startrow=0)
+        df.to_excel(writer, index=False, sheet_name='Registros', startrow=4)
         ws = writer.sheets['Registros']
+
+        # Insertar logo
+        from openpyxl.drawing.image import Image as ExcelImage
+        import os
+        logo_path = os.path.join('static', 'RH_Mobility_Logo.png')  # Reemplazá con el nombre real del archivo
+        if os.path.exists(logo_path):
+            img = ExcelImage(logo_path)
+            img.width = 100
+            img.height = 40
+            ws.add_image(img, 'A1')
+
+        # Insertar nombre del usuario
+        ws['B2'] = f"Usuario: {session['username']}"
+        ws['B2'].font = Font(bold=True, size=12)
 
         # Estilos
         header_font = Font(bold=True, color="FFFFFF", name='Calibri')
@@ -625,14 +636,14 @@ def exportar_excel():
         center_alignment = Alignment(horizontal="center", vertical="center", wrap_text=True)
 
         # Encabezados
-        for cell in ws[1]:
+        for cell in ws[5]:
             cell.font = header_font
             cell.fill = header_fill
             cell.border = thin_border
             cell.alignment = center_alignment
 
         # Celdas
-        for row in ws.iter_rows(min_row=2, max_row=ws.max_row):
+        for row in ws.iter_rows(min_row=6, max_row=ws.max_row):
             for cell in row:
                 cell.font = Font(name='Calibri', size=11)
                 cell.border = thin_border
@@ -651,7 +662,7 @@ def exportar_excel():
         total_row = ws.max_row + 2
         ws.cell(row=total_row, column=1, value="TOTALES").font = Font(bold=True)
 
-        for col in ws.iter_cols(min_row=1, max_row=1):
+        for col in ws.iter_cols(min_row=5, max_row=5):
             header = col[0].value
             if header == "Horas laborales":
                 col_idx = col[0].column
@@ -671,7 +682,7 @@ def exportar_excel():
                 cell.alignment = center_alignment
 
         ws.auto_filter.ref = ws.dimensions
-        ws.freeze_panes = 'A2'
+        ws.freeze_panes = 'A6'
 
     archivo.seek(0)
     return send_file(
