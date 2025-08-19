@@ -565,6 +565,7 @@ def exportar_excel():
         flash("Debés completar ambas fechas para exportar.", "warning")
         return redirect(url_for('admin'))
 
+
     query = query.filter(Registro.fecha.between(fecha_desde, fecha_hasta))
     registros = query.all()
 
@@ -584,6 +585,7 @@ def exportar_excel():
         'Tarea': r.tarea,
         'Cliente': r.cliente,
         'Comentarios': r.comentarios,
+        #'Contrato': 'Sí' if r.contrato else 'N/A',
         'Contable': r.contrato if r.contrato else 'N/A',
         'Service Order': r.service_order or '',
         'Centro de Costo': r.centro_costo or '',
@@ -608,47 +610,29 @@ def exportar_excel():
         '0': 'N/A'
     }).fillna(df['Contable'])
 
+
     archivo = BytesIO()
     with pd.ExcelWriter(archivo, engine='openpyxl') as writer:
-        df.to_excel(writer, index=False, sheet_name='Registros', startrow=4)
+        df.to_excel(writer, index=False, sheet_name='Registros', startrow=0)
         ws = writer.sheets['Registros']
 
-        # Logo
-        from openpyxl.drawing.image import Image as ExcelImage
-        logo_path = os.path.join('static', 'RH_Mobility_Logo.png')  # Reemplazá con el nombre real
-        if os.path.exists(logo_path):
-            img = ExcelImage(logo_path)
-            img.width = 100
-            img.height = 40
-            ws.add_image(img, 'A1')
-
-        # Nombre del usuario filtrado
-        nombre_usuario = None
-        if usuario_id:
-            usuario = Usuario.query.filter_by(id=usuario_id).first()
-            if usuario:
-                nombre_usuario = usuario.username
-
-        if nombre_usuario:
-            ws['B2'] = f"Usuario: {nombre_usuario}"
-            ws['B2'].font = Font(name='Calibri', size=16, bold=True, color='1F4E78')
-            ws['B2'].alignment = Alignment(horizontal='left', vertical='center')
-
         # Estilos
-        header_font = Font(bold=True, color="FFFFFF", name='Calibri', size=12)
+        header_font = Font(bold=True, color="FFFFFF", name='Calibri')
         header_fill = PatternFill(start_color="305496", end_color="305496", fill_type="solid")
         total_fill = PatternFill(start_color="D9E1F2", end_color="D9E1F2", fill_type="solid")
         thin_border = Border(left=Side(style='thin'), right=Side(style='thin'),
                              top=Side(style='thin'), bottom=Side(style='thin'))
         center_alignment = Alignment(horizontal="center", vertical="center", wrap_text=True)
 
-        for cell in ws[5]:
+        # Encabezados
+        for cell in ws[1]:
             cell.font = header_font
             cell.fill = header_fill
             cell.border = thin_border
             cell.alignment = center_alignment
 
-        for row in ws.iter_rows(min_row=6, max_row=ws.max_row):
+        # Celdas
+        for row in ws.iter_rows(min_row=2, max_row=ws.max_row):
             for cell in row:
                 cell.font = Font(name='Calibri', size=11)
                 cell.border = thin_border
@@ -657,15 +641,17 @@ def exportar_excel():
                 for cell in row:
                     cell.fill = PatternFill(start_color="F9F9F9", end_color="F9F9F9", fill_type="solid")
 
+        # Ajuste de columnas
         for col_num, column_cells in enumerate(ws.columns, 1):
             max_length = max((len(str(cell.value)) for cell in column_cells if cell.value), default=0)
             adjusted_width = min((max_length + 4), 50)
             ws.column_dimensions[get_column_letter(col_num)].width = adjusted_width
 
+        # Agregar fila de totales
         total_row = ws.max_row + 2
         ws.cell(row=total_row, column=1, value="TOTALES").font = Font(bold=True)
 
-        for col in ws.iter_cols(min_row=5, max_row=5):
+        for col in ws.iter_cols(min_row=1, max_row=1):
             header = col[0].value
             if header == "Horas laborales":
                 col_idx = col[0].column
@@ -685,15 +671,14 @@ def exportar_excel():
                 cell.alignment = center_alignment
 
         ws.auto_filter.ref = ws.dimensions
-        ws.freeze_panes = 'A6'
+        ws.freeze_panes = 'A2'
 
     archivo.seek(0)
     return send_file(
         archivo,
         as_attachment=True,
-        download_name=f"registros_{nombre_usuario or session['username']}.xlsx"
+        download_name=f"registros_{session['username']}.xlsx"
     )
-
 
 
 
@@ -1043,13 +1028,13 @@ def editar_registro(id):
 
         contexto = request.args.get('contexto', 'admin')  # valor por defecto
 
-        if session.get('role') in ['admin', 'superadmin']:
-            if contexto == 'dashboard':
-                return redirect(url_for('dashboard'))
-            else:
-                return redirect(url_for('admin', filtro_usuario=filtro_usuario, fecha_desde=fecha_desde, fecha_hasta=fecha_hasta))
-        else:
+    if session.get('role') in ['admin', 'superadmin']:
+        if contexto == 'dashboard':
             return redirect(url_for('dashboard'))
+        else:
+            return redirect(url_for('admin', filtro_usuario=filtro_usuario, fecha_desde=fecha_desde, fecha_hasta=fecha_hasta))
+    else:
+        return redirect(url_for('dashboard'))
 
 
         
