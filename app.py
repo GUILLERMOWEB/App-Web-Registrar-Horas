@@ -1076,7 +1076,7 @@ def editar_registro(id):
         }    
         
     role = session.get('role')  # 👈 esto es lo que falta
-
+    contexto = request.args.get('contexto', 'admin')  # 👈 esta línea
     # GET: mostrar formulario con datos y listas para selects
     contrato_labels = {item['value']: item['label'] for item in contratos}
 
