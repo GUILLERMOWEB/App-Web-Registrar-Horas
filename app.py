@@ -1026,10 +1026,16 @@ def editar_registro(id):
         db.session.commit()
         flash('Registro actualizado exitosamente', 'success')
 
+        contexto = request.args.get('contexto', 'admin')  # valor por defecto
+
         if session.get('role') in ['admin', 'superadmin']:
-            return redirect(url_for('admin', filtro_usuario=filtro_usuario, fecha_desde=fecha_desde, fecha_hasta=fecha_hasta))
+            if contexto == 'dashboard':
+                return redirect(url_for('dashboard'))
+            else:
+                return redirect(url_for('admin', filtro_usuario=filtro_usuario, fecha_desde=fecha_desde, fecha_hasta=fecha_hasta))
         else:
             return redirect(url_for('dashboard'))
+
 
         
     cliente_prefijo = {
