@@ -613,36 +613,41 @@ def exportar_excel():
         df.to_excel(writer, index=False, sheet_name='Registros', startrow=4)
         ws = writer.sheets['Registros']
 
-        # Insertar logo
+        # Logo
         from openpyxl.drawing.image import Image as ExcelImage
-        import os
-        logo_path = os.path.join('static', 'RH_Mobility_Logo.png')  # Reemplazá con el nombre real del archivo
+        logo_path = os.path.join('static', 'RH_Mobility_Logo.png')  # Reemplazá con el nombre real
         if os.path.exists(logo_path):
             img = ExcelImage(logo_path)
             img.width = 100
             img.height = 40
             ws.add_image(img, 'A1')
 
-        # Insertar nombre del usuario
-        ws['B2'] = f"Usuario: {session['username']}"
-        ws['B2'].font = Font(bold=True, size=12)
+        # Nombre del usuario filtrado
+        nombre_usuario = None
+        if usuario_id:
+            usuario = Usuario.query.filter_by(id=usuario_id).first()
+            if usuario:
+                nombre_usuario = usuario.username
+
+        if nombre_usuario:
+            ws['B2'] = f"Usuario: {nombre_usuario}"
+            ws['B2'].font = Font(name='Calibri', size=16, bold=True, color='1F4E78')
+            ws['B2'].alignment = Alignment(horizontal='left', vertical='center')
 
         # Estilos
-        header_font = Font(bold=True, color="FFFFFF", name='Calibri')
+        header_font = Font(bold=True, color="FFFFFF", name='Calibri', size=12)
         header_fill = PatternFill(start_color="305496", end_color="305496", fill_type="solid")
         total_fill = PatternFill(start_color="D9E1F2", end_color="D9E1F2", fill_type="solid")
         thin_border = Border(left=Side(style='thin'), right=Side(style='thin'),
                              top=Side(style='thin'), bottom=Side(style='thin'))
         center_alignment = Alignment(horizontal="center", vertical="center", wrap_text=True)
 
-        # Encabezados
         for cell in ws[5]:
             cell.font = header_font
             cell.fill = header_fill
             cell.border = thin_border
             cell.alignment = center_alignment
 
-        # Celdas
         for row in ws.iter_rows(min_row=6, max_row=ws.max_row):
             for cell in row:
                 cell.font = Font(name='Calibri', size=11)
@@ -652,13 +657,11 @@ def exportar_excel():
                 for cell in row:
                     cell.fill = PatternFill(start_color="F9F9F9", end_color="F9F9F9", fill_type="solid")
 
-        # Ajuste de columnas
         for col_num, column_cells in enumerate(ws.columns, 1):
             max_length = max((len(str(cell.value)) for cell in column_cells if cell.value), default=0)
             adjusted_width = min((max_length + 4), 50)
             ws.column_dimensions[get_column_letter(col_num)].width = adjusted_width
 
-        # Agregar fila de totales
         total_row = ws.max_row + 2
         ws.cell(row=total_row, column=1, value="TOTALES").font = Font(bold=True)
 
@@ -688,8 +691,9 @@ def exportar_excel():
     return send_file(
         archivo,
         as_attachment=True,
-        download_name=f"registros_{session['username']}.xlsx"
+        download_name=f"registros_{nombre_usuario or session['username']}.xlsx"
     )
+
 
 
 
