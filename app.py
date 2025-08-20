@@ -1065,7 +1065,7 @@ def editar_registro(id):
         'Belficor SA'                     : 'UYP-BELFICOR',
         'Compañía Salus SA'               : 'UYP-FTE SALUS',
         'Cooperativa Agraria de (CALCAR)' : 'UYC-COAGRARIA',
-        'Gibur S.A (Carton).'             : 'UYC-GIBUR',
+        'Gibur S.A. (Carton)'             : 'UYC-GIBUR',
         'Nolir S.A.'                      : 'UYC-NOLIR',
         'Recalco SA (ex Suadil)'          : 'UYC-RECALCO',
         'Conaprole Planta I (Proceso)'    : 'UYP-CONAPROLE P01',
