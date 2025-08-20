@@ -134,7 +134,8 @@ def dashboard():
         'Conaprole Planta VIII (Proceso)',
         'Cooperativa Agraria de (CALCAR)',
         'Gibur S.A.',
-        'Jugos del Uruguay SA',
+        'Jugos del Uruguay SA (Carton)',
+        'Jugos del Uruguay SA (Proceso)',
         'Montevideo Refrescos SA (Proceso)',
         'Nolir S.A.',
         'Recalco SA (ex Suadil)',
@@ -162,13 +163,14 @@ def dashboard():
         {'id': 11, 'nombre': 'Conaprole Planta VIII (Proceso) C.Costo= ()'},
         {'id': 12, 'nombre': 'Cerealin San Jose (Carton)C.Costo=8 ()'},
         {'id': 13, 'nombre': 'Cerealin San Jose (Proceso) C.Costo=8 ()'},
-        {'id': 14, 'nombre': 'Jugos del Uruguay SA  GMB revisar ()'},
-        {'id': 15, 'nombre': 'FUERA DE CONTRATO'},       
-        {'id': 16, 'nombre': 'Belficor SA C.Costo='},
-        {'id': 17, 'nombre': 'Compañía Salus SA C.Costo='},
-        {'id': 18, 'nombre': 'Barraca Deambrosi SA (Proceso) C.Costo=1 ()'},
-        {'id': 19, 'nombre': 'Montevideo Refrescos SA (Proceso) C.Costo= ()'},
-        {'id': 20, 'nombre': 'N/A'}
+        {'id': 14, 'nombre': 'Jugos del Uruguay SA (Carton) GMB revisar ()'},
+        {'id': 15, 'nombre': 'Jugos del Uruguay SA (Proceso) GMB revisar ()'},
+        {'id': 16, 'nombre': 'FUERA DE CONTRATO'},       
+        {'id': 17, 'nombre': 'Belficor SA C.Costo='},
+        {'id': 18, 'nombre': 'Compañía Salus SA C.Costo='},
+        {'id': 19, 'nombre': 'Barraca Deambrosi SA (Proceso) C.Costo=1 ()'},
+        {'id': 20, 'nombre': 'Montevideo Refrescos SA (Proceso) C.Costo= ()'},
+        {'id': 21, 'nombre': 'N/A'}
     ]
     contratos = [
         {'value': '73450003', 'label': 'Contrato'},
@@ -384,7 +386,15 @@ def dashboard():
         {'id': 180, 'nombre': 'UYP-MONRESA   MVD-MITEC   Máquina-Miteco Ingredients Dissolver                 N/S-16676-'},
         {'id': 181, 'nombre': 'UYP-MONRESA   MVD-MITEC   Máquina-Miteco Ingredients Dissolver                 N/S-T5880160029'},
         {'id': 182, 'nombre': 'UYP-MONRESA   MVD-MX01    Máquina-Tetra Pak Mixer RJCI                         N/S-T5845680002'},
-        {'id': 183, 'nombre': 'N/A'}
+        {'id': 183, 'nombre': 'UYC-JUGOSURUG FRY-LIN01   Máquina- TBA/21                                      N/S-15011/00099'},
+        {'id': 184, 'nombre': 'UYC-JUGOSURUG FRY-LIN02   Máquina- A3/Flex                                     N/S-21211/00147'},
+        {'id': 185, 'nombre': 'UYC-JUGOSURUG FRY-LIN03   Máquina- A3/Flex                                     N/S-21211/00389'},
+        {'id': 186, 'nombre': 'UYP-JUGOSURUG FRY-TREAT   Máquina-Tetra Plex Clip 6 RM WS                      N/S-30101-22606'},
+        {'id': 187, 'nombre': 'UYP-JUGOSURUG FRY-TREAT   Máquina-Tetra Plex CLIP 6 WS                         N/S-30101-25950'},
+        {'id': 188, 'nombre': 'UYP-JUGOSURUG FRY-TREAT   Máquina-Tetra Therm Nacional                         N/S-95085'},
+        {'id': 189, 'nombre': 'UYP-JUGOSURUG FRY-TREAT   Máquina-Tetra Therm Nacional                         N/S-B97439-01'},
+        {'id': 190, 'nombre': 'UYP-JUGOSURUG FRY-Z_DOC   Máquina-Plant Documentation                          N/S-D5865000135'},
+        {'id': 191, 'nombre': 'N/A'}
     ]
 
 
@@ -499,8 +509,9 @@ def dashboard():
         'Conaprole Planta VIII (Proceso)' : 'UYP-CONAPROLE P08',
         'Cerealin San Jose (Carton)'      : 'UYC-CEREALIN',
         'Cerealin San Jose (Proceso)'     : 'UYP-CEREALIN',
-        'Montevideo Refrescos SA (Proceso)': 'UYP-MONRESA',
-        'Jugos del Uruguay SA'            : '',  # definir si hay prefijo
+        'Montevideo Refrescos SA (Proceso)':'UYP-MONRESA',
+        'Jugos del Uruguay SA (Carton)'   : 'UYC-JUGOSURUG',  # definir si hay prefijo
+        'Jugos del Uruguay SA (Proceso)'   : 'UYP-JUGOSURUG',  # definir si hay prefijo
         'Tetrapak San Fernando'           : '',
         'N/A'                             : 'N/A'
     }
@@ -715,7 +726,8 @@ def editar_registro(id):
         'Conaprole Planta VIII (Proceso)',
         'Cooperativa Agraria de (CALCAR)',
         'Gibur S.A.',
-        'Jugos del Uruguay SA',
+        'Jugos del Uruguay SA (Carton)',
+        'Jugos del Uruguay SA (Proceso)',
         'Montevideo Refrescos SA (Proceso)',
         'Nolir S.A.',
         'Recalco SA (ex Suadil)',
@@ -742,13 +754,14 @@ def editar_registro(id):
         {'id': 11, 'nombre': 'Conaprole Planta VIII (Proceso) C.Costo= ()'},
         {'id': 12, 'nombre': 'Cerealin San Jose (Carton)C.Costo=8 ()'},
         {'id': 13, 'nombre': 'Cerealin San Jose (Proceso) C.Costo=8 ()'},
-        {'id': 14, 'nombre': 'Jugos del Uruguay SA  GMB revisar ()'},
-        {'id': 15, 'nombre': 'FUERA DE CONTRATO'},       
-        {'id': 16, 'nombre': 'Belficor SA C.Costo='},
-        {'id': 17, 'nombre': 'Compañía Salus SA C.Costo='},
-        {'id': 18, 'nombre': 'Barraca Deambrosi SA (Proceso) C.Costo=1 ()'},
-        {'id': 19, 'nombre': 'Montevideo Refrescos SA (Proceso) C.Costo= ()'},
-        {'id': 20, 'nombre': 'N/A'}
+        {'id': 14, 'nombre': 'Jugos del Uruguay SA (Carton) GMB revisar ()'},
+        {'id': 15, 'nombre': 'Jugos del Uruguay SA (Proceso) GMB revisar ()'},
+        {'id': 16, 'nombre': 'FUERA DE CONTRATO'},       
+        {'id': 17, 'nombre': 'Belficor SA C.Costo='},
+        {'id': 18, 'nombre': 'Compañía Salus SA C.Costo='},
+        {'id': 19, 'nombre': 'Barraca Deambrosi SA (Proceso) C.Costo=1 ()'},
+        {'id': 20, 'nombre': 'Montevideo Refrescos SA (Proceso) C.Costo= ()'},
+        {'id': 21, 'nombre': 'N/A'}
     ]
     contratos = [
             {'value': '73450003', 'label': 'Contrato'},
@@ -965,7 +978,15 @@ def editar_registro(id):
         {'id': 180, 'nombre': 'UYP-MONRESA   MVD-MITEC   Máquina-Miteco Ingredients Dissolver                 N/S-16676-'},
         {'id': 181, 'nombre': 'UYP-MONRESA   MVD-MITEC   Máquina-Miteco Ingredients Dissolver                 N/S-T5880160029'},
         {'id': 182, 'nombre': 'UYP-MONRESA   MVD-MX01    Máquina-Tetra Pak Mixer RJCI                         N/S-T5845680002'},
-        {'id': 183, 'nombre': 'N/A'}
+        {'id': 183, 'nombre': 'UYC-JUGOSURUG FRY-LIN01   Máquina- TBA/21                                      N/S-15011/00099'},
+        {'id': 184, 'nombre': 'UYC-JUGOSURUG FRY-LIN02   Máquina- A3/Flex                                     N/S-21211/00147'},
+        {'id': 185, 'nombre': 'UYC-JUGOSURUG FRY-LIN03   Máquina- A3/Flex                                     N/S-21211/00389'},
+        {'id': 186, 'nombre': 'UYP-JUGOSURUG FRY-TREAT   Máquina-Tetra Plex Clip 6 RM WS                      N/S-30101-22606'},
+        {'id': 187, 'nombre': 'UYP-JUGOSURUG FRY-TREAT   Máquina-Tetra Plex CLIP 6 WS                         N/S-30101-25950'},
+        {'id': 188, 'nombre': 'UYP-JUGOSURUG FRY-TREAT   Máquina-Tetra Therm Nacional                         N/S-95085'},
+        {'id': 189, 'nombre': 'UYP-JUGOSURUG FRY-TREAT   Máquina-Tetra Therm Nacional                         N/S-B97439-01'},
+        {'id': 190, 'nombre': 'UYP-JUGOSURUG FRY-Z_DOC   Máquina-Plant Documentation                          N/S-D5865000135'},
+        {'id': 191, 'nombre': 'N/A'}
     ]
 
     if request.method == 'POST':
@@ -1056,7 +1077,8 @@ def editar_registro(id):
         'Cerealin San Jose (Carton)'      : 'UYC-CEREALIN',
         'Cerealin San Jose (Proceso)'     : 'UYP-CEREALIN',
         'Montevideo Refrescos SA (Proceso)': 'UYP-MONRESA',
-        'Jugos del Uruguay SA'            : '',  # definir si hay prefijo
+        'Jugos del Uruguay SA (Carton)'   : 'UYC-JUGOSURUG',  # definir si hay prefijo
+        'Jugos del Uruguay SA (Proceso)'  : 'UYP-JUGOSURUG',  # definir si hay prefijo
         'Tetrapak San Fernando'           : '',
         'N/A'                             : 'N/A'
     }
