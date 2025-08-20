@@ -319,7 +319,7 @@ def dashboard():
         {'id': 114, 'nombre': 'UYP-CONAPROLE P08-PP 01   Máquina-Tetra Pak®Surge Hopper VT                    N/S-5860280659'},
         {'id': 115, 'nombre': 'UYP-CONAPROLE P08-PP 01   Máquina-Tetra Pak®Surge Hopper VT                    N/S-5860280660'},
         {'id': 116, 'nombre': 'UYP-CONAPROLE P08-PP 01   Máquina-Tetra Pak®Surge Hopper VT                    N/S-5860280661'},
-        {'id': 117 'nombre': 'UYP-CONAPROLE P08-PP 01   Máquina-Tetra Pak®Surge Hopper VT                    N/S-5860280662'},
+        {'id': 117, 'nombre': 'UYP-CONAPROLE P08-PP 01   Máquina-Tetra Pak®Surge Hopper VT                    N/S-5860280662'},
         {'id': 118, 'nombre': 'UYP-CONAPROLE P08-PP 01   Máquina-Tetra Pak®Big Bag Filling unit S DB006       N/S-5860140027'},
         {'id': 119, 'nombre': 'UYP-CONAPROLE P08-PP 01   Máquina-Tetra Pak®Bag Tipping unit CS VS600          N/S-5860310077'},
         {'id': 120, 'nombre': 'UYP-CONAPROLE P08-PP 01   Máquina-Tetra Pak®Bag Tipping unit CS VS600          N/S-5860310078'},
@@ -452,8 +452,6 @@ def dashboard():
         except ValueError:
             flash("Formato de hora incorrecto. Use HH:MM.", "danger")
             return redirect(url_for('dashboard'))
-
-        
             
 
         nuevo_registro = Registro(
