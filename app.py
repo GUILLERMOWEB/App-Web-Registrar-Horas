@@ -769,7 +769,7 @@ def editar_registro(id):
         {'id': 19, 'nombre': '1561233 - Companía Salus SA C.Costo='},
         {'id': 20, 'nombre': 'Barraca Deambrosi SA (Proceso) C.Costo=1 ()'},
         {'id': 22, 'nombre': 'Montevideo Refrescos SA (Proceso) C.Costo= ()'},
-        {'id': 23, 'nombre': '1569004 - Cerealin S.A C.Costo=8 ()'}
+        {'id': 23, 'nombre': '1569004 - Cerealin S.A C.Costo= ()'},
         {'id': 24, 'nombre': 'N/A'}
     ]
     contratos = [
