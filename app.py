@@ -174,7 +174,7 @@ def dashboard():
         {'id': 20, 'nombre': 'Barraca Deambrosi SA (Proceso) C.Costo=1 ()'},
         {'id': 22, 'nombre': 'Montevideo Refrescos SA (Proceso) C.Costo= ()'},
         {'id': 23, 'nombre': '1569004 - Cerealin S.A C.Costo= ()'},
-        {'id': 24, 'nombre': 'N/A'}
+        {'id': 24, 'nombre': 'Otros Clientes del Mercado N/A'}
     ]
     contratos = [
         {'value': '73450003', 'label': 'Contrato'},
@@ -399,7 +399,8 @@ def dashboard():
         {'id': 192, 'nombre': 'UYP-JUGOSURUG FRY-TREAT   Máquina-Tetra Therm Nacional                         N/S-95085'},
         {'id': 193, 'nombre': 'UYP-JUGOSURUG FRY-TREAT   Máquina-Tetra Therm Nacional                         N/S-B97439-01'},
         {'id': 194, 'nombre': 'UYP-JUGOSURUG FRY-Z_DOC   Máquina-Plant Documentation                          N/S-D5865000135'},
-        {'id': 195, 'nombre': 'N/A'}
+        {'id': 195, 'nombre': 'UYP - N/A'},
+        {'id': 196, 'nombre': 'UYC - N/A'}
     ]
 
 
@@ -517,8 +518,9 @@ def dashboard():
         'Montevideo Refrescos SA (Proceso)':'UYP-MONRESA',
         'Jugos del Uruguay SA (Carton)'   : 'UYC-JUGOSURUG',  # definir si hay prefijo
         'Jugos del Uruguay SA (Proceso)'  : 'UYP-JUGOSURUG',  # definir si hay prefijo
-        'Tetrapak San Fernando'           : '',
-        'N/A'                             : 'N/A'
+        'Tetrapak San Fernando'           : 'N/A',
+        'Otros Clientes del Mercado '     : 'UYP - N/A',
+        'Otros Clientes del Mercado '     : 'UYC - N/A'
     }
       # ─── Construcción automática de cliente_cc_lineas ───
     
@@ -770,7 +772,7 @@ def editar_registro(id):
         {'id': 20, 'nombre': 'Barraca Deambrosi SA (Proceso) C.Costo=1 ()'},
         {'id': 22, 'nombre': 'Montevideo Refrescos SA (Proceso) C.Costo= ()'},
         {'id': 23, 'nombre': '1569004 - Cerealin S.A C.Costo= ()'},
-        {'id': 24, 'nombre': 'N/A'}
+        {'id': 24, 'nombre': 'Otros Clientes del Mercado N/A'}
     ]
     contratos = [
             {'value': '73450003', 'label': 'Contrato'},
@@ -996,7 +998,8 @@ def editar_registro(id):
         {'id': 192, 'nombre': 'UYP-JUGOSURUG FRY-TREAT   Máquina-Tetra Therm Nacional                         N/S-95085'},
         {'id': 193, 'nombre': 'UYP-JUGOSURUG FRY-TREAT   Máquina-Tetra Therm Nacional                         N/S-B97439-01'},
         {'id': 194, 'nombre': 'UYP-JUGOSURUG FRY-Z_DOC   Máquina-Plant Documentation                          N/S-D5865000135'},
-        {'id': 195, 'nombre': 'N/A'}
+        {'id': 195, 'nombre': 'UYP - N/A'},
+        {'id': 196, 'nombre': 'UYC - N/A'}
     ]
 
     if request.method == 'POST':
@@ -1091,8 +1094,9 @@ def editar_registro(id):
         'Montevideo Refrescos SA (Proceso)': 'UYP-MONRESA',
         'Jugos del Uruguay SA (Carton)'   : 'UYC-JUGOSURUG',  # definir si hay prefijo
         'Jugos del Uruguay SA (Proceso)'  : 'UYP-JUGOSURUG',  # definir si hay prefijo
-        'Tetrapak San Fernando'           : '',
-        'N/A'                             : 'N/A'
+        'Tetrapak San Fernando'           : 'N/A',
+        'Otros Clientes del Mercado '     : 'UYP - N/A',
+        'Otros Clientes del Mercado '     : 'UYC - N/A'
     }
       # ─── Construcción automática de cliente_cc_lineas ───
     
