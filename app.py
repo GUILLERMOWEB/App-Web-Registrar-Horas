@@ -519,8 +519,8 @@ def dashboard():
         'Jugos del Uruguay SA (Carton)'   : 'UYC-JUGOSURUG',  # definir si hay prefijo
         'Jugos del Uruguay SA (Proceso)'  : 'UYP-JUGOSURUG',  # definir si hay prefijo
         'Tetrapak San Fernando'           : 'N/A',
-        'Otros Clientes del Mercado '     : 'UYP - N/A',
-        'Otros Clientes del Mercado '     : 'UYC - N/A'
+        'Otros Clientes del Mercado'      : 'UYP - N/A',
+        'Otros Clientes del Mercado'      : 'UYC - N/A'
     }
       # ─── Construcción automática de cliente_cc_lineas ───
     
@@ -1095,8 +1095,8 @@ def editar_registro(id):
         'Jugos del Uruguay SA (Carton)'   : 'UYC-JUGOSURUG',  # definir si hay prefijo
         'Jugos del Uruguay SA (Proceso)'  : 'UYP-JUGOSURUG',  # definir si hay prefijo
         'Tetrapak San Fernando'           : 'N/A',
-        'Otros Clientes del Mercado '     : 'UYP - N/A',
-        'Otros Clientes del Mercado '     : 'UYC - N/A'
+        'Otros Clientes del Mercado'      : 'UYP - N/A',
+        'Otros Clientes del Mercado'      : 'UYC - N/A'
     }
       # ─── Construcción automática de cliente_cc_lineas ───
     
