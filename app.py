@@ -120,12 +120,14 @@ def dashboard():
     # Ejemplo de listas de opciones (reemplazar por consulta a DB luego)
     
     clientes = [
-        'Barraca Deambrosi SA (Carton)',
-        'Barraca Deambrosi SA (Proceso)',
-        'Belficor SA',
-        'Cerealin San Jose (Carton)',
-        'Cerealin San Jose (Proceso)',
-        'Compañía Salus SA',
+        '1561046 - Barraca Deambrosi SA (Carton)',
+        '1561046 - Barraca Deambrosi SA (Proceso)',
+        '1561458 - Belficor Sociedad Anónima (Proceso)',
+        '1561459 - Belficor - Paraje La Boyada',
+        '1560018 - Cerealin San Jose (Carton)',
+        '1560018 - Cerealin San Jose (Proceso)',
+        '1569004 - Cerealin S.A',
+        '1561233 - Companía Salus SA',
         'Conaprole Planta I (Proceso)',
         'Conaprole Planta CIM (Carton)',
         'Conaprole Planta CIM (Proceso)',
@@ -140,7 +142,7 @@ def dashboard():
         'Nolir S.A.',
         'Recalco SA (ex Suadil)',
         'Tetrapak San Fernando',
-        'N/A'
+        'Otros Clientes del Mercado'
     ]
     if tipo_cliente == 'Cartón':
         clientes = [c for c in clientes if cliente_prefijo.get(c, '').startswith('UYC')]
@@ -150,7 +152,7 @@ def dashboard():
 
     service_orders = ['SM02', 'SM03','N/A']
     centros_costo = [
-        {'id': 1, 'nombre': 'Barraca Deambrosi SA (Carton) C.Costo=1 ()'},
+        {'id': 1, 'nombre': '1561046 - Barraca Deambrosi SA (Carton) C.Costo=1 ()'},
         {'id': 2, 'nombre': 'Cooperativa Agraria de (CALCAR) C.Costo=2 ()'},
         {'id': 3, 'nombre': 'Gibur S.A. (Carton) C.Costo=3 ()'},
         {'id': 4, 'nombre': 'Nolir S.A. C.Costo=4 ()'},
@@ -166,11 +168,13 @@ def dashboard():
         {'id': 14, 'nombre': 'Jugos del Uruguay SA (Carton) GMB revisar ()'},
         {'id': 15, 'nombre': 'Jugos del Uruguay SA (Proceso) GMB revisar ()'},
         {'id': 16, 'nombre': 'FUERA DE CONTRATO'},       
-        {'id': 17, 'nombre': 'Belficor SA C.Costo='},
-        {'id': 18, 'nombre': 'Compañía Salus SA C.Costo='},
-        {'id': 19, 'nombre': 'Barraca Deambrosi SA (Proceso) C.Costo=1 ()'},
-        {'id': 20, 'nombre': 'Montevideo Refrescos SA (Proceso) C.Costo= ()'},
-        {'id': 21, 'nombre': 'N/A'}
+        {'id': 17, 'nombre': '1561458 - Belficor Sociedad Anónima (Proceso) C.Costo='},
+        {'id': 18, 'nombre': '1561459 - Belficor - Paraje La Boyada C.Costo='},
+        {'id': 19, 'nombre': '1561233 - Companía Salus SA C.Costo='},
+        {'id': 20, 'nombre': 'Barraca Deambrosi SA (Proceso) C.Costo=1 ()'},
+        {'id': 22, 'nombre': 'Montevideo Refrescos SA (Proceso) C.Costo= ()'},
+        {'id': 23, 'nombre': '1569004 - Cerealin S.A C.Costo= ()'},
+        {'id': 24, 'nombre': 'N/A'}
     ]
     contratos = [
         {'value': '73450003', 'label': 'Contrato'},
@@ -492,10 +496,11 @@ def dashboard():
       
       
     cliente_prefijo = {
-        'Barraca Deambrosi SA (Carton)'   : 'UYC-BARRACA',
-        'Barraca Deambrosi SA (Proceso)'  : 'UYP-BARRACA',
-        'Belficor SA'                     : 'UYP-BELFICOR',
-        'Compañía Salus SA'               : 'UYP-FTE SALUS',
+        '1561046 - Barraca Deambrosi SA (Carton)'   : 'UYC-BARRACA',
+        '1561046 - Barraca Deambrosi SA (Proceso)'  : 'UYP-BARRACA',
+        '1561458 - Belficor Sociedad Anónima (Proceso)'       : 'UYP-BELFICOR',
+        '1561459 - Belficor - Paraje La Boyada'     : 'UYP-BELFICOR',
+        '1561233 - Companía Salus SA'               : 'UYP-FTE SALUS',
         'Cooperativa Agraria de (CALCAR)' : 'UYC-COAGRARIA',
         'Gibur S.A. (Carton)'             : 'UYC-GIBUR',
         'Nolir S.A.'                      : 'UYC-NOLIR',
@@ -508,9 +513,10 @@ def dashboard():
         'Conaprole Planta VIII (Proceso)' : 'UYP-CONAPROLE P08',
         'Cerealin San Jose (Carton)'      : 'UYC-CEREALIN',
         'Cerealin San Jose (Proceso)'     : 'UYP-CEREALIN',
+        '1569004 - Cerealin S.A'          : 'UYP-CEREALIN',
         'Montevideo Refrescos SA (Proceso)':'UYP-MONRESA',
         'Jugos del Uruguay SA (Carton)'   : 'UYC-JUGOSURUG',  # definir si hay prefijo
-        'Jugos del Uruguay SA (Proceso)'   : 'UYP-JUGOSURUG',  # definir si hay prefijo
+        'Jugos del Uruguay SA (Proceso)'  : 'UYP-JUGOSURUG',  # definir si hay prefijo
         'Tetrapak San Fernando'           : '',
         'N/A'                             : 'N/A'
     }
@@ -711,12 +717,14 @@ def editar_registro(id):
     # Definí acá tus listas o importalas desde donde estén definidas
     
     clientes = [
-        'Barraca Deambrosi SA (Carton)',
-        'Barraca Deambrosi SA (Proceso)',
-        'Belficor SA',
+        '1561046 - Barraca Deambrosi SA (Carton)',
+        '1561046 - Barraca Deambrosi SA (Proceso)',
+        '1561458 - Belficor Sociedad Anónima (Proceso)',
+        '1561459 - Belficor - Paraje La Boyada',
         'Cerealin San Jose (Carton)',
         'Cerealin San Jose (Proceso)',
-        'Compañía Salus SA',
+        '1569004 - Cerealin S.A',
+        '1561233 - Companía Salus SA',
         'Conaprole Planta I (Proceso)',
         'Conaprole Planta CIM (Carton)',
         'Conaprole Planta CIM (Proceso)',
@@ -731,7 +739,7 @@ def editar_registro(id):
         'Nolir S.A.',
         'Recalco SA (ex Suadil)',
         'Tetrapak San Fernando',
-        'N/A'
+        'Otros Clientes del Mercado'
     ]
 
 
@@ -740,7 +748,7 @@ def editar_registro(id):
     service_orders = ['SM02', 'SM03', 'N/A']
 
     centros_costo = [
-        {'id': 1, 'nombre': 'Barraca Deambrosi SA (Carton) C.Costo=1 ()'},
+        {'id': 1, 'nombre': '1561046 - Barraca Deambrosi SA (Carton) C.Costo=1 ()'},
         {'id': 2, 'nombre': 'Cooperativa Agraria de (CALCAR) C.Costo=2 ()'},
         {'id': 3, 'nombre': 'Gibur S.A. (Carton) C.Costo=3 ()'},
         {'id': 4, 'nombre': 'Nolir S.A. C.Costo=4 ()'},
@@ -756,11 +764,13 @@ def editar_registro(id):
         {'id': 14, 'nombre': 'Jugos del Uruguay SA (Carton) GMB revisar ()'},
         {'id': 15, 'nombre': 'Jugos del Uruguay SA (Proceso) GMB revisar ()'},
         {'id': 16, 'nombre': 'FUERA DE CONTRATO'},       
-        {'id': 17, 'nombre': 'Belficor SA C.Costo='},
-        {'id': 18, 'nombre': 'Compañía Salus SA C.Costo='},
-        {'id': 19, 'nombre': 'Barraca Deambrosi SA (Proceso) C.Costo=1 ()'},
-        {'id': 20, 'nombre': 'Montevideo Refrescos SA (Proceso) C.Costo= ()'},
-        {'id': 21, 'nombre': 'N/A'}
+        {'id': 17, 'nombre': '1561458 - Belficor Sociedad Anónima (Proceso) C.Costo='},
+        {'id': 18, 'nombre': '1561459 - Belficor - Paraje La Boyada C.Costo='},
+        {'id': 19, 'nombre': '1561233 - Companía Salus SA C.Costo='},
+        {'id': 20, 'nombre': 'Barraca Deambrosi SA (Proceso) C.Costo=1 ()'},
+        {'id': 22, 'nombre': 'Montevideo Refrescos SA (Proceso) C.Costo= ()'},
+        {'id': 23, 'nombre': '1569004 - Cerealin S.A C.Costo=8 ()'}
+        {'id': 24, 'nombre': 'N/A'}
     ]
     contratos = [
             {'value': '73450003', 'label': 'Contrato'},
@@ -1060,10 +1070,11 @@ def editar_registro(id):
 
         
     cliente_prefijo = {
-        'Barraca Deambrosi SA (Carton)'   : 'UYC-BARRACA',
-        'Barraca Deambrosi SA (Proceso)'  : 'UYP-BARRACA',
-        'Belficor SA'                     : 'UYP-BELFICOR',
-        'Compañía Salus SA'               : 'UYP-FTE SALUS',
+        '1561046 - Barraca Deambrosi SA (Carton)'   : 'UYC-BARRACA',
+        '1561046 - Barraca Deambrosi SA (Proceso)'  : 'UYP-BARRACA',
+        '1561458 - Belficor Sociedad Anónima (Proceso)'       : 'UYP-BELFICOR',
+        '1561459 - Belficor - Paraje La Boyada'     : 'UYP-BELFICOR',
+        '1561233 - Companía Salus SA'               : 'UYP-FTE SALUS',
         'Cooperativa Agraria de (CALCAR)' : 'UYC-COAGRARIA',
         'Gibur S.A. (Carton)'             : 'UYC-GIBUR',
         'Nolir S.A.'                      : 'UYC-NOLIR',
@@ -1076,6 +1087,7 @@ def editar_registro(id):
         'Conaprole Planta VIII (Proceso)' : 'UYP-CONAPROLE P08',
         'Cerealin San Jose (Carton)'      : 'UYC-CEREALIN',
         'Cerealin San Jose (Proceso)'     : 'UYP-CEREALIN',
+        '1569004 - Cerealin S.A'          : 'UYP-CEREALIN',
         'Montevideo Refrescos SA (Proceso)': 'UYP-MONRESA',
         'Jugos del Uruguay SA (Carton)'   : 'UYC-JUGOSURUG',  # definir si hay prefijo
         'Jugos del Uruguay SA (Proceso)'  : 'UYP-JUGOSURUG',  # definir si hay prefijo
