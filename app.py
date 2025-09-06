@@ -399,8 +399,9 @@ def dashboard():
         {'id': 192, 'nombre': 'UYP-JUGOSURUG FRY-TREAT   Máquina-Tetra Therm Nacional                         N/S-95085'},
         {'id': 193, 'nombre': 'UYP-JUGOSURUG FRY-TREAT   Máquina-Tetra Therm Nacional                         N/S-B97439-01'},
         {'id': 194, 'nombre': 'UYP-JUGOSURUG FRY-Z_DOC   Máquina-Plant Documentation                          N/S-D5865000135'},
-        {'id': 195, 'nombre': 'UYP - N/A'},
-        {'id': 196, 'nombre': 'UYC - N/A'}
+        {'id': 195, 'nombre': 'UYC-CONAPROLE P08-LIN05   Máquina-E3/Speed                                     N/S-21225/00033'},
+        {'id': 196, 'nombre': 'UYP - N/A'},
+        {'id': 197, 'nombre': 'UYC - N/A'}
     ]
 
 
@@ -998,8 +999,9 @@ def editar_registro(id):
         {'id': 192, 'nombre': 'UYP-JUGOSURUG FRY-TREAT   Máquina-Tetra Therm Nacional                         N/S-95085'},
         {'id': 193, 'nombre': 'UYP-JUGOSURUG FRY-TREAT   Máquina-Tetra Therm Nacional                         N/S-B97439-01'},
         {'id': 194, 'nombre': 'UYP-JUGOSURUG FRY-Z_DOC   Máquina-Plant Documentation                          N/S-D5865000135'},
-        {'id': 195, 'nombre': 'UYP - N/A'},
-        {'id': 196, 'nombre': 'UYC - N/A'}
+        {'id': 195, 'nombre': 'UYC-CONAPROLE P08-LIN05   Máquina-E3/Speed                                     N/S-21225/00033'},
+        {'id': 196, 'nombre': 'UYP - N/A'},
+        {'id': 197, 'nombre': 'UYC - N/A'}
     ]
 
     if request.method == 'POST':
