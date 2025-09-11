@@ -135,6 +135,7 @@ def dashboard():
         '1560606 - Conaprole Planta VIII (Carton)',
         '1560606 - Conaprole Planta VIII (Proceso)',
         '1561251 - Cooperativa Agraria (CALCAR)',
+        '1560621 - Ecolat Uruguay S.A. (Proceso)',
         '1561335 - Gibur S.A. (Carton)',
         '1561062 - Jugos del Uruguay S.A. (Carton)',
         '1561062 - Jugos del Uruguay S.A. (Proceso)',
@@ -174,7 +175,8 @@ def dashboard():
         {'id': 20, 'nombre': 'Barraca Deambrosi SA (Proceso) C.Costo=1 ()'},
         {'id': 22, 'nombre': '1561132 - Montevideo Refrescos S.A. (Proceso) C.Costo= ()'},
         {'id': 23, 'nombre': '1569004 - Cerealin S.A. C.Costo= ()'},
-        {'id': 24, 'nombre': 'Otros Clientes del Mercado N/A'}
+        {'id': 24, 'nombre': '1560621 - Ecolat Uruguay S.A. (Proceso) C.Costo= ()'},
+        {'id': 25, 'nombre': 'Otros Clientes del Mercado N/A'}
     ]
     contratos = [
         {'value': '73450003', 'label': 'Contrato'},
@@ -400,8 +402,25 @@ def dashboard():
         {'id': 193, 'nombre': 'UYP-JUGOSURUG FRY-TREAT   Máquina-Tetra Therm Nacional                         N/S-B97439-01'},
         {'id': 194, 'nombre': 'UYP-JUGOSURUG FRY-Z_DOC   Máquina-Plant Documentation                          N/S-D5865000135'},
         {'id': 195, 'nombre': 'UYC-CONAPROLE P08-LIN05   Máquina-E3/Speed                                     N/S-21225/00033'},
-        {'id': 196, 'nombre': 'UYP - N/A'},
-        {'id': 197, 'nombre': 'UYC - N/A'}
+        {'id': 196, 'nombre': 'UYP-ECOLAT    NVH-TREAT TETRA ALEX 30 A   Máquina-T4625220                     N/S-T4625220'},
+        {'id': 197, 'nombre': 'UYP-ECOLAT    NVH-TREAT Tetra Alsafe LA   Máquina-T2440170                     N/S-T2440170'},
+        {'id': 198, 'nombre': 'UYP-ECOLAT    NVH-TREAT Tetra Therm Aseptic Flex   Máquina-T2100197            N/S-T2100197'},
+        {'id': 199, 'nombre': 'UYP-ECOLAT    NVH-TREAT Tetra Alfast Plus   Máquina-T5845440334                N/S-T5845440334'},
+        {'id': 200, 'nombre': 'UYP-ECOLAT    NVH-TREAT Tetra Plex MS6-SR in C6092071/04   Máquina-30106-35480 N/S-30106-35480'},
+        {'id': 201, 'nombre': 'UYP-ECOLAT    NVH-TREAT Tetra Plex C6-SR in C6092071/01   Máquina-30106-35479  N/S-30106-35479'},
+        {'id': 202, 'nombre': 'UYP-ECOLAT    NVH-TREAT Tetra Alcip Nacional   Máquina-C6092071/02             N/S-C6092071/02'},
+        {'id': 203, 'nombre': 'UYP-ECOLAT    NVH-TREAT Tetra Therm Nacional   Máquina-C6092071/04             N/S-C6092071/04'},
+        {'id': 204, 'nombre': 'UYP-ECOLAT    NVH-TREAT Tetra Therm Nacional   Máquina-C6092071/01             N/S-C6092071/01'},
+        {'id': 205, 'nombre': 'UYP-ECOLAT    NVH-TREAT Tetra Therm Nacional   Máquina-C6092071/03             N/S-C6092071/03'},
+        {'id': 206, 'nombre': 'UYP-ECOLAT    NVH-TREAT Tetra Plex MS6-SR in C6092071/03   Máquina-30106-35573 N/S-30106-35573'},
+        {'id': 207, 'nombre': 'UYP-ECOLAT    NVH-TREAT Tetra Plex C6-SR   Máquina-30106-35478                 N/S-30106-35478'},
+        {'id': 208, 'nombre': 'UYP-ECOLAT    NVH-TREAT Tetra Plex C6-SR   Máquina-30106-35477                 N/S-30106-35477'},
+        {'id': 209, 'nombre': 'UYP-ECOLAT    NVH-TREAT Tetra Alcross US 100   Máquina-T5845810090             N/S-T5845810090'},
+        {'id': 210, 'nombre': 'UYP-ECOLAT    NVH-TREAT Tetra Plex MS10-SR   Máquina-30107-34354               N/S-30107-34354'},
+        {'id': 211, 'nombre': 'UYP-ECOLAT    NVH-TREAT Tetra Alfast   Máquina-T5845440556                     N/S-T5845440556'},
+        {'id': 212, 'nombre': 'UYP-ECOLAT    NVH-TREAT Tetra Alfast   Máquina-T5845440557                     N/S-T5845440557'},
+        {'id': 213, 'nombre': 'UYP - N/A'},
+        {'id': 214, 'nombre': 'UYC - N/A'}
     ]
 
 
@@ -503,7 +522,8 @@ def dashboard():
         '1561458 - Belficor Sociedad Anónima (Proceso)'       : 'UYP-BELFICOR',
         '1561459 - Belficor - Paraje La Boyada'     : 'UYP-BELFICOR',
         '1561233 - Companía Salus SA'               : 'UYP-FTE SALUS',
-        '1561251 - Cooperativa Agraria (CALCAR)' : 'UYC-COAGRARIA',
+        '1561251 - Cooperativa Agraria (CALCAR)'    :'UYC-COAGRARIA',
+        '1560621 - Ecolat Uruguay S.A. (Proceso)'   :'UYP-ECOLAT',
         '1561335 - Gibur S.A. (Carton)'             : 'UYC-GIBUR',
         '1561540 - Nolir S.A.'                      : 'UYC-NOLIR',
         '1560020 - Recalco S.A. (ex Suadil)'          : 'UYC-RECALCO',
@@ -735,6 +755,7 @@ def editar_registro(id):
         '1560606 - Conaprole Planta VIII (Carton)',
         '1560606 - Conaprole Planta VIII (Proceso)',
         '1561251 - Cooperativa Agraria (CALCAR)',
+        '1560621 - Ecolat Uruguay S.A. (Proceso)',
         '1561335 - Gibur S.A. (Carton)',
         '1561062 - Jugos del Uruguay S.A. (Carton)',
         '1561062 - Jugos del Uruguay S.A. (Proceso)',
@@ -773,7 +794,8 @@ def editar_registro(id):
         {'id': 20, 'nombre': 'Barraca Deambrosi SA (Proceso) C.Costo=1 ()'},
         {'id': 22, 'nombre': '1561132 - Montevideo Refrescos S.A. (Proceso) C.Costo= ()'},
         {'id': 23, 'nombre': '1569004 - Cerealin S.A. C.Costo= ()'},
-        {'id': 24, 'nombre': 'Otros Clientes del Mercado N/A'}
+        {'id': 24, 'nombre': '1560621 - Ecolat Uruguay S.A. (Proceso) C.Costo= ()'},
+        {'id': 25, 'nombre': 'Otros Clientes del Mercado N/A'}
     ]
     contratos = [
             {'value': '73450003', 'label': 'Contrato'},
@@ -1000,8 +1022,25 @@ def editar_registro(id):
         {'id': 193, 'nombre': 'UYP-JUGOSURUG FRY-TREAT   Máquina-Tetra Therm Nacional                         N/S-B97439-01'},
         {'id': 194, 'nombre': 'UYP-JUGOSURUG FRY-Z_DOC   Máquina-Plant Documentation                          N/S-D5865000135'},
         {'id': 195, 'nombre': 'UYC-CONAPROLE P08-LIN05   Máquina-E3/Speed                                     N/S-21225/00033'},
-        {'id': 196, 'nombre': 'UYP - N/A'},
-        {'id': 197, 'nombre': 'UYC - N/A'}
+        {'id': 196, 'nombre': 'UYP-ECOLAT    NVH-TREAT TETRA ALEX 30 A   Máquina-T4625220                     N/S-T4625220'},
+        {'id': 197, 'nombre': 'UYP-ECOLAT    NVH-TREAT Tetra Alsafe LA   Máquina-T2440170                     N/S-T2440170'},
+        {'id': 198, 'nombre': 'UYP-ECOLAT    NVH-TREAT Tetra Therm Aseptic Flex   Máquina-T2100197            N/S-T2100197'},
+        {'id': 199, 'nombre': 'UYP-ECOLAT    NVH-TREAT Tetra Alfast Plus   Máquina-T5845440334                N/S-T5845440334'},
+        {'id': 200, 'nombre': 'UYP-ECOLAT    NVH-TREAT Tetra Plex MS6-SR in C6092071/04   Máquina-30106-35480 N/S-30106-35480'},
+        {'id': 201, 'nombre': 'UYP-ECOLAT    NVH-TREAT Tetra Plex C6-SR in C6092071/01   Máquina-30106-35479  N/S-30106-35479'},
+        {'id': 202, 'nombre': 'UYP-ECOLAT    NVH-TREAT Tetra Alcip Nacional   Máquina-C6092071/02             N/S-C6092071/02'},
+        {'id': 203, 'nombre': 'UYP-ECOLAT    NVH-TREAT Tetra Therm Nacional   Máquina-C6092071/04             N/S-C6092071/04'},
+        {'id': 204, 'nombre': 'UYP-ECOLAT    NVH-TREAT Tetra Therm Nacional   Máquina-C6092071/01             N/S-C6092071/01'},
+        {'id': 205, 'nombre': 'UYP-ECOLAT    NVH-TREAT Tetra Therm Nacional   Máquina-C6092071/03             N/S-C6092071/03'},
+        {'id': 206, 'nombre': 'UYP-ECOLAT    NVH-TREAT Tetra Plex MS6-SR in C6092071/03   Máquina-30106-35573 N/S-30106-35573'},
+        {'id': 207, 'nombre': 'UYP-ECOLAT    NVH-TREAT Tetra Plex C6-SR   Máquina-30106-35478                 N/S-30106-35478'},
+        {'id': 208, 'nombre': 'UYP-ECOLAT    NVH-TREAT Tetra Plex C6-SR   Máquina-30106-35477                 N/S-30106-35477'},
+        {'id': 209, 'nombre': 'UYP-ECOLAT    NVH-TREAT Tetra Alcross US 100   Máquina-T5845810090             N/S-T5845810090'},
+        {'id': 210, 'nombre': 'UYP-ECOLAT    NVH-TREAT Tetra Plex MS10-SR   Máquina-30107-34354               N/S-30107-34354'},
+        {'id': 211, 'nombre': 'UYP-ECOLAT    NVH-TREAT Tetra Alfast   Máquina-T5845440556                     N/S-T5845440556'},
+        {'id': 212, 'nombre': 'UYP-ECOLAT    NVH-TREAT Tetra Alfast   Máquina-T5845440557                     N/S-T5845440557'},
+        {'id': 213, 'nombre': 'UYP - N/A'},
+        {'id': 214, 'nombre': 'UYC - N/A'}
     ]
 
     if request.method == 'POST':
