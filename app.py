@@ -1043,6 +1043,7 @@ def editar_registro(id):
         {'id': 213, 'nombre': 'UYC-CONAPROLE CIM-LIN03   Máquina-A3 Compact Flex                              N/S-21220/00285'},
         {'id': 214, 'nombre': 'UYP - N/A'},
         {'id': 215, 'nombre': 'UYC - N/A'}
+    ]
 
     if request.method == 'POST':
         try:
