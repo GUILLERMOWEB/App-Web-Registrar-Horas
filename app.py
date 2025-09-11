@@ -419,8 +419,9 @@ def dashboard():
         {'id': 210, 'nombre': 'UYP-ECOLAT    NVH-TREAT Tetra Plex MS10-SR   Máquina-30107-34354               N/S-30107-34354'},
         {'id': 211, 'nombre': 'UYP-ECOLAT    NVH-TREAT Tetra Alfast   Máquina-T5845440556                     N/S-T5845440556'},
         {'id': 212, 'nombre': 'UYP-ECOLAT    NVH-TREAT Tetra Alfast   Máquina-T5845440557                     N/S-T5845440557'},
-        {'id': 213, 'nombre': 'UYP - N/A'},
-        {'id': 214, 'nombre': 'UYC - N/A'}
+        {'id': 213, 'nombre': 'UYC-CONAPROLE CIM-LIN03   Máquina-A3 Compact Flex                              N/S-21220/00285'},
+        {'id': 214, 'nombre': 'UYP - N/A'},
+        {'id': 215, 'nombre': 'UYC - N/A'}
     ]
 
 
@@ -1039,9 +1040,9 @@ def editar_registro(id):
         {'id': 210, 'nombre': 'UYP-ECOLAT    NVH-TREAT Tetra Plex MS10-SR   Máquina-30107-34354               N/S-30107-34354'},
         {'id': 211, 'nombre': 'UYP-ECOLAT    NVH-TREAT Tetra Alfast   Máquina-T5845440556                     N/S-T5845440556'},
         {'id': 212, 'nombre': 'UYP-ECOLAT    NVH-TREAT Tetra Alfast   Máquina-T5845440557                     N/S-T5845440557'},
-        {'id': 213, 'nombre': 'UYP - N/A'},
-        {'id': 214, 'nombre': 'UYC - N/A'}
-    ]
+        {'id': 213, 'nombre': 'UYC-CONAPROLE CIM-LIN03   Máquina-A3 Compact Flex                              N/S-21220/00285'},
+        {'id': 214, 'nombre': 'UYP - N/A'},
+        {'id': 215, 'nombre': 'UYC - N/A'}
 
     if request.method == 'POST':
         try:
