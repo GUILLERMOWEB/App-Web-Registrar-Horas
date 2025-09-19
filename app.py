@@ -147,6 +147,9 @@ def dashboard():
         '1561540 - Nolir S.A.',
         '1560020 - Recalco S.A. (ex Suadil)',
         '1570011 - Tetrapak Argentina',
+        '1580001 - Tetra Pak Chile',
+        '1550005 - Tetra Pak Paraguay',
+        '1560001 - Tetra Pak Uruguay S.R.L.',
         'Otros Clientes del Mercado'
     ]
     if tipo_cliente == 'Cartón':
@@ -183,7 +186,11 @@ def dashboard():
         {'id': 25, 'nombre': '1561247 - Conaprole Planta IX San Ramón (Proceso) C.Costo= ()'},
         {'id': 26, 'nombre': '1561248 - Conaprole Planta XI (Proceso) C.Costo= ()'},
         {'id': 27, 'nombre': '1561249 - Conaprole Planta XVI (Proceso) C.Costo= ()'},
-        {'id': 28, 'nombre': 'Otros Clientes del Mercado N/A'}
+        {'id': 28, 'nombre': '1570011 - Tetrapak Argentina C.Costo= ()'},
+        {'id': 29, 'nombre': '1580001 - Tetra Pak Chile C.Costo= ()'},
+        {'id': 30, 'nombre': '1550005 - Tetra Pak Paraguay C.Costo= ()'},
+        {'id': 30, 'nombre': '1560001 - Tetra Pak Uruguay S.R.L. C.Costo= ()'},
+        {'id': 31, 'nombre': 'Otros Clientes del Mercado N/A'}
     ]
     contratos = [
         {'value': '73450003', 'label': 'Contrato'},
@@ -427,8 +434,9 @@ def dashboard():
         {'id': 211, 'nombre': 'UYP-ECOLAT    NVH-TREAT Tetra Alfast   Máquina-T5845440556                     N/S-T5845440556'},
         {'id': 212, 'nombre': 'UYP-ECOLAT    NVH-TREAT Tetra Alfast   Máquina-T5845440557                     N/S-T5845440557'},
         {'id': 213, 'nombre': 'UYC-CONAPROLE CIM-LIN03   Máquina-A3 Compact Flex                              N/S-21220/00285'},
-        {'id': 214, 'nombre': 'UYP - N/A'},
-        {'id': 215, 'nombre': 'UYC - N/A'}
+        {'id': 214, 'nombre': 'TPK - N/A'},
+        {'id': 215, 'nombre': 'UYP - N/A'},
+        {'id': 216, 'nombre': 'UYC - N/A'}
     ]
 
 
@@ -550,7 +558,10 @@ def dashboard():
         '1561132 - Montevideo Refrescos S.A. (Proceso)': 'UYP-MONRESA',
         '1561062 - Jugos del Uruguay S.A. (Carton)'   : 'UYC-JUGOSURUG',  # definir si hay prefijo
         '1561062 - Jugos del Uruguay S.A. (Proceso)'  : 'UYP-JUGOSURUG',  # definir si hay prefijo
-        '1570011 - Tetrapak Argentina'           : 'N/A',
+        '1570011 - Tetrapak Argentina'           : 'TPK - N/A',
+        '1580001 - Tetra Pak Chile'              : 'TPK - N/A',
+        '1550005 - Tetra Pak Paraguay'           : 'TPK - N/A',
+        '1560001 - Tetra Pak Uruguay S.R.L.'     : 'TPK - N/A',
         'Otros Clientes del Mercado'      : 'UYP - N/A',
         'Otros Clientes del Mercado'      : 'UYC - N/A'
     }
@@ -778,6 +789,9 @@ def editar_registro(id):
         '1561540 - Nolir S.A.',
         '1560020 - Recalco S.A. (ex Suadil)',
         '1570011 - Tetrapak Argentina',
+        '1580001 - Tetra Pak Chile',
+        '1550005 - Tetra Pak Paraguay',
+        '1560001 - Tetra Pak Uruguay S.R.L.',
         'Otros Clientes del Mercado'
     ]
 
@@ -813,7 +827,11 @@ def editar_registro(id):
         {'id': 25, 'nombre': '1561247 - Conaprole Planta IX San Ramón (Proceso) C.Costo= ()'},
         {'id': 26, 'nombre': '1561248 - Conaprole Planta XI (Proceso) C.Costo= ()'},
         {'id': 27, 'nombre': '1561249 - Conaprole Planta XVI (Proceso) C.Costo= ()'},
-        {'id': 28, 'nombre': 'Otros Clientes del Mercado N/A'}
+        {'id': 28, 'nombre': '1570011 - Tetrapak Argentina C.Costo= ()'},
+        {'id': 29, 'nombre': '1580001 - Tetra Pak Chile C.Costo= ()'},
+        {'id': 30, 'nombre': '1550005 - Tetra Pak Paraguay C.Costo= ()'},
+        {'id': 30, 'nombre': '1560001 - Tetra Pak Uruguay S.R.L. C.Costo= ()'},
+        {'id': 31, 'nombre': 'Otros Clientes del Mercado N/A'}
     ]
     contratos = [
         {'value': '73450003', 'label': 'Contrato'},
@@ -1058,8 +1076,9 @@ def editar_registro(id):
         {'id': 211, 'nombre': 'UYP-ECOLAT    NVH-TREAT Tetra Alfast   Máquina-T5845440556                     N/S-T5845440556'},
         {'id': 212, 'nombre': 'UYP-ECOLAT    NVH-TREAT Tetra Alfast   Máquina-T5845440557                     N/S-T5845440557'},
         {'id': 213, 'nombre': 'UYC-CONAPROLE CIM-LIN03   Máquina-A3 Compact Flex                              N/S-21220/00285'},
-        {'id': 214, 'nombre': 'UYP - N/A'},
-        {'id': 215, 'nombre': 'UYC - N/A'}
+        {'id': 214, 'nombre': 'TPK - N/A'},
+        {'id': 215, 'nombre': 'UYP - N/A'},
+        {'id': 216, 'nombre': 'UYC - N/A'}
     ]
 
     if request.method == 'POST':
@@ -1158,7 +1177,10 @@ def editar_registro(id):
         '1561132 - Montevideo Refrescos S.A. (Proceso)': 'UYP-MONRESA',
         '1561062 - Jugos del Uruguay S.A. (Carton)'   : 'UYC-JUGOSURUG',  # definir si hay prefijo
         '1561062 - Jugos del Uruguay S.A. (Proceso)'  : 'UYP-JUGOSURUG',  # definir si hay prefijo
-        '1570011 - Tetrapak Argentina'           : 'N/A',
+        '1570011 - Tetrapak Argentina'           : 'TPK - N/A',
+        '1580001 - Tetra Pak Chile'              : 'TPK - N/A',
+        '1550005 - Tetra Pak Paraguay'           : 'TPK - N/A',
+        '1560001 - Tetra Pak Uruguay S.R.L.'     : 'TPK - N/A',
         'Otros Clientes del Mercado'      : 'UYP - N/A',
         'Otros Clientes del Mercado'      : 'UYC - N/A'
     }
