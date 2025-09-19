@@ -12,6 +12,7 @@ from openpyxl import load_workbook
 from flask_migrate import Migrate
 from openpyxl.drawing.image import Image as ExcelImage
 from openpyxl.styles import Font, PatternFill, Border, Side, Alignment
+from flask_login import current_user
 
 
 #C:\Users\Guillermo\AppData\Local\Programs\Python\Python313\python.exe "$(FULL_CURRENT_PATH)"
@@ -594,6 +595,7 @@ def exportar_excel():
         return redirect(url_for('login'))
 
     role = session.get('role')
+    es_admin = role in ['admin', 'superadmin']
     user_id = session.get('user_id')
     fecha_desde = request.args.get('fecha_desde')
     fecha_hasta = request.args.get('fecha_hasta')
@@ -613,7 +615,6 @@ def exportar_excel():
     if not fecha_desde or not fecha_hasta or fecha_desde == 'None' or fecha_hasta == 'None':
         flash("Debés completar ambas fechas para exportar.", "warning")
         return redirect(url_for('admin'))
-
 
     query = query.filter(Registro.fecha.between(fecha_desde, fecha_hasta))
     registros = query.all()
@@ -635,13 +636,14 @@ def exportar_excel():
         'Cliente': r.cliente,
         'Comentarios': r.comentarios,
         #'Contrato': 'Sí' if r.contrato else 'N/A',
-        'Contable': r.contrato if r.contrato else 'N/A',
+        'Contable': r.contrato if es_admin and r.contrato else 'N/A',
         'Service Order': r.service_order or '',
         'Centro de Costo': r.centro_costo or '',
         'Tipo de Servicio': r.tipo_servicio or '',
         'Línea': r.linea or ''
     } for r in registros if r.user is not None])
 
+if es_admin:
     df['Contable'] = df['Contable'].map({
         '73450003': 'Contrato',
         '79010000': 'Administrativo                         - 79010000',
