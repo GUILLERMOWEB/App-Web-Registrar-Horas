@@ -135,6 +135,8 @@ def dashboard():
         '1560606 - Conaprole Planta VIII (Carton)',
         '1560606 - Conaprole Planta VIII (Proceso)',
         '1561247 - Conaprole Planta IX San Ramón (Proceso)',
+        '1561248 - Conaprole Planta XI (Proceso)',
+        '1561249 - Conaprole Planta XVI (Proceso)',
         '1561251 - Cooperativa Agraria (CALCAR)',
         '1560621 - Ecolat Uruguay S.A. (Proceso)',
         '1561335 - Gibur S.A. (Carton)',
@@ -178,7 +180,9 @@ def dashboard():
         {'id': 23, 'nombre': '1569004 - Cerealin S.A. C.Costo= ()'},
         {'id': 24, 'nombre': '1560621 - Ecolat Uruguay S.A. (Proceso) C.Costo= ()'},
         {'id': 25, 'nombre': '1561247 - Conaprole Planta IX San Ramón (Proceso) C.Costo= ()'},
-        {'id': 26, 'nombre': 'Otros Clientes del Mercado N/A'}
+        {'id': 26, 'nombre': '1561248 - Conaprole Planta XI (Proceso) C.Costo= ()'},
+        {'id': 27, 'nombre': '1561249 - Conaprole Planta XVI (Proceso) C.Costo= ()'},
+        {'id': 28, 'nombre': 'Otros Clientes del Mercado N/A'}
     ]
     contratos = [
         {'value': '73450003', 'label': 'Contrato'},
@@ -522,7 +526,7 @@ def dashboard():
     cliente_prefijo = {
         '1561046 - Barraca Deambrosi SA (Carton)'   : 'UYC-BARRACA',
         '1561046 - Barraca Deambrosi SA (Proceso)'  : 'UYP-BARRACA',
-        '1561458 - Belficor Sociedad Anónima (Proceso)'       : 'UYP-BELFICOR',
+        '1561458 - Belficor Sociedad Anónima (Proceso)': 'UYP-BELFICOR',
         '1561459 - Belficor - Paraje La Boyada'     : 'UYP-BELFICOR',
         '1561233 - Companía Salus SA'               : 'UYP-FTE SALUS',
         '1561251 - Cooperativa Agraria (CALCAR)'    : 'UYC-COAGRARIA',
@@ -537,6 +541,8 @@ def dashboard():
         '1560606 - Conaprole Planta VIII (Carton)'  : 'UYC-CONAPROLE P08',
         '1560606 - Conaprole Planta VIII (Proceso)' : 'UYP-CONAPROLE P08',
         '1561247 - Conaprole Planta IX San Ramón (Proceso)' : 'UYP-CONAPROLE P09',
+        '1561248 - Conaprole Planta XI (Proceso)'   : 'UYP-CONAPROLE P11',
+        '1561249 - Conaprole Planta XVI (Proceso)'  : 'UYP-CONAPROLE P16',
         '1560018 - Cerealin San Jose (Carton)'      : 'UYC-CEREALIN',
         '1560018 - Cerealin San Jose (Proceso)'     : 'UYP-CEREALIN',
         '1569004 - Cerealin S.A.'          : 'UYP-CEREALIN',
@@ -759,6 +765,8 @@ def editar_registro(id):
         '1560606 - Conaprole Planta VIII (Carton)',
         '1560606 - Conaprole Planta VIII (Proceso)',
         '1561247 - Conaprole Planta IX San Ramón (Proceso)',
+        '1561248 - Conaprole Planta XI (Proceso)',
+        '1561249 - Conaprole Planta XVI (Proceso)',
         '1561251 - Cooperativa Agraria (CALCAR)',
         '1560621 - Ecolat Uruguay S.A. (Proceso)',
         '1561335 - Gibur S.A. (Carton)',
@@ -801,7 +809,9 @@ def editar_registro(id):
         {'id': 23, 'nombre': '1569004 - Cerealin S.A. C.Costo= ()'},
         {'id': 24, 'nombre': '1560621 - Ecolat Uruguay S.A. (Proceso) C.Costo= ()'},
         {'id': 25, 'nombre': '1561247 - Conaprole Planta IX San Ramón (Proceso) C.Costo= ()'},
-        {'id': 26, 'nombre': 'Otros Clientes del Mercado N/A'}
+        {'id': 26, 'nombre': '1561248 - Conaprole Planta XI (Proceso) C.Costo= ()'},
+        {'id': 27, 'nombre': '1561249 - Conaprole Planta XVI (Proceso) C.Costo= ()'},
+        {'id': 28, 'nombre': 'Otros Clientes del Mercado N/A'}
     ]
     contratos = [
         {'value': '73450003', 'label': 'Contrato'},
@@ -1123,7 +1133,7 @@ def editar_registro(id):
     cliente_prefijo = {
         '1561046 - Barraca Deambrosi SA (Carton)'   : 'UYC-BARRACA',
         '1561046 - Barraca Deambrosi SA (Proceso)'  : 'UYP-BARRACA',
-        '1561458 - Belficor Sociedad Anónima (Proceso)'       : 'UYP-BELFICOR',
+        '1561458 - Belficor Sociedad Anónima (Proceso)': 'UYP-BELFICOR',
         '1561459 - Belficor - Paraje La Boyada'     : 'UYP-BELFICOR',
         '1561233 - Companía Salus SA'               : 'UYP-FTE SALUS',
         '1561251 - Cooperativa Agraria (CALCAR)'    : 'UYC-COAGRARIA',
@@ -1138,6 +1148,8 @@ def editar_registro(id):
         '1560606 - Conaprole Planta VIII (Carton)'  : 'UYC-CONAPROLE P08',
         '1560606 - Conaprole Planta VIII (Proceso)' : 'UYP-CONAPROLE P08',
         '1561247 - Conaprole Planta IX San Ramón (Proceso)' : 'UYP-CONAPROLE P09',
+        '1561248 - Conaprole Planta XI (Proceso)'   : 'UYP-CONAPROLE P11',
+        '1561249 - Conaprole Planta XVI (Proceso)'  : 'UYP-CONAPROLE P16',
         '1560018 - Cerealin San Jose (Carton)'      : 'UYC-CEREALIN',
         '1560018 - Cerealin San Jose (Proceso)'     : 'UYP-CEREALIN',
         '1569004 - Cerealin S.A.'          : 'UYP-CEREALIN',
