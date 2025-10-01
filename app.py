@@ -1091,10 +1091,15 @@ def editar_registro(id):
             almuerzo_horas = int(request.form.get('almuerzo_horas', 0))
             almuerzo = almuerzo_horas
 
-            viaje_ida = int(request.form.get('viaje_ida', 0))
-            viaje_vuelta = int(request.form.get('viaje_vuelta', 0))
-            km_ida = int(request.form.get('km_ida', 0))
-            km_vuelta = int(request.form.get('km_vuelta', 0))
+            viaje_ida = float(request.form.get('viaje_ida', 0) or 0)
+            viaje_vuelta = float(request.form.get('viaje_vuelta', 0) or 0)
+            km_ida = float(request.form.get('km_ida', 0) or 0)
+            km_vuelta = float(request.form.get('km_vuelta', 0) or 0)
+
+            # viaje_ida = int(request.form.get('viaje_ida', 0))
+            # viaje_vuelta = int(request.form.get('viaje_vuelta', 0))
+            # km_ida = int(request.form.get('km_ida', 0))
+            # km_vuelta = int(request.form.get('km_vuelta', 0))
 
             if viaje_ida < 0 or viaje_vuelta < 0 or km_ida < 0 or km_vuelta < 0:
                 flash("Los valores numéricos no pueden ser negativos", "danger")
