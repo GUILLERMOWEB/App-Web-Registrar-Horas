@@ -140,6 +140,7 @@ def dashboard():
         '1561249 - Conaprole Planta XVI (Proceso)',
         '1561251 - Cooperativa Agraria (CALCAR)',
         '1560621 - Ecolat Uruguay S.A. (Proceso)',
+        '1561461 - Estancias del Lago S.R.L. (Proceso)',
         '1561335 - Gibur S.A. (Carton)',
         '1561062 - Jugos del Uruguay S.A. (Carton)',
         '1561062 - Jugos del Uruguay S.A. (Proceso)',
@@ -190,7 +191,8 @@ def dashboard():
         {'id': 29, 'nombre': '1580001 - Tetra Pak Chile C.Costo= ()'},
         {'id': 30, 'nombre': '1550005 - Tetra Pak Paraguay C.Costo= ()'},
         {'id': 30, 'nombre': '1560001 - Tetra Pak Uruguay S.R.L. C.Costo= ()'},
-        {'id': 31, 'nombre': 'Otros Clientes del Mercado N/A'}
+        {'id': 31, 'nombre': '1561461 - Estancias del Lago S.R.L. (Proceso) C.Costo= ()'},
+        {'id': 32, 'nombre': 'Otros Clientes del Mercado N/A'}
     ]
     contratos = [
         {'value': '73450003', 'label': 'Contrato'},
@@ -436,7 +438,29 @@ def dashboard():
         {'id': 213, 'nombre': 'UYC-CONAPROLE CIM-LIN03   Máquina-A3 Compact Flex                              N/S-21220/00285'},
         {'id': 214, 'nombre': 'TPK - N/A'},
         {'id': 215, 'nombre': 'UYP - N/A'},
-        {'id': 216, 'nombre': 'UYC - N/A'}
+        {'id': 216, 'nombre': 'UYC - N/A'},
+        {'id': 217, 'nombre': 'UYP-ESTANCIA  DRZ-EVAP   Máquina-Tetra Magna Dryer Wide Body G123 H23              N/S-5847510006'},
+        {'id': 218, 'nombre': 'UYP-ESTANCIA  DRZ-EVAP   Máquina-Tetra Scheffers Evaporator G123 H21               N/S-5847630013'},
+        {'id': 219, 'nombre': 'UYP-ESTANCIA  DRZ-EVAP   Máquina-Tetra Scheffers Evaporator G123 H22               N/S-5847630014'},
+        {'id': 220, 'nombre': 'UYP-ESTANCIA  DRZ-TREAT  Máquina-Tetra Therm Lacta                                 N/S-T5845140212'},
+        {'id': 221, 'nombre': 'UYP-ESTANCIA  DRZ-TREAT  Máquina-Tetra Alfast                                      N/S-T5845440491'},
+        {'id': 222, 'nombre': 'UYP-ESTANCIA  DRZ-TREAT  Máquina-Tetra Centri C40                                  N/S-4205425'},
+        {'id': 223, 'nombre': 'UYP-ESTANCIA  DRZ-TREAT  Máquina-Tetra Guerin Tank Conveyor                        N/S-5860200008'},
+        {'id': 224, 'nombre': 'UYP-ESTANCIA  DRZ-TREAT  Máquina-Tetra Guerin Compact Dust Filter                  N/S-5860170011'},
+        {'id': 225, 'nombre': 'UYP-ESTANCIA  DRZ-TREAT  Máquina-Tetra Guerin Silo Equipment                       N/S-5860290004'},
+        {'id': 226, 'nombre': 'UYP-ESTANCIA  DRZ-TREAT  Máquina-Tetra Guerin Dense Ph Pneu Conv                   N/S-5860250009'},
+        {'id': 227, 'nombre': 'UYP-ESTANCIA  DRZ-TREAT  Máquina-Tetra Guerin Surge Hopper                         N/S-5860280021'},
+        {'id': 228, 'nombre': 'UYP-ESTANCIA  DRZ-TREAT  Máquina-Tetra Guerin Surge Hopper                         N/S-5860280022'},
+        {'id': 229, 'nombre': 'UYP-ESTANCIA  DRZ-TREAT  Máquina-Tetra Guerin Press Lean Ph Pneu Conv              N/S-5860240010'},
+        {'id': 230, 'nombre': 'UYP-ESTANCIA  DRZ-TREAT  Máquina-Hot water unit                                    N/S-32190-0690'},
+        {'id': 231, 'nombre': 'UYP-ESTANCIA  DRZ-TREAT  Máquina-Hot water unit                                    N/S-32190-0691'},
+        {'id': 232, 'nombre': 'UYP-ESTANCIA  DRZ-TREAT  Máquina-Milk Reception Unit                               N/S-32250-0096'},
+        {'id': 233, 'nombre': 'UYP-ESTANCIA  DRZ-TREAT  Máquina-Tetra Alex Homogenizer                            N/S-5856943162'},
+        {'id': 234, 'nombre': 'UYP-ESTANCIA  DRZ-TREAT  Máquina-Tetra Almix                                       N/S-15648-13'},
+        {'id': 235, 'nombre': 'UYP-ESTANCIA  DRZ-TREAT  Máquina-Tetra Alex Homogenizer                            N/S-5856943312'},
+        {'id': 236, 'nombre': 'UYP-ESTANCIA  DRZ-TREAT  Máquina-Tetra Guerin Silo Equipment                       N/S-5860290037'},
+        {'id': 237, 'nombre': 'UYP-ESTANCIA  DRZ-TPPM   Máquina-Production Control                                N/S-5861000097'}
+
     ]
 
 
@@ -540,6 +564,7 @@ def dashboard():
         '1561233 - Companía Salus SA'               : 'UYP-FTE SALUS',
         '1561251 - Cooperativa Agraria (CALCAR)'    : 'UYC-COAGRARIA',
         '1560621 - Ecolat Uruguay S.A. (Proceso)'   : 'UYP-ECOLAT',
+        '1561461 - Estancias del Lago S.R.L. (Proceso)' :'UYP-ESTANCIA ',
         '1561335 - Gibur S.A. (Carton)'             : 'UYC-GIBUR',
         '1561540 - Nolir S.A.'                      : 'UYC-NOLIR',
         '1560020 - Recalco S.A. (ex Suadil)'        : 'UYC-RECALCO',
@@ -782,6 +807,7 @@ def editar_registro(id):
         '1561249 - Conaprole Planta XVI (Proceso)',
         '1561251 - Cooperativa Agraria (CALCAR)',
         '1560621 - Ecolat Uruguay S.A. (Proceso)',
+        '1561461 - Estancias del Lago S.R.L. (Proceso)',
         '1561335 - Gibur S.A. (Carton)',
         '1561062 - Jugos del Uruguay S.A. (Carton)',
         '1561062 - Jugos del Uruguay S.A. (Proceso)',
@@ -831,7 +857,8 @@ def editar_registro(id):
         {'id': 29, 'nombre': '1580001 - Tetra Pak Chile C.Costo= ()'},
         {'id': 30, 'nombre': '1550005 - Tetra Pak Paraguay C.Costo= ()'},
         {'id': 30, 'nombre': '1560001 - Tetra Pak Uruguay S.R.L. C.Costo= ()'},
-        {'id': 31, 'nombre': 'Otros Clientes del Mercado N/A'}
+        {'id': 31, 'nombre': '1561461 - Estancias del Lago S.R.L. (Proceso) C.Costo= ()'},
+        {'id': 32, 'nombre': 'Otros Clientes del Mercado N/A'}
     ]
     contratos = [
         {'value': '73450003', 'label': 'Contrato'},
@@ -1078,7 +1105,29 @@ def editar_registro(id):
         {'id': 213, 'nombre': 'UYC-CONAPROLE CIM-LIN03   Máquina-A3 Compact Flex                              N/S-21220/00285'},
         {'id': 214, 'nombre': 'TPK - N/A'},
         {'id': 215, 'nombre': 'UYP - N/A'},
-        {'id': 216, 'nombre': 'UYC - N/A'}
+        {'id': 216, 'nombre': 'UYC - N/A'},
+        {'id': 217, 'nombre': 'UYP-ESTANCIA  DRZ-EVAP   Máquina-Tetra Magna Dryer Wide Body G123 H23              N/S-5847510006'},
+        {'id': 218, 'nombre': 'UYP-ESTANCIA  DRZ-EVAP   Máquina-Tetra Scheffers Evaporator G123 H21               N/S-5847630013'},
+        {'id': 219, 'nombre': 'UYP-ESTANCIA  DRZ-EVAP   Máquina-Tetra Scheffers Evaporator G123 H22               N/S-5847630014'},
+        {'id': 220, 'nombre': 'UYP-ESTANCIA  DRZ-TREAT  Máquina-Tetra Therm Lacta                                 N/S-T5845140212'},
+        {'id': 221, 'nombre': 'UYP-ESTANCIA  DRZ-TREAT  Máquina-Tetra Alfast                                      N/S-T5845440491'},
+        {'id': 222, 'nombre': 'UYP-ESTANCIA  DRZ-TREAT  Máquina-Tetra Centri C40                                  N/S-4205425'},
+        {'id': 223, 'nombre': 'UYP-ESTANCIA  DRZ-TREAT  Máquina-Tetra Guerin Tank Conveyor                        N/S-5860200008'},
+        {'id': 224, 'nombre': 'UYP-ESTANCIA  DRZ-TREAT  Máquina-Tetra Guerin Compact Dust Filter                  N/S-5860170011'},
+        {'id': 225, 'nombre': 'UYP-ESTANCIA  DRZ-TREAT  Máquina-Tetra Guerin Silo Equipment                       N/S-5860290004'},
+        {'id': 226, 'nombre': 'UYP-ESTANCIA  DRZ-TREAT  Máquina-Tetra Guerin Dense Ph Pneu Conv                   N/S-5860250009'},
+        {'id': 227, 'nombre': 'UYP-ESTANCIA  DRZ-TREAT  Máquina-Tetra Guerin Surge Hopper                         N/S-5860280021'},
+        {'id': 228, 'nombre': 'UYP-ESTANCIA  DRZ-TREAT  Máquina-Tetra Guerin Surge Hopper                         N/S-5860280022'},
+        {'id': 229, 'nombre': 'UYP-ESTANCIA  DRZ-TREAT  Máquina-Tetra Guerin Press Lean Ph Pneu Conv              N/S-5860240010'},
+        {'id': 230, 'nombre': 'UYP-ESTANCIA  DRZ-TREAT  Máquina-Hot water unit                                    N/S-32190-0690'},
+        {'id': 231, 'nombre': 'UYP-ESTANCIA  DRZ-TREAT  Máquina-Hot water unit                                    N/S-32190-0691'},
+        {'id': 232, 'nombre': 'UYP-ESTANCIA  DRZ-TREAT  Máquina-Milk Reception Unit                               N/S-32250-0096'},
+        {'id': 233, 'nombre': 'UYP-ESTANCIA  DRZ-TREAT  Máquina-Tetra Alex Homogenizer                            N/S-5856943162'},
+        {'id': 234, 'nombre': 'UYP-ESTANCIA  DRZ-TREAT  Máquina-Tetra Almix                                       N/S-15648-13'},
+        {'id': 235, 'nombre': 'UYP-ESTANCIA  DRZ-TREAT  Máquina-Tetra Alex Homogenizer                            N/S-5856943312'},
+        {'id': 236, 'nombre': 'UYP-ESTANCIA  DRZ-TREAT  Máquina-Tetra Guerin Silo Equipment                       N/S-5860290037'},
+        {'id': 237, 'nombre': 'UYP-ESTANCIA  DRZ-TPPM   Máquina-Production Control                                N/S-5861000097'}
+
     ]
 
     if request.method == 'POST':
@@ -1164,6 +1213,7 @@ def editar_registro(id):
         '1561233 - Companía Salus SA'               : 'UYP-FTE SALUS',
         '1561251 - Cooperativa Agraria (CALCAR)'    : 'UYC-COAGRARIA',
         '1560621 - Ecolat Uruguay S.A. (Proceso)'   : 'UYP-ECOLAT',
+        '1561461 - Estancias del Lago S.R.L. (Proceso)' :'UYP-ESTANCIA ',
         '1561335 - Gibur S.A. (Carton)'             : 'UYC-GIBUR',
         '1561540 - Nolir S.A.'                      : 'UYC-NOLIR',
         '1560020 - Recalco S.A. (ex Suadil)'        : 'UYC-RECALCO',
