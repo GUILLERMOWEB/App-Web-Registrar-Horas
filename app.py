@@ -17,6 +17,53 @@ from flask_login import current_user
 
 #C:\Users\Guillermo\AppData\Local\Programs\Python\Python313\python.exe "$(FULL_CURRENT_PATH)"
 
+FERIADOS = [
+    '2025-01-01', '2025-04-18', '2025-05-01', '2025-06-19',
+    '2025-07-18', '2025-08-25', '2025-12-25'
+]
+
+def is_feriado(fecha):
+    return fecha.strftime('%Y-%m-%d') in FERIADOS
+
+def calcular_horas_extra(row):
+    try:
+        fecha = datetime.strptime(row['Fecha'], '%Y-%m-%d')
+        entrada = datetime.strptime(row['Entrada'], '%H:%M').time()
+        salida = datetime.strptime(row['Salida'], '%H:%M').time()
+        horas = float(row['Horas laborales'])
+    except:
+        return pd.Series({'Horas extra 100%': 0.0, 'Horas extra 50%': 0.0})
+
+    extra_100 = 0.0
+    extra_50 = 0.0
+
+    if is_feriado(fecha):
+        extra_100 = horas
+    else:
+        dia_semana = fecha.weekday()
+        if dia_semana == 5:
+            if entrada >= time(13, 0):
+                extra_100 = horas
+            else:
+                entrada_dt = datetime.combine(fecha, entrada)
+                salida_dt = datetime.combine(fecha, salida)
+                corte = datetime.combine(fecha, time(13, 0))
+                if salida_dt > corte:
+                    extra_100 = (salida_dt - corte).seconds / 3600
+        elif dia_semana == 6:
+            extra_100 = horas
+
+    restante = max(horas - extra_100, 0)
+    if restante > 8:
+        extra_50 = restante - 8
+
+    return pd.Series({'Horas extra 100%': round(extra_100, 2), 'Horas extra 50%': round(extra_50, 2)})
+def convertir_hora_a_decimal(hora_str):
+    try:
+        return float(int(hora_str.strip()))
+    except ValueError:
+        return 0.0
+
 
 def convertir_hora_a_decimal(hora_str):
     try:
@@ -656,6 +703,10 @@ def exportar_excel():
     registros = query.all()
 
     df = pd.DataFrame([{
+    # Calcular horas extra
+    extras = df.apply(calcular_horas_extra, axis=1)
+    df = pd.concat([df, extras], axis=1)
+
         'Usuario': r.user.username if r.user else None,
         'Fecha': r.fecha,
         'Entrada': r.entrada,
@@ -749,6 +800,33 @@ def exportar_excel():
                 cell.border = thin_border
                 cell.alignment = center_alignment
             elif header == "Km totales":
+        col_idx = col[0].column
+        total = df["Km totales"].sum()
+        cell = ws.cell(row=total_row, column=col_idx, value=round(total, 2))
+        cell.font = Font(bold=True)
+        cell.fill = total_fill
+        cell.border = thin_border
+        cell.alignment = center_alignment
+
+    elif header == "Horas extra 100%":
+        col_idx = col[0].column
+        total = df["Horas extra 100%"].sum()
+        cell = ws.cell(row=total_row, column=col_idx, value=round(total, 2))
+        cell.font = Font(bold=True)
+        cell.fill = total_fill
+        cell.border = thin_border
+        cell.alignment = center_alignment
+
+    elif header == "Horas extra 50%":
+        col_idx = col[0].column
+        total = df["Horas extra 50%"].sum()
+        cell = ws.cell(row=total_row, column=col_idx, value=round(total, 2))
+        cell.font = Font(bold=True)
+        cell.fill = total_fill
+        cell.border = thin_border
+        cell.alignment = center_alignment
+
+    elif header == "Km totales":
                 col_idx = col[0].column
                 total = df["Km totales"].sum()
                 cell = ws.cell(row=total_row, column=col_idx, value=round(total, 2))
@@ -766,9 +844,6 @@ def exportar_excel():
         as_attachment=True,
         download_name=f"registros_{session['username']}.xlsx"
     )
-
-
-
 
 
 @app.route('/editar_registro/<int:id>', methods=['GET', 'POST'])
