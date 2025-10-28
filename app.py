@@ -19,8 +19,19 @@ from flask_login import current_user
 
 
 FERIADOS = [
+    # 2025
     '2025-01-01', '2025-04-18', '2025-05-01', '2025-06-19',
-    '2025-07-18', '2025-08-25', '2025-12-25'
+    '2025-07-18', '2025-08-25', '2025-12-25',
+
+    # 2026
+    '2026-01-01',  # Año Nuevo
+    '2026-04-02',  # Jueves Santo
+    '2026-04-03',  # Viernes Santo
+    '2026-05-01',  # Día del Trabajador
+    '2026-06-19',  # Natalicio de Artigas
+    '2026-07-18',  # Día de la Constitución
+    '2026-08-25',  # Día de la Independencia
+    '2026-12-25'   # Navidad
 ]
 
 def is_feriado(fecha):
@@ -84,9 +95,8 @@ def calcular_horas_extra(row):
             extra_100 += horas_despues_viaje
 
     else:
-        # Lunes a viernes
-        extra_50 = max(horas_laborales - 8, 0)
-        # Horas de viaje no se computan como extra
+        # Lunes a viernes: excedente + viajes al 50%
+        extra_50 = max(horas_laborales - 8, 0) + viaje_ida + viaje_vuelta
 
     return pd.Series({
         'Horas extra 100%': round(extra_100, 2),
