@@ -37,14 +37,14 @@ def calcular_horas_extra(row):
     except:
         return pd.Series({'Horas extra 100%': 0.0, 'Horas extra 50%': 0.0})
 
-    total_trabajado = horas_laborales + viaje_ida + viaje_vuelta
+    total_viaje = viaje_ida + viaje_vuelta
     extra_100 = 0.0
     extra_50 = 0.0
-    dia_semana = fecha.weekday()  # lunes=0, domingo=6
+    dia_semana = fecha.weekday()  # lunes=0, sábado=5, domingo=6
 
     if is_feriado(fecha) or dia_semana == 6:
         # Domingo o feriado: todo al 100%
-        extra_100 = total_trabajado
+        extra_100 = horas_laborales + total_viaje
 
     elif dia_semana == 5:
         # Sábado
@@ -52,33 +52,31 @@ def calcular_horas_extra(row):
         salida_dt = datetime.combine(fecha, salida)
         corte_13 = datetime.combine(fecha, time(13, 0))
 
+        # Horas laborales
         if salida_dt <= corte_13:
-            # Todo antes de las 13 hs: al 50%
-            extra_50 = total_trabajado
+            extra_50 += horas_laborales
         elif entrada_dt >= corte_13:
-            # Todo después de las 13 hs: al 100%
-            extra_100 = total_trabajado
+            extra_100 += horas_laborales
         else:
             # Parte antes y parte después de las 13 hs
             duracion_total = (salida_dt - entrada_dt).seconds / 3600
-            if duracion_total == 0:
-                return pd.Series({'Horas extra 100%': 0.0, 'Horas extra 50%': 0.0})
+            if duracion_total > 0:
+                antes_13 = (corte_13 - entrada_dt).seconds / 3600
+                despues_13 = (salida_dt - corte_13).seconds / 3600
+                proporcion_antes = antes_13 / duracion_total
+                proporcion_despues = despues_13 / duracion_total
+                extra_50 += horas_laborales * proporcion_antes
+                extra_100 += horas_laborales * proporcion_despues
 
-            antes_13 = (corte_13 - entrada_dt).seconds / 3600
-            despues_13 = (salida_dt - corte_13).seconds / 3600
-
-            proporcion_antes = antes_13 / duracion_total
-            proporcion_despues = despues_13 / duracion_total
-
-            extra_50 = total_trabajado * proporcion_antes
-            extra_100 = total_trabajado * proporcion_despues
+        # Viajes siempre al 50% los sábados
+        extra_50 += total_viaje
 
     else:
         # Lunes a viernes
         horas_normales = min(horas_laborales, 8)
         horas_extra = max(horas_laborales - 8, 0)
         extra_50 = horas_extra
-        # Las horas de viaje dentro de las 8hs laborales no se computan como extra
+        # Horas de viaje dentro de las 8 hs laborales no se computan como extra
 
     return pd.Series({
         'Horas extra 100%': round(extra_100, 2),
