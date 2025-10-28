@@ -29,25 +29,20 @@ def is_feriado(fecha):
 def calcular_horas_extra(row):
     horas_extra_50 = 0
     horas_extra_100 = 0
-
     fecha = row['Fecha']
     entrada = row['Entrada']
     salida = row['Salida']
     horas_laborales = row['Horas laborales'] or 0
     viaje_ida = row['Viaje ida (hs)'] or 0
     viaje_vuelta = row['Viaje vuelta (hs)'] or 0
-
     if isinstance(fecha, str):
         fecha = datetime.strptime(fecha, '%Y-%m-%d')
-
     dia_semana = fecha.weekday()
-
     if salida and isinstance(salida, str):
         try:
             salida = datetime.strptime(salida, '%H:%M:%S').time()
         except ValueError:
             salida = None
-
     if dia_semana < 5:
         if horas_laborales > 8:
             horas_extra_50 += horas_laborales - 8
@@ -56,18 +51,15 @@ def calcular_horas_extra(row):
             exceso = horas_laborales + viaje_total - 8
             viaje_exceso = min(exceso, viaje_total)
             horas_extra_50 += viaje_exceso
-
     elif dia_semana == 5:
         total_horas = horas_laborales + viaje_ida + viaje_vuelta
         if salida and salida < time(13, 0):
             horas_extra_50 += total_horas
         else:
             horas_extra_100 += total_horas
-
     elif dia_semana == 6:
         total_horas = horas_laborales + viaje_ida + viaje_vuelta
         horas_extra_100 += total_horas
-
     return pd.Series({
         'Horas extra 50%': round(horas_extra_50, 2),
         'Horas extra 100%': round(horas_extra_100, 2)
