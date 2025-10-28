@@ -71,18 +71,18 @@ def calcular_horas_extra(row):
         extra_50 += viaje_ida
 
         # --- Viaje vuelta: estimar horario de inicio ---
-        fin_trabajo_dt = salida_dt
+        fin_trabajo_dt = datetime.combine(fecha, salida)
         viaje_vuelta_inicio = fin_trabajo_dt
-        viaje_vuelta_fin = (datetime.combine(fecha, fin_trabajo_dt) + timedelta(hours=viaje_vuelta))
+        viaje_vuelta_fin = fin_trabajo_dt + timedelta(hours=viaje_vuelta)
 
         if viaje_vuelta_fin <= corte_13:
             extra_50 += viaje_vuelta
-        elif viaje_vuelta_inicio >= corte_13.time():
+        elif viaje_vuelta_inicio.time() >= time(13, 0):
             extra_100 += viaje_vuelta
         else:
             # Parte antes y parte después de las 13 hs
-            antes_13 = (corte_13 - datetime.combine(fecha, viaje_vuelta_inicio)).seconds / 3600
-            antes_13 = min(antes_13, viaje_vuelta)  # no más que la duración del viaje
+            antes_13 = (corte_13 - viaje_vuelta_inicio).seconds / 3600
+            antes_13 = min(antes_13, viaje_vuelta)
             despues_13 = viaje_vuelta - antes_13
             extra_50 += antes_13
             extra_100 += despues_13
