@@ -777,17 +777,17 @@ def exportar_excel():
         ws.cell(row=total_row, column=1, value="TOTALES").font = Font(bold=True)
 
         for col in ws.iter_cols(min_row=1, max_row=1):
-        header = col[0].value
-        col_idx = col[0].column
+            header = col[0].value
+            col_idx = col[0].column
 
-        if header == "Horas laborales":
-            total = df["Horas laborales"].sum()
-        elif header == "Horas Extras":
-            total = df["Horas Extras"].sum()
-        elif header == "Km totales":
-            total = df["Km totales"].sum()
-        else:
-            continue
+            if header == "Horas laborales":
+                total = df["Horas laborales"].sum()
+            elif header == "Horas Extras":
+                total = df["Horas Extras"].sum()
+            elif header == "Km totales":
+                total = df["Km totales"].sum()
+            else:
+                continue
 
             cell = ws.cell(row=total_row, column=col_idx, value=round(total, 2))
             cell.font = Font(bold=True)
