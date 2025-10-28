@@ -40,17 +40,16 @@ def calcular_horas_extra(row):
     extra_100 = 0.0
     extra_50 = 0.0
     dia_semana = fecha.weekday()  # lunes=0, sábado=5, domingo=6
-    total_viaje = viaje_ida + viaje_vuelta
+    corte_13 = datetime.combine(fecha, time(13, 0))
 
     if is_feriado(fecha) or dia_semana == 6:
         # Domingo o feriado: todo al 100%
-        extra_100 = horas_laborales + total_viaje
+        extra_100 = horas_laborales + viaje_ida + viaje_vuelta
 
     elif dia_semana == 5:
         # Sábado
         entrada_dt = datetime.combine(fecha, entrada)
         salida_dt = datetime.combine(fecha, salida)
-        corte_13 = datetime.combine(fecha, time(13, 0))
 
         # --- Horas laborales ---
         if salida_dt <= corte_13:
@@ -58,34 +57,31 @@ def calcular_horas_extra(row):
         elif entrada_dt >= corte_13:
             extra_100 += horas_laborales
         else:
-            duracion_total = (salida_dt - entrada_dt).seconds / 3600
-            if duracion_total > 0:
-                antes_13 = (corte_13 - entrada_dt).seconds / 3600
-                despues_13 = (salida_dt - corte_13).seconds / 3600
-                proporcion_antes = antes_13 / duracion_total
-                proporcion_despues = despues_13 / duracion_total
-                extra_50 += horas_laborales * proporcion_antes
-                extra_100 += horas_laborales * proporcion_despues
+            # Parte antes y parte después de las 13 hs (enteros exactos)
+            horas_antes = (corte_13 - entrada_dt).seconds / 3600
+            horas_despues = (salida_dt - corte_13).seconds / 3600
+            extra_50 += horas_antes
+            extra_100 += horas_despues
 
         # --- Viaje ida: siempre al 50% ---
         extra_50 += viaje_ida
 
-        # --- Viaje vuelta: estimar horario de inicio ---
-        fin_trabajo_dt = datetime.combine(fecha, salida)
+        # --- Viaje vuelta ---
+        fin_trabajo_dt = salida_dt
         viaje_vuelta_inicio = fin_trabajo_dt
         viaje_vuelta_fin = fin_trabajo_dt + timedelta(hours=viaje_vuelta)
 
         if viaje_vuelta_fin <= corte_13:
             extra_50 += viaje_vuelta
-        elif viaje_vuelta_inicio.time() >= time(13, 0):
+        elif viaje_vuelta_inicio >= corte_13:
             extra_100 += viaje_vuelta
         else:
             # Parte antes y parte después de las 13 hs
-            antes_13 = (corte_13 - viaje_vuelta_inicio).seconds / 3600
-            antes_13 = min(antes_13, viaje_vuelta)
-            despues_13 = viaje_vuelta - antes_13
-            extra_50 += antes_13
-            extra_100 += despues_13
+            horas_antes_viaje = (corte_13 - viaje_vuelta_inicio).seconds / 3600
+            horas_antes_viaje = min(horas_antes_viaje, viaje_vuelta)
+            horas_despues_viaje = viaje_vuelta - horas_antes_viaje
+            extra_50 += horas_antes_viaje
+            extra_100 += horas_despues_viaje
 
     else:
         # Lunes a viernes
