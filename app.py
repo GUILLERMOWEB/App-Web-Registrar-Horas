@@ -43,7 +43,7 @@ def calcular_horas_extra(row):
         entrada = datetime.strptime(row['Entrada'], '%H:%M').time()
         salida = datetime.strptime(row['Salida'], '%H:%M').time()
         horas_laborales = float(row['Horas laborales'] or 0)
-        almuerzo = float(row.get('Almuerzo (hs)', 0) or 0)
+        almuerzo = int(row.get('Almuerzo (hs)', 0) or 0)
         viaje_ida = float(row.get('Viaje ida (hs)', 0) or 0)
         viaje_vuelta = float(row.get('Viaje vuelta (hs)', 0) or 0)
     except:
@@ -57,23 +57,29 @@ def calcular_horas_extra(row):
     if is_feriado(fecha) or dia_semana == 6:
         # Domingo o feriado: todo al 100%
         extra_100 = horas_laborales + viaje_ida + viaje_vuelta
+
     elif dia_semana == 5:
         # Sábado
         entrada_dt = datetime.combine(fecha, entrada)
         salida_dt = datetime.combine(fecha, salida)
 
         if salida_dt <= corte_13:
-            extra_50 += max(horas_laborales - almuerzo, 0)
+            extra_50 += horas_laborales
         elif entrada_dt >= corte_13:
-            extra_100 += max(horas_laborales - almuerzo, 0)
+            extra_100 += horas_laborales
         else:
-            horas_antes = (corte_13 - entrada_dt).seconds / 3600
-            horas_despues = (salida_dt - corte_13).seconds / 3600
-            duracion_total = horas_antes + horas_despues
-            almuerzo_antes = almuerzo * (horas_antes / duracion_total)
-            almuerzo_despues = almuerzo - almuerzo_antes
-            extra_50 += max(horas_antes - almuerzo_antes, 0)
-            extra_100 += max(horas_despues - almuerzo_despues, 0)
+            horas_antes_bruto = int((corte_13 - entrada_dt).seconds / 3600)
+            horas_despues_bruto = int((salida_dt - corte_13).seconds / 3600)
+
+            # Ajustar almuerzo entero
+            if almuerzo > 0:
+                if horas_antes_bruto >= horas_despues_bruto:
+                    horas_antes_bruto -= 1
+                else:
+                    horas_despues_bruto -= 1
+
+            extra_50 += max(horas_antes_bruto, 0)
+            extra_100 += max(horas_despues_bruto, 0)
 
         # Viaje ida: siempre al 50%
         extra_50 += viaje_ida
@@ -91,8 +97,8 @@ def calcular_horas_extra(row):
         extra_50 = max(horas_laborales - 8, 0) + viaje_ida + viaje_vuelta
 
     return pd.Series({
-        'Horas extra 100%': round(extra_100, 2),
-        'Horas extra 50%': round(extra_50, 2)
+        'Horas extra 100%': int(extra_100),
+        'Horas extra 50%': int(extra_50)
     })
 
 def convertir_hora_a_decimal(hora_str):
