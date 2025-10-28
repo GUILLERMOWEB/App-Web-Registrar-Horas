@@ -729,6 +729,15 @@ def exportar_excel():
     extras = df.apply(calcular_horas_extra, axis=1)
     df = pd.concat([df, extras], axis=1)
 
+    # Reordenar columnas para que las horas extra estén justo después de 'Horas totales'
+    cols = list(df.columns)
+    if "Horas extra 100%" in cols and "Horas extra 50%" in cols:
+        cols.remove("Horas extra 100%")
+        cols.remove("Horas extra 50%")
+        idx = cols.index("Horas totales") + 1
+        cols[idx:idx] = ["Horas extra 100%", "Horas extra 50%"]
+        df = df[cols]
+
     if es_admin:
         df['Contable'] = df['Contable'].map({
             '73450003': 'Contrato',
@@ -812,10 +821,6 @@ def exportar_excel():
         as_attachment=True,
         download_name=f"registros_{session['username']}.xlsx"
     )
-
-
-
-
 
 @app.route('/editar_registro/<int:id>', methods=['GET', 'POST'])
 def editar_registro(id):
