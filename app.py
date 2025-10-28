@@ -37,70 +37,19 @@ FERIADOS = [
 def is_feriado(fecha):
     return fecha.strftime('%Y-%m-%d') in FERIADOS
 
-def calcular_horas_extra(row):
+def calcular_horas_extras_simplificado(row):
     try:
-        fecha = datetime.strptime(row['Fecha'], '%Y-%m-%d')
-        entrada = datetime.strptime(row['Entrada'], '%H:%M').time()
-        salida = datetime.strptime(row['Salida'], '%H:%M').time()
         horas_laborales = float(row['Horas laborales'] or 0)
-        almuerzo = int(row.get('Almuerzo (hs)', 0) or 0)
         viaje_ida = float(row.get('Viaje ida (hs)', 0) or 0)
         viaje_vuelta = float(row.get('Viaje vuelta (hs)', 0) or 0)
     except:
-        return pd.Series({'Horas extra 100%': 0.0, 'Horas extra 50%': 0.0})
+        return pd.Series({'Horas Extras': 0.0})
 
-    extra_100 = 0.0
-    extra_50 = 0.0
-    dia_semana = fecha.weekday()  # lunes=0, sábado=5, domingo=6
-    corte_13 = datetime.combine(fecha, time(13, 0))
+    total_trabajado = horas_laborales + viaje_ida + viaje_vuelta
 
-    if is_feriado(fecha) or dia_semana == 6:
-        # Domingo o feriado: todo al 100%
-        extra_100 = horas_laborales + viaje_ida + viaje_vuelta
+    horas_extras = max(total_trabajado - 8, 0)
 
-    elif dia_semana == 5:
-        # Sábado
-        entrada_dt = datetime.combine(fecha, entrada)
-        salida_dt = datetime.combine(fecha, salida)
-
-        if salida_dt <= corte_13:
-            extra_50 += horas_laborales
-        elif entrada_dt >= corte_13:
-            extra_100 += horas_laborales
-        else:
-            horas_antes_bruto = int((corte_13 - entrada_dt).seconds / 3600)
-            horas_despues_bruto = int((salida_dt - corte_13).seconds / 3600)
-
-            if almuerzo > 0:
-                if horas_antes_bruto >= horas_despues_bruto:
-                    horas_antes_bruto -= 1
-                else:
-                    horas_despues_bruto -= 1
-
-            extra_50 += max(horas_antes_bruto, 0)
-            extra_100 += max(horas_despues_bruto, 0)
-
-        # Viaje ida: siempre al 50%
-        extra_50 += viaje_ida
-
-        # Viaje vuelta: si empieza después de las 13 → todo al 100, si no → todo al 50
-        fin_trabajo_dt = salida_dt
-        viaje_vuelta_inicio = fin_trabajo_dt
-        if viaje_vuelta_inicio >= corte_13:
-            extra_100 += viaje_vuelta
-        else:
-            extra_50 += viaje_vuelta
-
-    else:
-        # Lunes a viernes: solo excedente sobre 8 hs
-        total_trabajado = horas_laborales + viaje_ida + viaje_vuelta
-        if total_trabajado > 8:
-            extra_50 = total_trabajado - 8
-
-    return pd.Series({
-        'Horas extra 100%': int(extra_100),
-        'Horas extra 50%': int(extra_50)
-    })
+    return pd.Series({'Horas Extras': round(horas_extras, 2)})
 
 def convertir_hora_a_decimal(hora_str):
     try:
@@ -763,16 +712,15 @@ def exportar_excel():
         'Línea': r.linea or ''
     } for r in registros if r.user is not None])
 
-    extras = df.apply(calcular_horas_extra, axis=1)
+    extras = df.apply(calcular_horas_extras_simplificado, axis=1)
     df = pd.concat([df, extras], axis=1)
 
-    # Reordenar columnas para que las horas extra estén justo después de 'Horas totales'
+    # Reordenar columnas para que 'Horas Extras' esté justo después de 'Horas totales'
     cols = list(df.columns)
-    if "Horas extra 100%" in cols and "Horas extra 50%" in cols:
-        cols.remove("Horas extra 100%")
-        cols.remove("Horas extra 50%")
+    if "Horas Extras" in cols:
+        cols.remove("Horas Extras")
         idx = cols.index("Horas totales") + 1
-        cols[idx:idx] = ["Horas extra 100%", "Horas extra 50%"]
+        cols.insert(idx, "Horas Extras")
         df = df[cols]
 
     if es_admin:
@@ -829,19 +777,17 @@ def exportar_excel():
         ws.cell(row=total_row, column=1, value="TOTALES").font = Font(bold=True)
 
         for col in ws.iter_cols(min_row=1, max_row=1):
-            header = col[0].value
-            col_idx = col[0].column
+        header = col[0].value
+        col_idx = col[0].column
 
-            if header == "Horas laborales":
-                total = df["Horas laborales"].sum()
-            elif header == "Horas extra 100%":
-                total = df["Horas extra 100%"].sum()
-            elif header == "Horas extra 50%":
-                total = df["Horas extra 50%"].sum()
-            elif header == "Km totales":
-                total = df["Km totales"].sum()
-            else:
-                continue
+        if header == "Horas laborales":
+            total = df["Horas laborales"].sum()
+        elif header == "Horas Extras":
+            total = df["Horas Extras"].sum()
+        elif header == "Km totales":
+            total = df["Km totales"].sum()
+        else:
+            continue
 
             cell = ws.cell(row=total_row, column=col_idx, value=round(total, 2))
             cell.font = Font(bold=True)
