@@ -18,6 +18,52 @@ from flask_login import current_user
 #C:\Users\Guillermo\AppData\Local\Programs\Python\Python313\python.exe "$(FULL_CURRENT_PATH)"
 
 
+FERIADOS = [
+    '2025-01-01', '2025-04-18', '2025-05-01', '2025-06-19',
+    '2025-07-18', '2025-08-25', '2025-12-25'
+]
+
+def is_feriado(fecha):
+    return fecha.strftime('%Y-%m-%d') in FERIADOS
+
+def calcular_horas_extra(row):
+    try:
+        fecha = datetime.strptime(row['Fecha'], '%Y-%m-%d')
+        entrada = datetime.strptime(row['Entrada'], '%H:%M').time()
+        salida = datetime.strptime(row['Salida'], '%H:%M').time()
+        horas = float(row['Horas laborales'])
+    except:
+        return pd.Series({'Horas extra 100%': 0.0, 'Horas extra 50%': 0.0})
+
+    extra_100 = 0.0
+    extra_50 = 0.0
+
+    if is_feriado(fecha):
+        extra_100 = horas
+    else:
+        dia_semana = fecha.weekday()
+        if dia_semana == 5:
+            if entrada >= time(13, 0):
+                extra_100 = horas
+            else:
+                entrada_dt = datetime.combine(fecha, entrada)
+                salida_dt = datetime.combine(fecha, salida)
+                corte = datetime.combine(fecha, time(13, 0))
+                if salida_dt > corte:
+                    extra_100 = (salida_dt - corte).seconds / 3600
+        elif dia_semana == 6:
+            extra_100 = horas
+
+    restante = max(horas - extra_100, 0)
+    if restante > 8:
+        extra_50 = restante - 8
+
+    return pd.Series({'Horas extra 100%': round(extra_100, 2), 'Horas extra 50%': round(extra_50, 2)})
+def convertir_hora_a_decimal(hora_str):
+    try:
+        return float(int(hora_str.strip()))
+    except ValueError:
+        return 0.0
 
 def convertir_hora_a_decimal(hora_str):
     try:
@@ -626,6 +672,7 @@ def dashboard():
     )
 
 
+
 @app.route('/exportar_excel')
 def exportar_excel():
     if 'user_id' not in session:
@@ -672,13 +719,15 @@ def exportar_excel():
         'Tarea': r.tarea,
         'Cliente': r.cliente,
         'Comentarios': r.comentarios,
-        #'Contrato': 'Sí' if r.contrato else 'N/A',
         'Contable': r.contrato if es_admin and r.contrato else 'N/A',
         'Service Order': r.service_order or '',
         'Centro de Costo': r.centro_costo or '',
         'Tipo de Servicio': r.tipo_servicio or '',
         'Línea': r.linea or ''
     } for r in registros if r.user is not None])
+
+    extras = df.apply(calcular_horas_extra, axis=1)
+    df = pd.concat([df, extras], axis=1)
 
     if es_admin:
         df['Contable'] = df['Contable'].map({
@@ -698,13 +747,11 @@ def exportar_excel():
             '0': 'N/A'
         }).fillna(df['Contable'])
 
-
     archivo = BytesIO()
     with pd.ExcelWriter(archivo, engine='openpyxl') as writer:
         df.to_excel(writer, index=False, sheet_name='Registros', startrow=0)
         ws = writer.sheets['Registros']
 
-        # Estilos
         header_font = Font(bold=True, color="FFFFFF", name='Calibri')
         header_fill = PatternFill(start_color="305496", end_color="305496", fill_type="solid")
         total_fill = PatternFill(start_color="D9E1F2", end_color="D9E1F2", fill_type="solid")
@@ -712,14 +759,12 @@ def exportar_excel():
                              top=Side(style='thin'), bottom=Side(style='thin'))
         center_alignment = Alignment(horizontal="center", vertical="center", wrap_text=True)
 
-        # Encabezados
         for cell in ws[1]:
             cell.font = header_font
             cell.fill = header_fill
             cell.border = thin_border
             cell.alignment = center_alignment
 
-        # Celdas
         for row in ws.iter_rows(min_row=2, max_row=ws.max_row):
             for cell in row:
                 cell.font = Font(name='Calibri', size=11)
@@ -729,34 +774,34 @@ def exportar_excel():
                 for cell in row:
                     cell.fill = PatternFill(start_color="F9F9F9", end_color="F9F9F9", fill_type="solid")
 
-        # Ajuste de columnas
         for col_num, column_cells in enumerate(ws.columns, 1):
             max_length = max((len(str(cell.value)) for cell in column_cells if cell.value), default=0)
             adjusted_width = min((max_length + 4), 50)
             ws.column_dimensions[get_column_letter(col_num)].width = adjusted_width
 
-        # Agregar fila de totales
         total_row = ws.max_row + 2
         ws.cell(row=total_row, column=1, value="TOTALES").font = Font(bold=True)
 
         for col in ws.iter_cols(min_row=1, max_row=1):
             header = col[0].value
+            col_idx = col[0].column
+
             if header == "Horas laborales":
-                col_idx = col[0].column
                 total = df["Horas laborales"].sum()
-                cell = ws.cell(row=total_row, column=col_idx, value=round(total, 2))
-                cell.font = Font(bold=True)
-                cell.fill = total_fill
-                cell.border = thin_border
-                cell.alignment = center_alignment
+            elif header == "Horas extra 100%":
+                total = df["Horas extra 100%"].sum()
+            elif header == "Horas extra 50%":
+                total = df["Horas extra 50%"].sum()
             elif header == "Km totales":
-                col_idx = col[0].column
                 total = df["Km totales"].sum()
-                cell = ws.cell(row=total_row, column=col_idx, value=round(total, 2))
-                cell.font = Font(bold=True)
-                cell.fill = total_fill
-                cell.border = thin_border
-                cell.alignment = center_alignment
+            else:
+                continue
+
+            cell = ws.cell(row=total_row, column=col_idx, value=round(total, 2))
+            cell.font = Font(bold=True)
+            cell.fill = total_fill
+            cell.border = thin_border
+            cell.alignment = center_alignment
 
         ws.auto_filter.ref = ws.dimensions
         ws.freeze_panes = 'A2'
