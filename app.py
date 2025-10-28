@@ -85,21 +85,13 @@ def calcular_horas_extra(row):
 
     else:
         # Lunes a viernes
-        horas_normales = min(horas_laborales, 8)
-        horas_extra = max(horas_laborales - 8, 0)
-        extra_50 = horas_extra
+        extra_50 = max(horas_laborales - 8, 0)
         # Horas de viaje no se computan como extra
 
     return pd.Series({
         'Horas extra 100%': round(extra_100, 2),
         'Horas extra 50%': round(extra_50, 2)
     })
-
-def convertir_hora_a_decimal(hora_str):
-    try:
-        return float(int(hora_str.strip()))
-    except ValueError:
-        return 0.0
 
 def convertir_hora_a_decimal(hora_str):
     try:
