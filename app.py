@@ -71,7 +71,6 @@ def calcular_horas_extra(row):
             horas_antes_bruto = int((corte_13 - entrada_dt).seconds / 3600)
             horas_despues_bruto = int((salida_dt - corte_13).seconds / 3600)
 
-            # Ajustar almuerzo entero
             if almuerzo > 0:
                 if horas_antes_bruto >= horas_despues_bruto:
                     horas_antes_bruto -= 1
@@ -93,8 +92,10 @@ def calcular_horas_extra(row):
             extra_50 += viaje_vuelta
 
     else:
-        # Lunes a viernes: excedente + viajes al 50%
-        extra_50 = max(horas_laborales - 8, 0) + viaje_ida + viaje_vuelta
+        # Lunes a viernes: solo excedente sobre 8 hs
+        total_trabajado = horas_laborales + viaje_ida + viaje_vuelta
+        if total_trabajado > 8:
+            extra_50 = total_trabajado - 8
 
     return pd.Series({
         'Horas extra 100%': int(extra_100),
