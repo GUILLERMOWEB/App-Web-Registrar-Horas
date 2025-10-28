@@ -27,38 +27,52 @@ def is_feriado(fecha):
     return fecha.strftime('%Y-%m-%d') in FERIADOS
 
 def calcular_horas_extra(row):
-    try:
-        fecha = datetime.strptime(row['Fecha'], '%Y-%m-%d')
-        entrada = datetime.strptime(row['Entrada'], '%H:%M').time()
-        salida = datetime.strptime(row['Salida'], '%H:%M').time()
-        horas = float(row['Horas laborales'])
-    except:
-        return pd.Series({'Horas extra 100%': 0.0, 'Horas extra 50%': 0.0})
+    horas_extra_50 = 0
+    horas_extra_100 = 0
 
-    extra_100 = 0.0
-    extra_50 = 0.0
+    fecha = row['Fecha']
+    entrada = row['Entrada']
+    salida = row['Salida']
+    horas_laborales = row['Horas laborales'] or 0
+    viaje_ida = row['Viaje ida (hs)'] or 0
+    viaje_vuelta = row['Viaje vuelta (hs)'] or 0
 
-    if is_feriado(fecha):
-        extra_100 = horas
-    else:
-        dia_semana = fecha.weekday()
-        if dia_semana == 5:
-            if entrada >= time(13, 0):
-                extra_100 = horas
-            else:
-                entrada_dt = datetime.combine(fecha, entrada)
-                salida_dt = datetime.combine(fecha, salida)
-                corte = datetime.combine(fecha, time(13, 0))
-                if salida_dt > corte:
-                    extra_100 = (salida_dt - corte).seconds / 3600
-        elif dia_semana == 6:
-            extra_100 = horas
+    if isinstance(fecha, str):
+        fecha = datetime.strptime(fecha, '%Y-%m-%d')
 
-    restante = max(horas - extra_100, 0)
-    if restante > 8:
-        extra_50 = restante - 8
+    dia_semana = fecha.weekday()
 
-    return pd.Series({'Horas extra 100%': round(extra_100, 2), 'Horas extra 50%': round(extra_50, 2)})
+    if salida and isinstance(salida, str):
+        try:
+            salida = datetime.strptime(salida, '%H:%M:%S').time()
+        except ValueError:
+            salida = None
+
+    if dia_semana < 5:
+        if horas_laborales > 8:
+            horas_extra_50 += horas_laborales - 8
+        viaje_total = viaje_ida + viaje_vuelta
+        if horas_laborales + viaje_total > 8:
+            exceso = horas_laborales + viaje_total - 8
+            viaje_exceso = min(exceso, viaje_total)
+            horas_extra_50 += viaje_exceso
+
+    elif dia_semana == 5:
+        total_horas = horas_laborales + viaje_ida + viaje_vuelta
+        if salida and salida < time(13, 0):
+            horas_extra_50 += total_horas
+        else:
+            horas_extra_100 += total_horas
+
+    elif dia_semana == 6:
+        total_horas = horas_laborales + viaje_ida + viaje_vuelta
+        horas_extra_100 += total_horas
+
+    return pd.Series({
+        'Horas extra 50%': round(horas_extra_50, 2),
+        'Horas extra 100%': round(horas_extra_100, 2)
+    })
+
 def convertir_hora_a_decimal(hora_str):
     try:
         return float(int(hora_str.strip()))
