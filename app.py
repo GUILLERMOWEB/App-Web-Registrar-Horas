@@ -697,6 +697,7 @@ def exportar_excel():
         'Almuerzo (hs)': r.almuerzo,
         'Viaje ida (hs)': r.viaje_ida,
         'Viaje vuelta (hs)': r.viaje_vuelta,
+        'Horas viaje': (r.viaje_ida or 0) + (r.viaje_vuelta or 0),  # ✅ NUEVA COLUMNA
         'Horas laborales': r.horas,
         'Horas totales': round((r.horas or 0) + (r.viaje_ida or 0) + (r.viaje_vuelta or 0), 2),
         'Km ida': r.km_ida,
@@ -715,8 +716,16 @@ def exportar_excel():
     extras = df.apply(calcular_horas_extras_simplificado, axis=1)
     df = pd.concat([df, extras], axis=1)
 
-    # Reordenar columnas para que 'Horas Extras' esté justo después de 'Horas totales'
+    # ✅ Reordenar columnas: 'Horas viaje' entre 'Viaje vuelta (hs)' y 'Horas laborales'
     cols = list(df.columns)
+    if "Horas viaje" in cols:
+        cols.remove("Horas viaje")
+        if "Viaje vuelta (hs)" in cols and "Horas laborales" in cols:
+            idx = cols.index("Viaje vuelta (hs)") + 1
+            cols.insert(idx, "Horas viaje")
+            df = df[cols]
+
+    # Reordenar columnas para que 'Horas Extras' esté justo después de 'Horas totales'
     if "Horas Extras" in cols:
         cols.remove("Horas Extras")
         idx = cols.index("Horas totales") + 1
@@ -786,6 +795,8 @@ def exportar_excel():
                 total = df["Horas Extras"].sum()
             elif header == "Km totales":
                 total = df["Km totales"].sum()
+            elif header == "Horas viaje":  # ✅ NUEVO total agregado
+                total = df["Horas viaje"].sum()
             else:
                 continue
 
