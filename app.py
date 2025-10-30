@@ -793,6 +793,8 @@ def exportar_excel():
                 total = df["Horas laborales"].sum()
             elif header == "Horas Extras":
                 total = df["Horas Extras"].sum()
+            elif header == "Horas totales":
+                total = df["Horas totales"].sum()
             elif header == "Km totales":
                 total = df["Km totales"].sum()
             elif header == "Horas viaje":  # ✅ NUEVO total agregado
