@@ -8,7 +8,8 @@
   <form method="POST" action="/dashboard" class="row g-3 mb-4">
     <div class="col-md-2">
       <label for="fecha" class="form-label">Fecha</label>
-      <input type="date" name="fecha" class="form-control" required>
+      <input type="date" name="fecha" id="fecha" class="form-control" required>
+      <div id="mensaje-fecha" class="form-text text-warning"></div>
     </div>
     <div class="col-md-2">
       <label for="entrada_hora" class="form-label">Hora de Entrada</label>
@@ -314,6 +315,23 @@
       poblar(clienteSelect.value);
     }
   });
+</script>
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    const fechaInput = document.getElementById('fecha');
+    const mensaje = document.getElementById('mensaje-fecha');
+
+    fechaInput.addEventListener('change', function () {
+        const hoy = new Date().toISOString().split('T')[0];
+        const seleccionada = fechaInput.value;
+
+        if (seleccionada !== hoy) {
+            mensaje.textContent = "⚠️ Estás poniendo una fecha distinta a la de hoy.";
+        } else {
+            mensaje.textContent = "";
+        }
+    });
+});
 </script>
 
 
