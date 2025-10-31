@@ -350,7 +350,8 @@ document.addEventListener('DOMContentLoaded', function () {
         const entrada = parseInt(entradaHora.value) * 60 + parseInt(entradaMinuto.value);
         const salida = parseInt(salidaHora.value) * 60 + parseInt(salidaMinuto.value);
 
-        if (salida < entrada) {
+        // Si salida < entrada y salida es mayor a 0 (es decir, no es exactamente 00:00)
+        if (salida < entrada && salida > 0) {
             mensajeHoras.textContent = "⚠️ La hora de salida es menor que la de entrada. Hasta las 00:00 está permitido del día. Generá un nuevo reporte para las horas posteriores.";
             btnRegistrar.disabled = true;
         } else {
