@@ -328,8 +328,9 @@ document.addEventListener('DOMContentLoaded', function () {
         const hoy = new Date().toISOString().split('T')[0];
         const seleccionada = fechaInput.value;
 
-        if (seleccionada !== hoy) {
+        if (seleccionada && seleccionada !== hoy) {
             mensaje.textContent = "⚠️ Estás poniendo una fecha distinta a la de hoy.";
+            mensaje.style.color = "orange";
         } else {
             mensaje.textContent = "";
         }
