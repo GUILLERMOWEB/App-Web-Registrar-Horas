@@ -7,18 +7,19 @@
   <form method="POST" class="row g-3 mb-4">
     <div class="col-md-2">
       <label for="fecha" class="form-label">Fecha</label>
-      <input type="date" name="fecha" class="form-control" value="{{ registro.fecha }}" required>
+      <input type="date" name="fecha" id="fecha" class="form-control" value="{{ registro.fecha }}" required>
+      <div id="mensaje-fecha" style="color:#FFD700; font-weight:bold; margin-top:8px;"></div>
     </div>
    <div class="col-md-2">
       <label for="entrada" class="form-label">Hora de Entrada</label>
       <div class="d-flex">
-        <select name="entrada_hora" class="form-control me-1" required>
+        <select name="entrada_hora" id="entrada_hora" class="form-control me-1" required> 
           {% for h in range(0, 24) %}
             {% set h_str = "%02d"|format(h) %}
             <option value="{{ h_str }}" {% if registro.entrada[:2] == h_str %}selected{% endif %}>{{ h_str }}</option>
           {% endfor %}
         </select>
-        <select name="entrada_minuto" class="form-control" required>
+        <select name="entrada_minuto" id="entrada_minuto" class="form-control" required>
           {% for m in [0, 15, 30, 45] %}
             {% set m_str = "%02d"|format(m) %}
             <option value="{{ m_str }}" {% if registro.entrada[3:5] == m_str %}selected{% endif %}>{{ m_str }}</option>
@@ -30,19 +31,22 @@
     <div class="col-md-2">
       <label for="salida" class="form-label">Hora de Salida</label>
       <div class="d-flex">
-        <select name="salida_hora" class="form-control me-1" required>
+        <select name="salida_hora" id="salida_hora" class="form-control me-1" required>
           {% for h in range(0, 24) %}
             {% set h_str = "%02d"|format(h) %}
             <option value="{{ h_str }}" {% if registro.salida[:2] == h_str %}selected{% endif %}>{{ h_str }}</option>
           {% endfor %}
         </select>
-        <select name="salida_minuto" class="form-control" required>
+        <select name="salida_minuto" id="salida_minuto" class="form-control" required>
           {% for m in [0, 15, 30, 45] %}
             {% set m_str = "%02d"|format(m) %}
             <option value="{{ m_str }}" {% if registro.salida[3:5] == m_str %}selected{% endif %}>{{ m_str }}</option>
           {% endfor %}
         </select>
       </div>
+    </div>
+    <div class="col-md-12">
+      <div id="mensaje-horas" style="color:#FFD700; font-weight:bold; margin-top:8px;"></div>
     </div>
 
     <div class="col-md-2">
@@ -237,6 +241,59 @@ document.addEventListener("DOMContentLoaded", function () {
       poblar(clienteSelect.value);
     }
   });
+</script>
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    const fechaInput = document.getElementById('fecha');
+    const mensaje = document.getElementById('mensaje-fecha');
+
+    fechaInput.addEventListener('change', function () {
+        // Obtener fecha actual en formato YYYY-MM-DD
+        const hoy = new Date();
+        const yyyy = hoy.getFullYear();
+        const mm = String(hoy.getMonth() + 1).padStart(2, '0');
+        const dd = String(hoy.getDate()).padStart(2, '0');
+        const hoyStr = `${yyyy}-${mm}-${dd}`;
+
+        const seleccionada = fechaInput.value;
+
+        if (seleccionada && seleccionada !== hoyStr) {
+            mensaje.textContent = "⚠️ Estás poniendo una fecha distinta a la de hoy.";
+            mensaje.style.color = "orange";
+        } else {
+            mensaje.textContent = "";
+        }
+    });
+});
+</script>
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    const entradaHora = document.getElementById('entrada_hora');
+    const entradaMinuto = document.getElementById('entrada_minuto');
+    const salidaHora = document.getElementById('salida_hora');
+    const salidaMinuto = document.getElementById('salida_minuto');
+    const mensajeHoras = document.getElementById('mensaje-horas');
+    const btnRegistrar = document.getElementById('btn-registrar');
+
+    function verificarHoras() {
+        const entrada = parseInt(entradaHora.value) * 60 + parseInt(entradaMinuto.value);
+        const salida = parseInt(salidaHora.value) * 60 + parseInt(salidaMinuto.value);
+
+        // Si salida < entrada y salida es mayor a 0 (es decir, no es exactamente 00:00)
+        if (salida < entrada && salida > 0) {
+            mensajeHoras.textContent = "⚠️ La hora de salida es menor que la de entrada. Hasta las 00:00 está permitido del día. Generá un nuevo reporte para las horas posteriores.";
+            btnRegistrar.disabled = true;
+        } else {
+            mensajeHoras.textContent = "";
+            btnRegistrar.disabled = false;
+        }
+    }
+
+    entradaHora.addEventListener('change', verificarHoras);
+    entradaMinuto.addEventListener('change', verificarHoras);
+    salidaHora.addEventListener('change', verificarHoras);
+    salidaMinuto.addEventListener('change', verificarHoras);
+});
 </script>
 
 {% endblock %}
