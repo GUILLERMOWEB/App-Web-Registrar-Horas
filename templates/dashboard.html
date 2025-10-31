@@ -151,7 +151,7 @@
     </div>
   
     <div class="col-12">
-      <button type="submit" class="btn btn-primary">Registrar</button>
+      <button type="submit" class="btn btn-primary" id="btn-registrar">Registrar</button>
     </div>
   </form>
   
@@ -325,10 +325,11 @@ document.addEventListener('DOMContentLoaded', function () {
     const mensaje = document.getElementById('mensaje-fecha');
 
     fechaInput.addEventListener('change', function () {
-        const hoy = new Date().toISOString().split('T')[0];
-        const seleccionada = fechaInput.value;
+        const hoy = new Date();
+        const hoyLocal = new Date(hoy.getFullYear(), hoy.getMonth(), hoy.getDate());
+        const seleccionada = new Date(fechaInput.value);
 
-        if (seleccionada && seleccionada !== hoy) {
+        if (fechaInput.value && seleccionada.getTime() !== hoyLocal.getTime()) {
             mensaje.textContent = "⚠️ Estás poniendo una fecha distinta a la de hoy.";
             mensaje.style.color = "orange";
         } else {
