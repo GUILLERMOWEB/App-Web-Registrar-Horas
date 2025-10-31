@@ -325,11 +325,16 @@ document.addEventListener('DOMContentLoaded', function () {
     const mensaje = document.getElementById('mensaje-fecha');
 
     fechaInput.addEventListener('change', function () {
+        // Obtener fecha actual en formato YYYY-MM-DD
         const hoy = new Date();
-        const hoyLocal = new Date(hoy.getFullYear(), hoy.getMonth(), hoy.getDate());
-        const seleccionada = new Date(fechaInput.value);
+        const yyyy = hoy.getFullYear();
+        const mm = String(hoy.getMonth() + 1).padStart(2, '0');
+        const dd = String(hoy.getDate()).padStart(2, '0');
+        const hoyStr = `${yyyy}-${mm}-${dd}`;
 
-        if (fechaInput.value && seleccionada.getTime() !== hoyLocal.getTime()) {
+        const seleccionada = fechaInput.value;
+
+        if (seleccionada && seleccionada !== hoyStr) {
             mensaje.textContent = "⚠️ Estás poniendo una fecha distinta a la de hoy.";
             mensaje.style.color = "orange";
         } else {
