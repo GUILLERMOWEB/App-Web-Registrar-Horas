@@ -356,11 +356,17 @@ document.addEventListener('DOMContentLoaded', function () {
         const entrada = parseInt(entradaHora.value) * 60 + parseInt(entradaMinuto.value);
         const salida = parseInt(salidaHora.value) * 60 + parseInt(salidaMinuto.value);
 
-        // Si salida < entrada y salida es mayor a 0 (es decir, no es exactamente 00:00)
+        // Validación: salida menor que entrada y salida > 0
         if (salida < entrada && salida > 0) {
             mensajeHoras.textContent = "⚠️ La hora de salida es menor que la de entrada. Hasta las 00:00 está permitido del día. Generá un nuevo reporte para las horas posteriores.";
             btnRegistrar.disabled = true;
-        } else {
+        }
+        // Validación: entrada y salida iguales
+        else if (salida === entrada) {
+            mensajeHoras.textContent = "⚠️ La hora de entrada y salida no pueden ser iguales.";
+            btnRegistrar.disabled = true;
+        }
+        else {
             mensajeHoras.textContent = "";
             btnRegistrar.disabled = false;
         }
