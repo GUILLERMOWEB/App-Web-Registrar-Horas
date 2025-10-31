@@ -153,7 +153,7 @@
     </div>
 
     <div class="col-12">
-      <button type="submit" class="btn btn-primary">Actualizar</button>
+      <button type="submit" class="btn btn-primary" id="btn-actualizar">Actualizar</button>
     </div>
   </form>
 </div>
@@ -273,7 +273,7 @@ document.addEventListener('DOMContentLoaded', function () {
     const salidaHora = document.getElementById('salida_hora');
     const salidaMinuto = document.getElementById('salida_minuto');
     const mensajeHoras = document.getElementById('mensaje-horas');
-    const btnRegistrar = document.getElementById('btn-registrar');
+    const btnActualizar = document.getElementById('btn-actualizar');
 
     function verificarHoras() {
         const entrada = parseInt(entradaHora.value) * 60 + parseInt(entradaMinuto.value);
@@ -282,10 +282,10 @@ document.addEventListener('DOMContentLoaded', function () {
         // Si salida < entrada y salida es mayor a 0 (es decir, no es exactamente 00:00)
         if (salida < entrada && salida > 0) {
             mensajeHoras.textContent = "⚠️ La hora de salida es menor que la de entrada. Hasta las 00:00 está permitido del día. Generá un nuevo reporte para las horas posteriores.";
-            btnRegistrar.disabled = true;
+            btnActualizar.disabled = true;
         } else {
             mensajeHoras.textContent = "";
-            btnRegistrar.disabled = false;
+            btnActualizar.disabled = false;
         }
     }
 
