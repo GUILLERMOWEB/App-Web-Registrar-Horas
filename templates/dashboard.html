@@ -177,8 +177,15 @@
   </div>
   
   <!-- Información del total de horas trabajadas -->
-  <div class="alert alert-info">
-    Total de horas trabajadas (incluyendo viaje): <strong>{{ total_horas }}</strong>
+  <div class="table-scroll">
+    <div class="total-horas mb-2">
+      Total de horas trabajadas (incluyendo viaje): <strong>{{ total_horas }}</strong>
+    </div>
+    <div class="table-responsive">
+      <table class="table table-striped">
+        <!-- contenido de la tabla -->
+      </table>
+    </div>
   </div>
 
   <!-- Tabla de registros -->
