@@ -14,12 +14,12 @@
     <div class="col-md-2">
       <label for="entrada_hora" class="form-label">Hora de Entrada</label>
       <div class="d-flex">
-        <select name="entrada_hora" class="form-control me-1" required>
+        <select name="entrada_hora" id="entrada_hora" class="form-control me-1" required>
           {% for h in range(0, 24) %}
             <option value="{{ "%02d"|format(h) }}">{{ "%02d"|format(h) }}</option>
           {% endfor %}
         </select>
-        <select name="entrada_minuto" class="form-control" required>
+        <select name="entrada_minuto" id="entrada_minuto" class="form-control" required>
           {% for m in [0, 15, 30, 45] %}
             <option value="{{ "%02d"|format(m) }}">{{ "%02d"|format(m) }}</option>
           {% endfor %}
@@ -30,17 +30,20 @@
     <div class="col-md-2">
       <label for="salida_hora" class="form-label">Hora de Salida</label>
       <div class="d-flex">
-        <select name="salida_hora" class="form-control me-1" required>
+        <select name="salida_hora" id="salida_hora" class="form-control me-1" required>
           {% for h in range(0, 24) %}
             <option value="{{ "%02d"|format(h) }}">{{ "%02d"|format(h) }}</option>
           {% endfor %}
         </select>
-        <select name="salida_minuto" class="form-control" required>
+        <select name="salida_minuto" id="salida_minuto" class="form-control" required>
           {% for m in [0, 15, 30, 45] %}
             <option value="{{ "%02d"|format(m) }}">{{ "%02d"|format(m) }}</option>
           {% endfor %}
         </select>
       </div>
+    </div>
+    <div class="col-md-12">
+      <div id="mensaje-horas" class="form-text text-danger mt-2"></div>
     </div>
 
     <div class="col-md-2">
@@ -331,6 +334,34 @@ document.addEventListener('DOMContentLoaded', function () {
             mensaje.textContent = "";
         }
     });
+});
+</script>
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    const entradaHora = document.getElementById('entrada_hora');
+    const entradaMinuto = document.getElementById('entrada_minuto');
+    const salidaHora = document.getElementById('salida_hora');
+    const salidaMinuto = document.getElementById('salida_minuto');
+    const mensajeHoras = document.getElementById('mensaje-horas');
+    const btnRegistrar = document.getElementById('btn-registrar');
+
+    function verificarHoras() {
+        const entrada = parseInt(entradaHora.value) * 60 + parseInt(entradaMinuto.value);
+        const salida = parseInt(salidaHora.value) * 60 + parseInt(salidaMinuto.value);
+
+        if (salida < entrada) {
+            mensajeHoras.textContent = "⚠️ La hora de salida es menor que la de entrada. Hasta las 00:00 está permitido del día. Generá un nuevo reporte para las horas posteriores.";
+            btnRegistrar.disabled = true;
+        } else {
+            mensajeHoras.textContent = "";
+            btnRegistrar.disabled = false;
+        }
+    }
+
+    entradaHora.addEventListener('change', verificarHoras);
+    entradaMinuto.addEventListener('change', verificarHoras);
+    salidaHora.addEventListener('change', verificarHoras);
+    salidaMinuto.addEventListener('change', verificarHoras);
 });
 </script>
 
