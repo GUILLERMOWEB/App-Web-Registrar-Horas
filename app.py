@@ -515,7 +515,7 @@ def dashboard():
         {'id': 244, 'nombre': 'UYC-RECALCO   MVD-LIN02  Máquina-TBA/8                                             N/S-20613/83359'},
         {'id': 245, 'nombre': 'UYC-RECALCO   MVD-LIN03  Máquina-TBA/8                                             N/S-15010/00889'},
         {'id': 246, 'nombre': 'UYC-PONTEVEDRA  PAY-LIN02  Máquina-TBA/19                                           N/S-20591/83337'},
-        {'id': 247, 'nombre': 'UYC-PONTEVEDRA  PAY-LIN01  Máquina-A3/Flex                                          N/S-21211/00422'}
+        {'id': 247, 'nombre': 'UYC-PONTEVEDRA  PAY-LIN01  Máquina-A3/Flex                                          N/S-21211/00422'},
         {'id': 248, 'nombre': 'UYP-CRUFI  MVD-IC 01  Máquina-Tetra Pak® Continuous Freezer S1500 A2                N/S-Z1421199'},
         {'id': 249, 'nombre': 'UYP-CRUFI  MVD-IC 01  Máquina-Tetra Pak Continuous Freezer S1500 A2                 N/S-Z1421390'},
         {'id': 250, 'nombre': 'UYP-CRUFI  MVD-IC 01  Máquina-Tetra Pak Continuous Freezer S1500 A2                 N/S-Z1421391'}
