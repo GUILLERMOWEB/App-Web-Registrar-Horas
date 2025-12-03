@@ -172,6 +172,8 @@ def dashboard():
         '1561248 - Conaprole Planta XI (Proceso)',
         '1561249 - Conaprole Planta XVI (Proceso)',
         '1561251 - Cooperativa Agraria (CALCAR)',
+        '1560607 - Crufi (Carton)',
+        '1560607 - Crufi (Proceso)',
         '1560621 - Ecolat Uruguay S.A. (Proceso)',
         '1561461 - Estancias del Lago S.R.L. (Proceso)',
         '1561335 - Gibur S.A. (Carton)',
@@ -233,7 +235,9 @@ def dashboard():
         {'id': 33, 'nombre': '1560020 - Recalco S.A. (Proceso) C.Costo=5 ()'},
         {'id': 34, 'nombre': '0000000 - Pontevedra (Carton) C.Costo=5 ()'},
         {'id': 35, 'nombre': '0000000 - Pontevedra (Proceso) C.Costo=5 ()'},
-        {'id': 36, 'nombre': 'Otros Clientes del Mercado N/A'}
+        {'id': 36, 'nombre': '1560607 - Crufi (Carton) C.Costo=5 ()'},
+        {'id': 37, 'nombre': '1560607 - Crufi (Proceso) C.Costo=5 ()'},
+        {'id': 38, 'nombre': 'Otros Clientes del Mercado N/A'}
     ]
 
     contratos = [
@@ -512,6 +516,9 @@ def dashboard():
         {'id': 245, 'nombre': 'UYC-RECALCO   MVD-LIN03  Máquina-TBA/8                                             N/S-15010/00889'},
         {'id': 246, 'nombre': 'UYC-PONTEVEDRA  PAY-LIN02  Máquina-TBA/19                                           N/S-20591/83337'},
         {'id': 247, 'nombre': 'UYC-PONTEVEDRA  PAY-LIN01  Máquina-A3/Flex                                          N/S-21211/00422'}
+        {'id': 248, 'nombre': 'UYP-CRUFI  MVD-IC 01  Máquina-Tetra Pak® Continuous Freezer S1500 A2                N/S-Z1421199'},
+        {'id': 249, 'nombre': 'UYP-CRUFI  MVD-IC 01  Máquina-Tetra Pak Continuous Freezer S1500 A2                 N/S-Z1421390'},
+        {'id': 250, 'nombre': 'UYP-CRUFI  MVD-IC 01  Máquina-Tetra Pak Continuous Freezer S1500 A2                 N/S-Z1421391'}
 
     ]
 
@@ -631,12 +638,14 @@ def dashboard():
         '1561249 - Conaprole Planta XVI (Proceso)'  : 'UYP-CONAPROLE P16',
         '1560018 - Cerealin San Jose (Carton)'      : 'UYC-CEREALIN',
         '1560018 - Cerealin San Jose (Proceso)'     : 'UYP-CEREALIN',
-        '1569004 - Cerealin S.A.'          : 'UYP-CEREALIN',
+        '1569004 - Cerealin S.A.'                   : 'UYP-CEREALIN',
         '1561132 - Montevideo Refrescos S.A. (Proceso)': 'UYP-MONRESA',
         '1561062 - Jugos del Uruguay S.A. (Carton)'   : 'UYC-JUGOSURUG',  # definir si hay prefijo
         '1561062 - Jugos del Uruguay S.A. (Proceso)'  : 'UYP-JUGOSURUG',  # definir si hay prefijo
         '0000000 - Pontevedra (Carton)'          : 'UYC-PONTEVEDRA',
         '0000000 - Pontevedra (Proceso)'         : 'UYP-PONTEVEDRA',
+        '1560607 - Crufi (Carton)'               : 'UYC-CRUFI',
+        '1560607 - Crufi (Proceso)'              : 'UYP-CRUFI',
         '1570011 - Tetrapak Argentina'           : 'TPK - N/A',
         '1580001 - Tetra Pak Chile'              : 'TPK - N/A',
         '1550005 - Tetra Pak Paraguay'           : 'TPK - N/A',
@@ -874,6 +883,8 @@ def editar_registro(id):
         '1561248 - Conaprole Planta XI (Proceso)',
         '1561249 - Conaprole Planta XVI (Proceso)',
         '1561251 - Cooperativa Agraria (CALCAR)',
+        '1560607 - Crufi (Carton)',
+        '1560607 - Crufi (Proceso)',
         '1560621 - Ecolat Uruguay S.A. (Proceso)',
         '1561461 - Estancias del Lago S.R.L. (Proceso)',
         '1561335 - Gibur S.A. (Carton)',
@@ -934,7 +945,9 @@ def editar_registro(id):
         {'id': 33, 'nombre': '1560020 - Recalco S.A. (Proceso) C.Costo=5 ()'},
         {'id': 34, 'nombre': '0000000 - Pontevedra (Carton) C.Costo=5 ()'},
         {'id': 35, 'nombre': '0000000 - Pontevedra (Proceso) C.Costo=5 ()'},
-        {'id': 36, 'nombre': 'Otros Clientes del Mercado N/A'}
+        {'id': 36, 'nombre': '1560607 - Crufi (Carton) C.Costo=5 ()'},
+        {'id': 37, 'nombre': '1560607 - Crufi (Proceso) C.Costo=5 ()'},
+        {'id': 38, 'nombre': 'Otros Clientes del Mercado N/A'}
     ]
 
     contratos = [
@@ -1213,7 +1226,10 @@ def editar_registro(id):
         {'id': 244, 'nombre': 'UYC-RECALCO   MVD-LIN02  Máquina-TBA/8                                             N/S-20613/83359'},
         {'id': 245, 'nombre': 'UYC-RECALCO   MVD-LIN03  Máquina-TBA/8                                             N/S-15010/00889'},
         {'id': 246, 'nombre': 'UYC-PONTEVEDRA  PAY-LIN02  Máquina-TBA/19                                           N/S-20591/83337'},
-        {'id': 247, 'nombre': 'UYC-PONTEVEDRA  PAY-LIN01  Máquina-A3/Flex                                          N/S-21211/00422'}
+        {'id': 247, 'nombre': 'UYC-PONTEVEDRA  PAY-LIN01  Máquina-A3/Flex                                          N/S-21211/00422'},
+        {'id': 248, 'nombre': 'UYP-CRUFI  MVD-IC 01  Máquina-Tetra Pak® Continuous Freezer S1500 A2                N/S-Z1421199'},
+        {'id': 249, 'nombre': 'UYP-CRUFI  MVD-IC 01  Máquina-Tetra Pak Continuous Freezer S1500 A2                 N/S-Z1421390'},
+        {'id': 250, 'nombre': 'UYP-CRUFI  MVD-IC 01  Máquina-Tetra Pak Continuous Freezer S1500 A2                 N/S-Z1421391'}
 
     ]
 
@@ -1317,12 +1333,14 @@ def editar_registro(id):
         '1561249 - Conaprole Planta XVI (Proceso)'  : 'UYP-CONAPROLE P16',
         '1560018 - Cerealin San Jose (Carton)'      : 'UYC-CEREALIN',
         '1560018 - Cerealin San Jose (Proceso)'     : 'UYP-CEREALIN',
-        '1569004 - Cerealin S.A.'          : 'UYP-CEREALIN',
+        '1569004 - Cerealin S.A.'                   : 'UYP-CEREALIN',
         '1561132 - Montevideo Refrescos S.A. (Proceso)': 'UYP-MONRESA',
         '1561062 - Jugos del Uruguay S.A. (Carton)'   : 'UYC-JUGOSURUG',  # definir si hay prefijo
         '1561062 - Jugos del Uruguay S.A. (Proceso)'  : 'UYP-JUGOSURUG',  # definir si hay prefijo
         '0000000 - Pontevedra (Carton)'          : 'UYC-PONTEVEDRA',
         '0000000 - Pontevedra (Proceso)'         : 'UYP-PONTEVEDRA',
+        '1560607 - Crufi (Carton)'               : 'UYC-CRUFI',
+        '1560607 - Crufi (Proceso)'              : 'UYP-CRUFI',
         '1570011 - Tetrapak Argentina'           : 'TPK - N/A',
         '1580001 - Tetra Pak Chile'              : 'TPK - N/A',
         '1550005 - Tetra Pak Paraguay'           : 'TPK - N/A',
