@@ -180,7 +180,10 @@ def dashboard():
         '1561062 - Jugos del Uruguay S.A. (Proceso)',
         '1561132 - Montevideo Refrescos S.A. (Proceso)',
         '1561540 - Nolir S.A.',
-        '1560020 - Recalco S.A. (ex Suadil)',
+        '0000000 - Pontevedra (Carton)',
+        '0000000 - Pontevedra (Proceso)',
+        '1560020 - Recalco S.A. (Carton)',
+        '1560020 - Recalco S.A. (Proceso)',
         '1570011 - Tetrapak Argentina',
         '1580001 - Tetra Pak Chile',
         '1550005 - Tetra Pak Paraguay',
@@ -199,7 +202,7 @@ def dashboard():
         {'id': 2, 'nombre': '1561251 - Cooperativa Agraria (CALCAR) C.Costo=2 ()'},
         {'id': 3, 'nombre': '1561335 - Gibur S.A. (Carton) C.Costo=3 ()'},
         {'id': 4, 'nombre': '1561540 - Nolir S.A. C.Costo=4 ()'},
-        {'id': 5, 'nombre': '1560020 - Recalco S.A. (ex Suadil) C.Costo=5 ()'},
+        {'id': 5, 'nombre': '1560020 - Recalco S.A. (Carton) C.Costo=5 ()'},
         {'id': 6, 'nombre': '1561250 - Conaprole Planta CIM (Carton) C.Costo=6 ()'},
         {'id': 7, 'nombre': '1561245 - Conaprole Planta I (Proceso) C.Costo= ()'},
         {'id': 8, 'nombre': '1561250 - Conaprole Planta CIM (Proceso) C.Costo= ()'},
@@ -227,7 +230,10 @@ def dashboard():
         {'id': 30, 'nombre': '1560001 - Tetra Pak Uruguay S.R.L. C.Costo= ()'},
         {'id': 31, 'nombre': '1561461 - Estancias del Lago S.R.L. (Proceso) C.Costo= ()'},
         {'id': 32, 'nombre': '1561335 - Gibur S.A. (Proceso) C.Costo=3 ()'},
-        {'id': 33, 'nombre': 'Otros Clientes del Mercado N/A'}
+        {'id': 33, 'nombre': '1560020 - Recalco S.A. (Proceso) C.Costo=5 ()'},
+        {'id': 34, 'nombre': '0000000 - Pontevedra (Carton) C.Costo=5 ()'},
+        {'id': 35, 'nombre': '0000000 - Pontevedra (Proceso) C.Costo=5 ()'},
+        {'id': 36, 'nombre': 'Otros Clientes del Mercado N/A'}
     ]
 
     contratos = [
@@ -501,12 +507,13 @@ def dashboard():
         {'id': 240, 'nombre': 'UYP-GIBUR     MVD-TREAT  Máquina-Tetra Plex M6 FM                                  N/S-30106-74320'},
         {'id': 241, 'nombre': 'UYP-GIBUR     MVD-TREAT  Máquina-Tetra Promato Nacional                            N/S-6038107/01'},
         {'id': 242, 'nombre': 'UYP-GIBUR     MVD-TREAT  Máquina-Tetra Spiraflo MTC 108                            N/S-1063101'},
-        {'id': 243, 'nombre': 'UYP-GIBUR     MVD-TREAT  Máquina-Tetra Spiraflo CC108                              N/S-1103001'}
-
+        {'id': 243, 'nombre': 'UYP-GIBUR     MVD-TREAT  Máquina-Tetra Spiraflo CC108                              N/S-1103001'},
+        {'id': 244, 'nombre': 'UYC-RECALCO   MVD-LIN02  Máquina-TBA/8                                             N/S-20613/83359'},
+        {'id': 245, 'nombre': 'UYC-RECALCO   MVD-LIN03  Máquina-TBA/8                                             N/S-15010/00889'},
+        {'id': 246, 'nombre': 'UYC-PONTEVEDRA  PAY-LIN02  Máquina-TBA/19                                           N/S-20591/83337'},
+        {'id': 247, 'nombre': 'UYC-PONTEVEDRA  PAY-LIN01  Máquina-A3/Flex                                          N/S-21211/00422'}
 
     ]
-
-
 
     if request.method == 'POST':
         fecha = request.form['fecha']
@@ -611,7 +618,8 @@ def dashboard():
         '1561335 - Gibur S.A. (Carton)'             : 'UYC-GIBUR',
         '1561335 - Gibur S.A. (Proceso)'            : 'UYP-GIBUR',
         '1561540 - Nolir S.A.'                      : 'UYC-NOLIR',
-        '1560020 - Recalco S.A. (ex Suadil)'        : 'UYC-RECALCO',
+        '1560020 - Recalco S.A. (Carton)'           : 'UYC-RECALCO',
+        '1560020 - Recalco S.A. (Proceso)'          : 'UYP-RECALCO',
         '1561245 - Conaprole Planta I (Proceso)'    : 'UYP-CONAPROLE P01',
         '1561250 - Conaprole Planta CIM (Carton)'   : 'UYC-CONAPROLE CIM',
         '1561250 - Conaprole Planta CIM (Proceso)'  : 'UYP-CONAPROLE CIM',
@@ -627,6 +635,8 @@ def dashboard():
         '1561132 - Montevideo Refrescos S.A. (Proceso)': 'UYP-MONRESA',
         '1561062 - Jugos del Uruguay S.A. (Carton)'   : 'UYC-JUGOSURUG',  # definir si hay prefijo
         '1561062 - Jugos del Uruguay S.A. (Proceso)'  : 'UYP-JUGOSURUG',  # definir si hay prefijo
+        '0000000 - Pontevedra (Carton)'          : 'UYC-PONTEVEDRA',
+        '0000000 - Pontevedra (Proceso)'         : 'UYP-PONTEVEDRA',
         '1570011 - Tetrapak Argentina'           : 'TPK - N/A',
         '1580001 - Tetra Pak Chile'              : 'TPK - N/A',
         '1550005 - Tetra Pak Paraguay'           : 'TPK - N/A',
@@ -872,7 +882,10 @@ def editar_registro(id):
         '1561062 - Jugos del Uruguay S.A. (Proceso)',
         '1561132 - Montevideo Refrescos S.A. (Proceso)',
         '1561540 - Nolir S.A.',
-        '1560020 - Recalco S.A. (ex Suadil)',
+        '0000000 - Pontevedra (Carton)',
+        '0000000 - Pontevedra (Proceso)',
+        '1560020 - Recalco S.A. (Carton)',
+        '1560020 - Recalco S.A. (Proceso)',
         '1570011 - Tetrapak Argentina',
         '1580001 - Tetra Pak Chile',
         '1550005 - Tetra Pak Paraguay',
@@ -890,7 +903,7 @@ def editar_registro(id):
         {'id': 2, 'nombre': '1561251 - Cooperativa Agraria (CALCAR) C.Costo=2 ()'},
         {'id': 3, 'nombre': '1561335 - Gibur S.A. (Carton) C.Costo=3 ()'},
         {'id': 4, 'nombre': '1561540 - Nolir S.A. C.Costo=4 ()'},
-        {'id': 5, 'nombre': '1560020 - Recalco S.A. (ex Suadil) C.Costo=5 ()'},
+        {'id': 5, 'nombre': '1560020 - Recalco S.A. (Carton) C.Costo=5 ()'},
         {'id': 6, 'nombre': '1561250 - Conaprole Planta CIM (Carton) C.Costo=6 ()'},
         {'id': 7, 'nombre': '1561245 - Conaprole Planta I (Proceso) C.Costo= ()'},
         {'id': 8, 'nombre': '1561250 - Conaprole Planta CIM (Proceso) C.Costo= ()'},
@@ -918,7 +931,10 @@ def editar_registro(id):
         {'id': 30, 'nombre': '1560001 - Tetra Pak Uruguay S.R.L. C.Costo= ()'},
         {'id': 31, 'nombre': '1561461 - Estancias del Lago S.R.L. (Proceso) C.Costo= ()'},
         {'id': 32, 'nombre': '1561335 - Gibur S.A. (Proceso) C.Costo=3 ()'},
-        {'id': 33, 'nombre': 'Otros Clientes del Mercado N/A'}
+        {'id': 33, 'nombre': '1560020 - Recalco S.A. (Proceso) C.Costo=5 ()'},
+        {'id': 34, 'nombre': '0000000 - Pontevedra (Carton) C.Costo=5 ()'},
+        {'id': 35, 'nombre': '0000000 - Pontevedra (Proceso) C.Costo=5 ()'},
+        {'id': 36, 'nombre': 'Otros Clientes del Mercado N/A'}
     ]
 
     contratos = [
@@ -1193,8 +1209,11 @@ def editar_registro(id):
         {'id': 240, 'nombre': 'UYP-GIBUR     MVD-TREAT  Máquina-Tetra Plex M6 FM                                  N/S-30106-74320'},
         {'id': 241, 'nombre': 'UYP-GIBUR     MVD-TREAT  Máquina-Tetra Promato Nacional                            N/S-6038107/01'},
         {'id': 242, 'nombre': 'UYP-GIBUR     MVD-TREAT  Máquina-Tetra Spiraflo MTC 108                            N/S-1063101'},
-        {'id': 243, 'nombre': 'UYP-GIBUR     MVD-TREAT  Máquina-Tetra Spiraflo CC108                              N/S-1103001'}
-
+        {'id': 243, 'nombre': 'UYP-GIBUR     MVD-TREAT  Máquina-Tetra Spiraflo CC108                              N/S-1103001'},
+        {'id': 244, 'nombre': 'UYC-RECALCO   MVD-LIN02  Máquina-TBA/8                                             N/S-20613/83359'},
+        {'id': 245, 'nombre': 'UYC-RECALCO   MVD-LIN03  Máquina-TBA/8                                             N/S-15010/00889'},
+        {'id': 246, 'nombre': 'UYC-PONTEVEDRA  PAY-LIN02  Máquina-TBA/19                                           N/S-20591/83337'},
+        {'id': 247, 'nombre': 'UYC-PONTEVEDRA  PAY-LIN01  Máquina-A3/Flex                                          N/S-21211/00422'}
 
     ]
 
@@ -1285,7 +1304,8 @@ def editar_registro(id):
         '1561335 - Gibur S.A. (Carton)'             : 'UYC-GIBUR',
         '1561335 - Gibur S.A. (Proceso)'            : 'UYP-GIBUR',
         '1561540 - Nolir S.A.'                      : 'UYC-NOLIR',
-        '1560020 - Recalco S.A. (ex Suadil)'        : 'UYC-RECALCO',
+        '1560020 - Recalco S.A. (Carton)'           : 'UYC-RECALCO',
+        '1560020 - Recalco S.A. (Proceso)'          : 'UYP-RECALCO',
         '1561245 - Conaprole Planta I (Proceso)'    : 'UYP-CONAPROLE P01',
         '1561250 - Conaprole Planta CIM (Carton)'   : 'UYC-CONAPROLE CIM',
         '1561250 - Conaprole Planta CIM (Proceso)'  : 'UYP-CONAPROLE CIM',
@@ -1301,6 +1321,8 @@ def editar_registro(id):
         '1561132 - Montevideo Refrescos S.A. (Proceso)': 'UYP-MONRESA',
         '1561062 - Jugos del Uruguay S.A. (Carton)'   : 'UYC-JUGOSURUG',  # definir si hay prefijo
         '1561062 - Jugos del Uruguay S.A. (Proceso)'  : 'UYP-JUGOSURUG',  # definir si hay prefijo
+        '0000000 - Pontevedra (Carton)'          : 'UYC-PONTEVEDRA',
+        '0000000 - Pontevedra (Proceso)'         : 'UYP-PONTEVEDRA',
         '1570011 - Tetrapak Argentina'           : 'TPK - N/A',
         '1580001 - Tetra Pak Chile'              : 'TPK - N/A',
         '1550005 - Tetra Pak Paraguay'           : 'TPK - N/A',
