@@ -175,6 +175,7 @@ def dashboard():
         '1560621 - Ecolat Uruguay S.A. (Proceso)',
         '1561461 - Estancias del Lago S.R.L. (Proceso)',
         '1561335 - Gibur S.A. (Carton)',
+        '1561335 - Gibur S.A. (Proceso)',
         '1561062 - Jugos del Uruguay S.A. (Carton)',
         '1561062 - Jugos del Uruguay S.A. (Proceso)',
         '1561132 - Montevideo Refrescos S.A. (Proceso)',
@@ -225,8 +226,10 @@ def dashboard():
         {'id': 30, 'nombre': '1550005 - Tetra Pak Paraguay C.Costo= ()'},
         {'id': 30, 'nombre': '1560001 - Tetra Pak Uruguay S.R.L. C.Costo= ()'},
         {'id': 31, 'nombre': '1561461 - Estancias del Lago S.R.L. (Proceso) C.Costo= ()'},
-        {'id': 32, 'nombre': 'Otros Clientes del Mercado N/A'}
+        {'id': 32, 'nombre': '1561335 - Gibur S.A. (Proceso) C.Costo=3 ()'},
+        {'id': 33, 'nombre': 'Otros Clientes del Mercado N/A'}
     ]
+
     contratos = [
         {'value': '73450003', 'label': 'Contrato'},
         {'value': '79010000', 'label': 'Administrativo                          - 79010000'},
@@ -492,7 +495,14 @@ def dashboard():
         {'id': 234, 'nombre': 'UYP-ESTANCIA  DRZ-TREAT  Máquina-Tetra Almix                                       N/S-15648-13'},
         {'id': 235, 'nombre': 'UYP-ESTANCIA  DRZ-TREAT  Máquina-Tetra Alex Homogenizer                            N/S-5856943312'},
         {'id': 236, 'nombre': 'UYP-ESTANCIA  DRZ-TREAT  Máquina-Tetra Guerin Silo Equipment                       N/S-5860290037'},
-        {'id': 237, 'nombre': 'UYP-ESTANCIA  DRZ-TPPM   Máquina-Production Control                                N/S-5861000097'}
+        {'id': 237, 'nombre': 'UYP-ESTANCIA  DRZ-TPPM   Máquina-Production Control                                N/S-5861000097'},  
+        {'id': 238, 'nombre': 'UYP-GIBUR     MVD-PF 01  Máquina-Esterilizador Tomate/Jugo                         N/S-B6279083/01'},
+        {'id': 239, 'nombre': 'UYP-GIBUR     MVD-PF 01  Máquina-Tubular Heat Exchanger C70, SMO                   N/S-1193414'},
+        {'id': 240, 'nombre': 'UYP-GIBUR     MVD-TREAT  Máquina-Tetra Plex M6 FM                                  N/S-30106-74320'},
+        {'id': 241, 'nombre': 'UYP-GIBUR     MVD-TREAT  Máquina-Tetra Promato Nacional                            N/S-6038107/01'},
+        {'id': 242, 'nombre': 'UYP-GIBUR     MVD-TREAT  Máquina-Tetra Spiraflo MTC 108                            N/S-1063101'},
+        {'id': 243, 'nombre': 'UYP-GIBUR     MVD-TREAT  Máquina-Tetra Spiraflo CC108                              N/S-1103001'}
+
 
     ]
 
@@ -599,6 +609,7 @@ def dashboard():
         '1560621 - Ecolat Uruguay S.A. (Proceso)'   : 'UYP-ECOLAT',
         '1561461 - Estancias del Lago S.R.L. (Proceso)' :'UYP-ESTANCIA ',
         '1561335 - Gibur S.A. (Carton)'             : 'UYC-GIBUR',
+        '1561335 - Gibur S.A. (Proceso)'            : 'UYP-GIBUR',
         '1561540 - Nolir S.A.'                      : 'UYC-NOLIR',
         '1560020 - Recalco S.A. (ex Suadil)'        : 'UYC-RECALCO',
         '1561245 - Conaprole Planta I (Proceso)'    : 'UYP-CONAPROLE P01',
@@ -856,6 +867,7 @@ def editar_registro(id):
         '1560621 - Ecolat Uruguay S.A. (Proceso)',
         '1561461 - Estancias del Lago S.R.L. (Proceso)',
         '1561335 - Gibur S.A. (Carton)',
+        '1561335 - Gibur S.A. (Proceso)',
         '1561062 - Jugos del Uruguay S.A. (Carton)',
         '1561062 - Jugos del Uruguay S.A. (Proceso)',
         '1561132 - Montevideo Refrescos S.A. (Proceso)',
@@ -905,8 +917,10 @@ def editar_registro(id):
         {'id': 30, 'nombre': '1550005 - Tetra Pak Paraguay C.Costo= ()'},
         {'id': 30, 'nombre': '1560001 - Tetra Pak Uruguay S.R.L. C.Costo= ()'},
         {'id': 31, 'nombre': '1561461 - Estancias del Lago S.R.L. (Proceso) C.Costo= ()'},
-        {'id': 32, 'nombre': 'Otros Clientes del Mercado N/A'}
+        {'id': 32, 'nombre': '1561335 - Gibur S.A. (Proceso) C.Costo=3 ()'},
+        {'id': 33, 'nombre': 'Otros Clientes del Mercado N/A'}
     ]
+
     contratos = [
         {'value': '73450003', 'label': 'Contrato'},
         {'value': '79010000', 'label': 'Administrativo                          - 79010000'},
@@ -1173,7 +1187,14 @@ def editar_registro(id):
         {'id': 234, 'nombre': 'UYP-ESTANCIA  DRZ-TREAT  Máquina-Tetra Almix                                       N/S-15648-13'},
         {'id': 235, 'nombre': 'UYP-ESTANCIA  DRZ-TREAT  Máquina-Tetra Alex Homogenizer                            N/S-5856943312'},
         {'id': 236, 'nombre': 'UYP-ESTANCIA  DRZ-TREAT  Máquina-Tetra Guerin Silo Equipment                       N/S-5860290037'},
-        {'id': 237, 'nombre': 'UYP-ESTANCIA  DRZ-TPPM   Máquina-Production Control                                N/S-5861000097'}
+        {'id': 237, 'nombre': 'UYP-ESTANCIA  DRZ-TPPM   Máquina-Production Control                                N/S-5861000097'},
+        {'id': 238, 'nombre': 'UYP-GIBUR     MVD-PF 01  Máquina-Esterilizador Tomate/Jugo                         N/S-B6279083/01'},
+        {'id': 239, 'nombre': 'UYP-GIBUR     MVD-PF 01  Máquina-Tubular Heat Exchanger C70, SMO                   N/S-1193414'},
+        {'id': 240, 'nombre': 'UYP-GIBUR     MVD-TREAT  Máquina-Tetra Plex M6 FM                                  N/S-30106-74320'},
+        {'id': 241, 'nombre': 'UYP-GIBUR     MVD-TREAT  Máquina-Tetra Promato Nacional                            N/S-6038107/01'},
+        {'id': 242, 'nombre': 'UYP-GIBUR     MVD-TREAT  Máquina-Tetra Spiraflo MTC 108                            N/S-1063101'},
+        {'id': 243, 'nombre': 'UYP-GIBUR     MVD-TREAT  Máquina-Tetra Spiraflo CC108                              N/S-1103001'}
+
 
     ]
 
@@ -1262,6 +1283,7 @@ def editar_registro(id):
         '1560621 - Ecolat Uruguay S.A. (Proceso)'   : 'UYP-ECOLAT',
         '1561461 - Estancias del Lago S.R.L. (Proceso)' :'UYP-ESTANCIA ',
         '1561335 - Gibur S.A. (Carton)'             : 'UYC-GIBUR',
+        '1561335 - Gibur S.A. (Proceso)'            : 'UYP-GIBUR',
         '1561540 - Nolir S.A.'                      : 'UYC-NOLIR',
         '1560020 - Recalco S.A. (ex Suadil)'        : 'UYC-RECALCO',
         '1561245 - Conaprole Planta I (Proceso)'    : 'UYP-CONAPROLE P01',
