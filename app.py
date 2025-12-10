@@ -839,7 +839,7 @@ def exportar_excel():
             cell.alignment = center_alignment
 
         ws.auto_filter.ref = ws.dimensions
-        ws.freeze_panes = 'A2'
+        ws.freeze_panes = 'B2'
 
     archivo.seek(0)
     return send_file(
