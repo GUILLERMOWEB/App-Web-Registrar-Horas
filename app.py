@@ -979,64 +979,6 @@ def exportar_excel():
                     # Congelar encabezado y primera columna (Semana fija)
                     ws3.freeze_panes = 'B2'
 
-                    # ===== Gráfico de columnas agrupadas por semana con serie por usuario =====
-                    try:
-                        from openpyxl.chart import BarChart, Reference, Series
-
-                        # Necesitamos pivotear en memoria para saber dónde está cada serie
-                        # (pero usaremos la hoja para crear referencias)
-                        usuarios_unicos = list(df_user_sem['Usuario'].unique())
-                        semanas_unicas = list(df_user_sem['Semana'].unique())
-
-                        # Título dinámico: si hay un solo usuario filtrado, incluir su nombre
-                        titulo = "Promedio de horas totales por usuario (últimas 4 semanas)"
-                        if len(usuarios_unicos) == 1:
-                            titulo = f"Promedio de horas totales - {usuarios_unicos[0]} (últimas 4 semanas)"
-
-                        chart_bar_users = BarChart()
-                        chart_bar_users.title = titulo
-                        chart_bar_users.y_axis.title = "Horas (promedio)"
-                        chart_bar_users.x_axis.title = "Semana"
-                        chart_bar_users.type = "col"
-                        chart_bar_users.grouping = "clustered"
-
-                        # Categorías (semanas) están en la primera columna
-                        cats = Reference(ws3, min_col=1, min_row=2, max_row=ws3.max_row)
-                        chart_bar_users.set_categories(cats)
-
-                        # Ubicación de columnas por nombre
-                        cols = [cell.value for cell in ws3[1]]
-                        # Índices (1-based) de columnas clave
-                        col_semana_idx = cols.index('Semana') + 1
-                        col_usuario_idx = cols.index('Usuario') + 1
-                        col_totales_idx = cols.index('Horas totales') + 1
-
-                        # Para cada usuario, construimos una serie tomando todas las filas de ese usuario
-                        # Nota: como la tabla está ordenada por Semana y Usuario, tendremos datos discontinuos.
-                        # Usaremos una técnica: crear una serie por usuario referente a toda la columna
-                        # y luego filtrarla con valores (Excel mostrará puntos donde coinciden).
-                        # Otra opción sería generar una tabla pivot en otra zona; para simplicidad, usamos esta.
-
-                        # Agregar una serie por usuario
-                        for usuario in usuarios_unicos:
-                            # Creamos referencia completa a la columna "Horas totales"
-                            data_ref = Reference(ws3, min_col=col_totales_idx, min_row=1, max_row=ws3.max_row)
-                            serie = Series(data_ref, title=usuario)
-                            # openpyxl no permite filtrar filas en la referencia; la tabla incluye todas las filas.
-                            # Aún así, Excel mostrará todas las barras; para una separación clara por usuario,
-                            # conviene generar una tabla pivot en otra hoja. Si te interesa, te lo implemento.
-                            chart_bar_users.series.append(serie)
-
-                        # Insertar gráfico
-                        ws3.add_chart(chart_bar_users, "H2")
-
-                    except Exception as e:
-                        print(f"[WARN] No se pudo crear gráfico por usuario: {e}")
-    
-    except Exception as e:
-        print(f"[WARN] Promedios por usuario omitidos por error: {e}")
-
-
 
     archivo.seek(0)
     return send_file(
