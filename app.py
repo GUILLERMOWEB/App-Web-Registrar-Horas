@@ -840,6 +840,107 @@ def exportar_excel():
 
         ws.auto_filter.ref = ws.dimensions
         ws.freeze_panes = 'B2'
+        
+        # ====== RESUMEN 4 SEMANAS (NUEVA HOJA) ======
+        if not df.empty:
+            # Asegurar tipo fecha y construir la semana (lunes como inicio)
+            df['Fecha'] = pd.to_datetime(df['Fecha'], errors='coerce')
+            df = df.dropna(subset=['Fecha']).copy()
+            df['Semana'] = df['Fecha'] - pd.to_timedelta(df['Fecha'].dt.weekday, unit='D')
+
+            # Tomar las últimas 4 semanas efectivamente presentes en los datos exportados
+            semanas_ordenadas = sorted(df['Semana'].dropna().unique())
+            ultimas_4 = semanas_ordenadas[-4:] if len(semanas_ordenadas) >= 4 else semanas_ordenadas
+
+            df_4w = df[df['Semana'].isin(ultimas_4)].copy()
+
+            # Asegurar columnas numéricas que vamos a promediar
+            for col in ['Horas laborales', 'Horas Extras', 'Horas totales', 'Horas viaje', 'Km totales']:
+                if col not in df_4w.columns:
+                    df_4w[col] = 0
+                df_4w[col] = pd.to_numeric(df_4w[col], errors='coerce').fillna(0)
+
+            # Etiqueta de semana como string (lunes de cada semana)
+            df_4w['Semana'] = df_4w['Semana'].dt.strftime('%Y-%m-%d')
+
+            df_semana = (df_4w
+                .groupby('Semana', as_index=False)
+                .agg({
+                    'Horas laborales': 'mean',
+                    'Horas Extras': 'mean',
+                    'Horas totales': 'mean',
+                    'Horas viaje': 'mean',
+                    'Km totales': 'mean'
+                })
+                .sort_values('Semana')
+                .round(2)
+            )
+
+            # Crear hoja
+            sheet_resumen = 'Resumen 4 semanas'
+            df_semana.to_excel(writer, sheet_name=sheet_resumen, index=False)
+            ws2 = writer.sheets[sheet_resumen]
+
+            # Formato de encabezado y celdas (mismo estilo que la hoja principal)
+            for cell in ws2[1]:
+                cell.font = header_font
+                cell.fill = header_fill
+                cell.border = thin_border
+                cell.alignment = center_alignment
+
+            for row in ws2.iter_rows(min_row=2, max_row=ws2.max_row):
+                for cell in row:
+                    cell.font = Font(name='Calibri', size=11)
+                    cell.border = thin_border
+                    cell.alignment = center_alignment
+                if row[0].row % 2 == 1:
+                    for cell in row:
+                        cell.fill = PatternFill(start_color="F9F9F9", end_color="F9F9F9", fill_type="solid")
+
+            # Ancho de columnas
+            for col_num, column_cells in enumerate(ws2.columns, 1):
+                max_length = max((len(str(cell.value)) for cell in column_cells if cell.value), default=0)
+                ws2.column_dimensions[get_column_letter(col_num)].width = min((max_length + 4), 50)
+
+            # Congelar fila 1 y columna A (encabezado y semanas fijas)
+            ws2.freeze_panes = 'B2'
+
+            # ===== Gráficos =====
+            from openpyxl.chart import BarChart, LineChart, Reference
+
+            # Categorías (las semanas)
+            cats = Reference(ws2, min_col=1, min_row=2, max_row=ws2.max_row)
+
+            # Columna de "Horas totales"
+            cols = list(df_semana.columns)
+            col_totales = cols.index('Horas totales') + 1  # +1 por 1-based en Excel
+            data_totales = Reference(ws2, min_col=col_totales, min_row=1, max_row=ws2.max_row)
+
+            # Gráfico de columnas con Horas totales (promedio)
+            chart_bar = BarChart()
+            chart_bar.title = "Promedio de horas totales (últimas 4 semanas)"
+            chart_bar.y_axis.title = "Horas (promedio)"
+            chart_bar.x_axis.title = "Semana"
+            chart_bar.add_data(data_totales, titles_from_data=True)
+            chart_bar.set_categories(cats)
+
+            # Línea con Horas Extras (promedio), si existe
+            if 'Horas Extras' in cols:
+                col_extras = cols.index('Horas Extras') + 1
+                data_extras = Reference(ws2, min_col=col_extras, min_row=1, max_row=ws2.max_row)
+
+                chart_line = LineChart()
+                chart_line.title = "Horas Extras (promedio)"
+                chart_line.add_data(data_extras, titles_from_data=True)
+                chart_line.y_axis.title = "Extras (promedio)"
+
+                # Ubicar ambos gráficos
+                ws2.add_chart(chart_bar, "G2")
+                ws2.add_chart(chart_line, "G20")
+            else:
+                # Solo barras si no hay Extras
+                ws2.add_chart(chart_bar, "G2")
+
 
     archivo.seek(0)
     return send_file(
