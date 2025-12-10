@@ -1032,8 +1032,9 @@ def exportar_excel():
 
                     except Exception as e:
                         print(f"[WARN] No se pudo crear gráfico por usuario: {e}")
+    
     except Exception as e:
-        print(f"[WARN] Promedios por usuario omitidos
+        print(f"[WARN] Promedios por usuario omitidos por error: {e}")
 
 
 
